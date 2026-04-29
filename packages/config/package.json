@@ -1,0 +1,23 @@
+{
+  "name": "@okil-chai/config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./eslint": "./eslint/index.js",
+    "./prettier": "./prettier/index.js",
+    "./typescript/base": "./typescript/base.json",
+    "./typescript/nestjs": "./typescript/nestjs.json",
+    "./typescript/react-spa": "./typescript/react-spa.json",
+    "./typescript/nextjs": "./typescript/nextjs.json",
+    "./vitest": "./vitest/base.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.0"
+  }
+}

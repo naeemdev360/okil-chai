@@ -1,0 +1,63 @@
+{
+  "search": {
+    "title": "Find the right lawyer for you",
+    "placeholder": "Search by name, specialty, or location",
+    "filters": {
+      "specialty": "Specialty",
+      "language": "Language",
+      "location": "Location",
+      "consultationType": "Consultation Type",
+      "priceRange": "Price Range",
+      "availability": "Availability",
+      "applyFilters": "Apply Filters",
+      "clearAll": "Clear All"
+    },
+    "results": {
+      "count_one": "{{count}} lawyer found",
+      "count_other": "{{count}} lawyers found",
+      "sortBy": "Sort by",
+      "sortOptions": {
+        "relevance": "Relevance",
+        "rating": "Highest Rated",
+        "price_asc": "Price: Low to High",
+        "price_desc": "Price: High to Low"
+      }
+    }
+  },
+  "appointment": {
+    "book": "Book Appointment",
+    "selectDate": "Select a date",
+    "selectTime": "Select a time slot",
+    "consultationType": "Consultation type",
+    "inPerson": "In Person",
+    "video": "Video Call",
+    "phone": "Phone Call",
+    "notes": "Notes for the lawyer (optional)",
+    "notesPlaceholder": "Briefly describe your legal issue...",
+    "summary": "Booking Summary",
+    "fee": "Consultation fee",
+    "platformFee": "Platform fee",
+    "total": "Total",
+    "confirmBooking": "Confirm & Pay",
+    "cancelPolicy": "Free cancellation up to 24 hours before the appointment."
+  },
+  "status": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "noShow": "No Show"
+  },
+  "confirmation": {
+    "title": "Booking confirmed!",
+    "subtitle": "Your appointment has been booked successfully.",
+    "addToCalendar": "Add to Calendar",
+    "viewAppointment": "View Appointment",
+    "bookAnother": "Book Another"
+  },
+  "errors": {
+    "slotUnavailable": "This time slot is no longer available. Please choose another.",
+    "paymentFailed": "Payment failed. Please try a different payment method.",
+    "bookingFailed": "Booking failed. Please try again."
+  }
+}

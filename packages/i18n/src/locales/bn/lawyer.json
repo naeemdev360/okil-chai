@@ -1,0 +1,56 @@
+{
+  "profile": {
+    "verified": "যাচাইকৃত",
+    "topRated": "শীর্ষ রেটেড",
+    "pro": "প্রো",
+    "yearsExperience": "{{count}} বছরের অভিজ্ঞতা",
+    "cases": "{{count}}টি মামলা",
+    "rating": "{{rating}} ({{count}}টি রিভিউ)",
+    "consultationFee": "পরামর্শ ফি",
+    "perHour": "/ ঘণ্টা",
+    "perSession": "/ সেশন",
+    "speaksLanguages": "ভাষা",
+    "practicesIn": "অনুশীলন করেন",
+    "about": "পরিচিতি",
+    "specialties": "বিশেষত্ব",
+    "education": "শিক্ষা",
+    "availability": "উপলব্ধতা",
+    "reviews": "রিভিউ",
+    "bookNow": "এখনই বুক করুন",
+    "sendMessage": "বার্তা পাঠান",
+    "saveProfile": "প্রোফাইল সংরক্ষণ করুন",
+    "share": "শেয়ার করুন"
+  },
+  "onboarding": {
+    "title": "ওকিল চাই-তে আইনজীবী হিসেবে যোগ দিন",
+    "subtitle": "আরও বেশি ক্লায়েন্টের কাছে পৌঁছান এবং আপনার প্র্যাকটিস বাড়ান",
+    "steps": {
+      "personal": "ব্যক্তিগত তথ্য",
+      "professional": "পেশাদার বিবরণ",
+      "credentials": "সনদ ও বার সদস্যপদ",
+      "availability": "উপলব্ধতা সেট করুন",
+      "payment": "পেমেন্ট সেটআপ",
+      "review": "পর্যালোচনা ও জমা দিন"
+    },
+    "barNumber": "বার সদস্যপদ নম্বর",
+    "barState": "বার রাজ্য / এখতিয়ার",
+    "uploadCredentials": "সনদ আপলোড করুন",
+    "uploadHint": "PDF, JPG বা PNG, সর্বোচ্চ ১০MB",
+    "submitForReview": "পর্যালোচনার জন্য জমা দিন",
+    "pendingReview": "আপনার প্রোফাইল পর্যালোচনাধীন। ২ কার্যদিবসের মধ্যে জানানো হবে।",
+    "approved": "অভিনন্দন! আপনার প্রোফাইল লাইভ হয়েছে।",
+    "rejected": "আপনার আবেদন অনুমোদিত হয়নি। সাপোর্টের সাথে যোগাযোগ করুন।"
+  },
+  "dashboard": {
+    "title": "ড্যাশবোর্ড",
+    "upcomingAppointments": "আসন্ন অ্যাপয়েন্টমেন্ট",
+    "earnings": "আয়",
+    "thisMonth": "এই মাসে",
+    "totalEarnings": "মোট আয়",
+    "pendingPayout": "অপেক্ষমান পেআউট",
+    "profileViews": "প্রোফাইল ভিউ",
+    "conversionRate": "রূপান্তর হার",
+    "noAppointments": "কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই",
+    "availabilitySettings": "উপলব্ধতা সেটিংস"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "profile": {
+    "verified": "Verified",
+    "topRated": "Top Rated",
+    "pro": "Pro",
+    "yearsExperience": "{{count}} years experience",
+    "cases": "{{count}} cases",
+    "rating": "{{rating}} ({{count}} reviews)",
+    "consultationFee": "Consultation fee",
+    "perHour": "/ hour",
+    "perSession": "/ session",
+    "speaksLanguages": "Speaks",
+    "practicesIn": "Practices in",
+    "about": "About",
+    "specialties": "Specialties",
+    "education": "Education",
+    "availability": "Availability",
+    "reviews": "Reviews",
+    "bookNow": "Book Now",
+    "sendMessage": "Send Message",
+    "saveProfile": "Save Profile",
+    "share": "Share"
+  },
+  "onboarding": {
+    "title": "Join OkilChai as a Lawyer",
+    "subtitle": "Reach more clients and grow your practice",
+    "steps": {
+      "personal": "Personal Information",
+      "professional": "Professional Details",
+      "credentials": "Credentials & Bar Membership",
+      "availability": "Set Your Availability",
+      "payment": "Payment Setup",
+      "review": "Review & Submit"
+    },
+    "barNumber": "Bar membership number",
+    "barState": "Bar state / jurisdiction",
+    "uploadCredentials": "Upload credentials",
+    "uploadHint": "PDF, JPG, or PNG up to 10MB",
+    "submitForReview": "Submit for Review",
+    "pendingReview": "Your profile is under review. We'll notify you within 2 business days.",
+    "approved": "Congratulations! Your profile is live.",
+    "rejected": "Your application was not approved. Please contact support."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "upcomingAppointments": "Upcoming Appointments",
+    "earnings": "Earnings",
+    "thisMonth": "This month",
+    "totalEarnings": "Total earnings",
+    "pendingPayout": "Pending payout",
+    "profileViews": "Profile views",
+    "conversionRate": "Conversion rate",
+    "noAppointments": "No upcoming appointments",
+    "availabilitySettings": "Availability Settings"
+  }
+}

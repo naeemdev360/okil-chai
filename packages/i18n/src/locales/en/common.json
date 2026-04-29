@@ -1,0 +1,54 @@
+{
+  "app": {
+    "name": "OkilChai",
+    "tagline": "Find a Lawyer. Book in Minutes."
+  },
+  "nav": {
+    "findLawyer": "Find a Lawyer",
+    "howItWorks": "How It Works",
+    "forLawyers": "For Lawyers",
+    "login": "Log In",
+    "signUp": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Log Out"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "viewAll": "View All",
+    "loadMore": "Load More",
+    "tryAgain": "Try Again"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "success": "Success",
+    "error": "Something went wrong",
+    "notFound": "Not Found",
+    "noResults": "No results found"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "networkError": "Network error. Please check your connection and try again.",
+    "serverError": "A server error occurred. Please try again later.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "sessionExpired": "Your session has expired. Please log in again."
+  },
+  "accessibility": {
+    "closeModal": "Close modal",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "loading": "Content is loading"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@okil-chai/shared": ["../../packages/shared/src/index.ts"],
+      "@okil-chai/ui": ["../../packages/ui/src/index.ts"],
+      "@okil-chai/design-tokens": ["../../packages/design-tokens/src/index.ts"],
+      "@okil-chai/design-tokens/tailwind": ["../../packages/design-tokens/src/tailwind/preset.ts"]
+    }
+  },
+  "include": ["src/**/*", "vite.config.ts", "tailwind.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}
