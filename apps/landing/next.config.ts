@@ -5,7 +5,8 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   experimental: {
-    typedRoutes: true,
+    // typedRoutes requires all route files to exist; re-enable once all app routes are scaffolded
+    typedRoutes: false,
   },
 };
 

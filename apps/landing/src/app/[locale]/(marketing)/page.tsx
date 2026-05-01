@@ -1,18 +1,31 @@
-import { useTranslations } from 'next-intl';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { HeroSection } from '../../../components/sections/HeroSection';
+import { StatsBar } from '../../../components/sections/StatsBar';
+import { HowItWorksSection } from '../../../components/sections/HowItWorksSection';
+import { PracticeAreasSection } from '../../../components/sections/PracticeAreasSection';
+import { TestimonialsSection } from '../../../components/sections/TestimonialsSection';
+import { TrustSafetySection } from '../../../components/sections/TrustSafetySection';
+import { PricingSection } from '../../../components/sections/PricingSection';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('home.hero');
+  return {
+    title: `${t('title')} ${t('titleHighlight')}`,
+    description: t('subtitle'),
+  };
+}
 
 export default function HomePage() {
-  const t = useTranslations('home');
-
   return (
-    <main className="min-h-screen bg-navy-950 text-white">
-      <div className="container mx-auto px-4 py-24 text-center">
-        <h1 className="font-heading text-5xl font-bold text-white mb-6">
-          {t('hero.title')}
-        </h1>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          {t('hero.subtitle')}
-        </p>
-      </div>
-    </main>
+    <>
+      <HeroSection />
+      <StatsBar />
+      <HowItWorksSection />
+      <PracticeAreasSection />
+      <TestimonialsSection />
+      <TrustSafetySection />
+      <PricingSection />
+    </>
   );
 }

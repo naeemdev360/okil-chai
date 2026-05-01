@@ -1,3 +1,5 @@
+export * from './query';
+
 export { useDebounce } from './useDebounce';
 export { useLocalStorage } from './useLocalStorage';
 export { useMediaQuery, useBreakpoint, BREAKPOINTS } from './useMediaQuery';

@@ -1,8 +1,319 @@
 {
   "home": {
     "hero": {
-      "title": "Find Your Lawyer",
-      "subtitle": "Legal help as easy as booking a doctor. Connect with trusted lawyers in minutes."
+      "tagline": "The Trusted Legal Platform",
+      "title": "Find a Trusted Lawyer.",
+      "titleHighlight": "Book in Minutes.",
+      "subtitle": "Connect with verified attorneys across 50+ practice areas. Transparent pricing, secure messaging, and instant booking.",
+      "searchPlaceholder": "Search by practice area, lawyer name, or location…",
+      "searchButton": "Search Lawyers",
+      "practiceAreas": {
+        "criminal": "Criminal Law",
+        "family": "Family Law",
+        "corporate": "Corporate Law",
+        "immigration": "Immigration",
+        "realestate": "Real Estate",
+        "employment": "Employment",
+        "ip": "Intellectual Property",
+        "tax": "Tax Law"
+      }
+    },
+    "stats": {
+      "lawyers": { "value": "2,400+", "label": "Verified Lawyers" },
+      "areas":   { "value": "50+",    "label": "Practice Areas" },
+      "satisfaction": { "value": "98%",     "label": "Client Satisfaction" },
+      "bookingTime":  { "value": "< 3 min", "label": "Average Booking Time" }
+    },
+    "howItWorks": {
+      "sectionLabel": "Simple Process",
+      "title": "How OkilChai Works",
+      "steps": {
+        "search": {
+          "number": "01",
+          "title": "Search & Filter",
+          "body": "Browse verified lawyers by practice area, location, budget, and availability."
+        },
+        "book": {
+          "number": "02",
+          "title": "Book Instantly",
+          "body": "Choose a time slot and book a video, phone, or in-person consultation."
+        },
+        "help": {
+          "number": "03",
+          "title": "Get Legal Help",
+          "body": "Connect with your lawyer and resolve your legal issue with confidence."
+        }
+      }
+    },
+    "practiceAreas": {
+      "sectionLabel": "Areas of Expertise",
+      "title": "Find the Right Legal Expert",
+      "subtitle": "Whatever your legal need, we have verified specialists ready to help.",
+      "areas": {
+        "criminal":    { "name": "Criminal Law",          "desc": "Defense & prosecution"    },
+        "family":      { "name": "Family Law",            "desc": "Divorce, custody, adoption"},
+        "corporate":   { "name": "Corporate Law",         "desc": "Business & contracts"     },
+        "immigration": { "name": "Immigration",           "desc": "Visas & citizenship"      },
+        "realestate":  { "name": "Real Estate",           "desc": "Property & disputes"      },
+        "employment":  { "name": "Employment",            "desc": "Workplace & HR"           },
+        "ip":          { "name": "Intellectual Property", "desc": "Patents & trademarks"     },
+        "tax":         { "name": "Tax Law",               "desc": "Filings & audits"         }
+      }
+    },
+    "testimonials": {
+      "sectionLabel": "Client Stories",
+      "title": "Trusted by Thousands",
+      "items": {
+        "priya":   { "quote": "Found an immigration lawyer in 10 minutes and had my case filed within the week. OkilChai made an overwhelming process feel manageable.", "name": "Priya Sharma",      "role": "Verified Client" },
+        "marcus":  { "quote": "The booking flow is seamless. I compared three family law attorneys, read their reviews, and booked a video consultation the same day.",  "name": "Marcus Chen",       "role": "Verified Client" },
+        "fatima":  { "quote": "Every lawyer is actually vetted. That mattered to me — I didn't want to scroll through random directories. Highly recommend.",             "name": "Fatima Al-Rashid", "role": "Verified Client" }
+      }
+    },
+    "trust": {
+      "sectionLabel": "Why OkilChai",
+      "title": "Built on Trust & Transparency",
+      "items": {
+        "verified":  { "title": "Verified Credentials",    "body": "Every lawyer is bar-verified and background-checked before joining the platform." },
+        "secure":    { "title": "Secure & Confidential",   "body": "End-to-end encrypted consultations. Attorney-client privilege protected." },
+        "refund":    { "title": "Satisfaction Guarantee",  "body": "Not satisfied with your first consultation? Get a full refund within 24 hours." },
+        "support":   { "title": "24/7 Support",            "body": "Our team is available around the clock to help resolve any booking or payment issues." }
+      }
+    },
+    "pricing": {
+      "sectionLabel": "Simple Pricing",
+      "title": "Pay for What You Need",
+      "subtitle": "No hidden fees. No retainer surprises. Cancel anytime.",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "saveBadge": "Save 20%",
+      "enterpriseNote": "Need a custom plan for your firm?",
+      "enterpriseCta": "Talk to our sales team →",
+      "plans": {
+        "basic": {
+          "name": "Basic",
+          "tagline": "For one-off legal questions",
+          "billing": "Free forever",
+          "badge": "",
+          "cta": "Get Started Free",
+          "features": ["Search & browse all lawyers", "View lawyer profiles & reviews", "Book up to 2 consultations/month", "Secure in-app messaging"]
+        },
+        "pro": {
+          "name": "Pro",
+          "tagline": "For ongoing legal needs",
+          "billing": "per month, billed annually",
+          "badge": "Most Popular",
+          "cta": "Start 14-Day Free Trial",
+          "features": ["Everything in Basic", "Unlimited consultations", "Priority lawyer matching", "Document vault — 10 GB", "Appointment reminders & follow-ups"]
+        },
+        "business": {
+          "name": "Business",
+          "tagline": "For teams & enterprises",
+          "billing": "per month, billed annually",
+          "badge": "",
+          "cta": "Contact Sales",
+          "features": ["Everything in Pro", "Up to 10 team seats", "Dedicated case manager", "Document vault — unlimited", "Custom SLA & invoicing", "Admin dashboard & audit log", "Priority phone support"]
+        }
+      }
+    }
+  },
+  "auth": {
+    "roleChooser": {
+      "tagline": "Welcome to OkilChai",
+      "title": "How will you use OkilChai?",
+      "subtitle": "Choose your account type. You can always create a separate account for the other role later.",
+      "alreadyHave": "Already have an account?",
+      "signIn": "Sign in",
+      "client": {
+        "title": "I need a lawyer",
+        "blurb": "Search verified attorneys, book consultations, and manage your legal matters in one place.",
+        "bullets": ["Free to sign up", "Pay only for consultations", "Cancel anytime"],
+        "cta": "Continue as Client"
+      },
+      "lawyer": {
+        "title": "I'm a lawyer",
+        "blurb": "Build your digital presence, attract qualified clients, and run your practice with modern tools.",
+        "bullets": ["10% platform fee", "Free Pro for 3 months", "Stripe payouts weekly"],
+        "cta": "Continue as Lawyer"
+      }
+    },
+    "signIn": {
+      "heading": "Welcome back",
+      "subheading": "Sign in to manage your appointments and messages.",
+      "email": "Email address",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign In",
+      "magicLink": "Send a magic link instead",
+      "noAccount": "Don't have one?",
+      "signUp": "Sign up",
+      "google": "Continue with Google",
+      "apple": "Continue with Apple",
+      "divider": "OR CONTINUE WITH EMAIL"
+    },
+    "signUp": {
+      "heading": "Create your account",
+      "subHeadingClient": "Find a verified lawyer in minutes — not days.",
+      "subHeadingLawyer": "Join 25,000+ lawyers building their practice on OkilChai.",
+      "fullName": "Full name",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Create Account",
+      "terms": "I agree to OkilChai's",
+      "termsLink": "Terms of Service",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
+      "haveAccount": "Have an account?",
+      "signIn": "Sign in",
+      "signingAs": "Signing up as",
+      "changeRole": "change",
+      "google": "Continue with Google",
+      "apple": "Continue with Apple",
+      "divider": "OR CONTINUE WITH EMAIL"
+    },
+    "forgotPassword": {
+      "heading": "Reset your password",
+      "subheading": "Enter your email and we'll send a reset link.",
+      "email": "Email address",
+      "submit": "Send Reset Link",
+      "success": "Check your email for a reset link.",
+      "backToSignIn": "Back to sign in"
+    },
+    "panel": {
+      "tagline": "The Trusted Legal Platform",
+      "headline1": "Justice",
+      "headline2": "begins with",
+      "headline3": "the right counsel.",
+      "body": "Connect with verified attorneys across 50+ practice areas. Transparent pricing, secure messaging, and instant booking.",
+      "stats": {
+        "lawyers": { "value": "12,500+", "label": "Verified Lawyers" },
+        "rating":  { "value": "4.9★",   "label": "Average Rating"   },
+        "bookings":{ "value": "50K+",   "label": "Bookings Made"    }
+      },
+      "security": "Your data is encrypted end-to-end and never sold."
+    },
+    "disclaimer": "Protected by reCAPTCHA · OkilChai is not a law firm.\nUse of this platform does not create an attorney-client relationship."
+  },
+  "onboarding": {
+    "lawyer": {
+      "tagline": "Join OkilChai",
+      "title": "Lawyer Onboarding",
+      "subtitle": "Set up your profile in 7 simple steps. Most lawyers complete this in under 10 minutes.",
+      "steps": {
+        "account":      "Account Setup",
+        "personal":     "Personal Info",
+        "credentials":  "Credentials",
+        "specs":        "Specializations",
+        "pricing":      "Pricing",
+        "availability": "Availability",
+        "photo":        "Profile Photo"
+      },
+      "stepOf": "Step {current} of {total}",
+      "back": "Back",
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "submit": "Submit for Verification",
+      "fields": {
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "confirmPwHint": "Must match your password",
+        "termsLabel": "I agree to OkilChai's",
+        "termsLink": "Terms of Service",
+        "termsAnd": "and",
+        "privacyLink": "Privacy Policy",
+        "oauthGoogle": "Continue with Google",
+        "oauthApple": "Continue with Apple",
+        "oauthDivider": "OR CONTINUE WITH EMAIL",
+        "fullName": "Full Legal Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "experience": "Years of Experience",
+        "bio": "Professional Bio",
+        "bioHint": "100–300 words. Describe your background, approach, and notable cases.",
+        "bioPh": "I'm a criminal defense attorney with 15 years of trial experience…",
+        "barNumber": "Bar Number",
+        "barNumberHint": "Issued by your jurisdiction's bar association",
+        "barNumberPh": "e.g. BB-12345",
+        "yearAdmitted": "Year Admitted",
+        "barCouncil": "Bar Council / Jurisdiction",
+        "uploadDocs": "Upload Credential Documents",
+        "uploadHint": "Bar certificate, ID proof. PDF or image — encrypted in transit.",
+        "uploadCta": "Drop files here or click to browse",
+        "uploadSpec": "PDF, JPG, PNG · Max 10 MB per file",
+        "verificationNote": "Verification typically takes 24–48 hours. We cross-check your bar number with the official registry. You'll receive an email once approved.",
+        "practiceAreas": "Practice Areas",
+        "practiceAreasHint": "Select up to 5",
+        "languages": "Languages You Speak",
+        "city": "Office City",
+        "cityPh": "e.g. Dhaka, Bangladesh",
+        "hourlyRate": "Hourly Consultation Rate (USD)",
+        "perHour": "per hour",
+        "earningsPreview": "Earnings Preview",
+        "consultationFee": "Consultation Fee",
+        "platformFee": "Platform Fee (10%)",
+        "yourPayout": "Your Payout",
+        "consultTypes": "Consultation Types You Offer",
+        "video":     { "label": "Video Call",  "desc": "Best for most cases" },
+        "phone":     { "label": "Phone Call",  "desc": "Voice only"          },
+        "inPerson":  { "label": "In-Person",   "desc": "At your office"      },
+        "workingDays": "Working Days",
+        "workingDaysHint": "Toggle days you accept consultations. You can block specific dates later.",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "slotDuration": "Slot Duration",
+        "googleCalSync": "Sync with Google Calendar",
+        "googleCalSyncHint": "Automatically block times when you're busy elsewhere",
+        "addPhoto": "Add a Professional Photo",
+        "photoBody": "Profiles with photos receive 8× more bookings. Use a clear, well-lit headshot in professional attire. Min 400×400 px.",
+        "uploadPhoto": "Upload Photo",
+        "almostDone": "You're almost done!",
+        "almostDoneBullets": [
+          "Your profile will be reviewed within 24–48 hours.",
+          "You'll get an email when verification completes.",
+          "Connect Stripe to receive payouts (next step after approval)."
+        ]
+      }
+    }
+  },
+  "lawyerProfile": {
+    "tabs": {
+      "about": "About",
+      "reviews": "Reviews",
+      "availability": "Availability",
+      "location": "Location"
+    }
+  },
+  "search": {
+    "pageTitle": "Find a Lawyer — OkilChai",
+    "pageDescription": "Search verified lawyers by practice area, location, and budget.",
+    "sectionLabel": "Browse Lawyers",
+    "heading": "Find Your Perfect",
+    "headingHighlight": "Legal Expert.",
+    "searchPlaceholder": "Search by practice area, lawyer name, or location…",
+    "searchButton": "Search",
+    "backHome": "Back to Home",
+    "showing": "Showing",
+    "lawyers": "lawyers",
+    "for": "for",
+    "filters": {
+      "all": "All",
+      "availableToday": "Available Today",
+      "video": "Video",
+      "under150": "Under $150/hr",
+      "topRated": "Top Rated"
+    },
+    "card": {
+      "viewProfile": "View Profile",
+      "fromPrice": "From ${price}/hr",
+      "verifiedLabel": "Verified"
+    },
+    "consultTypes": {
+      "video": "Video",
+      "phone": "Phone",
+      "inPerson": "In-Person"
+    },
+    "noResults": {
+      "title": "No lawyers found",
+      "subtitle": "Try a different search term or remove a filter."
     }
   }
 }
