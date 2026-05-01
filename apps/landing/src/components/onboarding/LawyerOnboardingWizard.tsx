@@ -100,9 +100,7 @@ export function LawyerOnboardingWizard() {
 
             <div className="py-6">
               <p className="font-sans text-xs text-gold font-semibold tracking-[0.06em] uppercase mb-1.5">
-                {t('stepOf')
-                  .replace('{current}', String(stepIdx + 1))
-                  .replace('{total}', String(STEPS.length))}
+                {t('stepOf', { current: stepIdx + 1, total: STEPS.length })}
               </p>
               <h2 className="font-heading text-[26px] font-semibold text-navy">
                 {t(`steps.${STEPS[stepIdx]!.key}`)}

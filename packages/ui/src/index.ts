@@ -6,6 +6,8 @@ export * from './icons';
 
 // Composite primitives
 export { ToggleChip }     from './components/ui/toggle-chip';
+export { TogglePill, togglePillVariants } from './components/ui/toggle-pill';
+export type { TogglePillProps } from './components/ui/toggle-pill';
 export { PasswordInput }  from './components/ui/password-input';
 
 // Shared cross-framework components

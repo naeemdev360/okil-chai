@@ -225,7 +225,7 @@
         "oauthDivider": "OR CONTINUE WITH EMAIL",
         "fullName": "Full Legal Name",
         "email": "Email Address",
-        "phone": "Phone Number",
+        "phoneNumber": "Phone Number",
         "experience": "Years of Experience",
         "bio": "Professional Bio",
         "bioHint": "100–300 words. Describe your background, approach, and notable cases.",
@@ -272,6 +272,66 @@
           "Connect Stripe to receive payouts (next step after approval)."
         ]
       }
+    }
+  },
+  "aiMatcher": {
+    "tagline": "AI-Powered Matching",
+    "title": "Tell us what happened.",
+    "titleHighlight": "We'll find the right lawyer.",
+    "subtitle": "Describe your situation in plain language. Our AI analyzes your case and matches you with three vetted lawyers — ranked by fit, expertise, and budget. Free. Confidential. 30 seconds.",
+    "inputLabel": "Describe your situation",
+    "inputPlaceholder": "e.g. My landlord is trying to evict me without proper notice…",
+    "charCount": "{count} chars · Encrypted & confidential",
+    "minChars": "min 20 chars",
+    "errorMinChars": "Please describe your situation in at least 20 characters.",
+    "samplesLabel": "Or try an example",
+    "urgencyLabel": "How urgent?",
+    "urgency": {
+      "today": "Today",
+      "thisWeek": "This week",
+      "noRush": "No rush"
+    },
+    "budgetLabel": "Budget per hour",
+    "budget": {
+      "low": "< $100",
+      "mid": "$100–200",
+      "any": "Any"
+    },
+    "cta": "Find My Lawyer",
+    "privacy": "Your description is encrypted and never shared without consent",
+    "samples": {
+      "landlord": "My landlord is trying to evict me without proper notice. The lease has 4 months left.",
+      "business": "I want to start a business with two co-founders and need help with incorporation and shareholder agreements.",
+      "dui": "I was arrested for DUI last week and have a court date in 3 weeks. First-time offense.",
+      "visa": "My visa is expiring and my employer is dragging their feet on the renewal paperwork."
+    },
+    "analyzingTitle": "Analyzing your case…",
+    "analyzingSubtitle": "Our AI is reviewing 200+ vetted lawyers across 12 practice areas to find your best match. This usually takes a few seconds.",
+    "analyzingSteps": {
+      "identifying": "Identifying legal practice area",
+      "matching": "Matching against lawyer expertise",
+      "filtering": "Filtering by budget & availability",
+      "ranking": "Ranking by fit score"
+    },
+    "resultsNewSearch": "New search",
+    "resultsBadgePrefix": "AI Match",
+    "resultsSubtitle": "Here are your top 3 matches. Click any lawyer to view their full profile or book directly.",
+    "resultsWhyMatch": "Why this match:",
+    "resultsPerHour": "per hour",
+    "resultsBookNow": "Book Now",
+    "resultsViewProfile": "View Profile",
+    "resultsBestMatch": "Best Match",
+    "resultsNoFit": "Not seeing the right fit?",
+    "resultsBrowseAll": "Browse all lawyers",
+    "teaser": {
+      "sectionLabel": "AI-Powered",
+      "title": "Describe Your Problem.",
+      "titleHighlight": "Get Matched Instantly.",
+      "subtitle": "Not sure which type of lawyer you need? Describe your situation in plain English and our AI matches you with three verified attorneys — ranked by fit, expertise, and budget.",
+      "cta": "Try AI Matcher — Free",
+      "feature0": "Works for any legal issue",
+      "feature1": "Results in under 30 seconds",
+      "feature2": "Completely confidential"
     }
   },
   "lawyerProfile": {

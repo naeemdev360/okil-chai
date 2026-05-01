@@ -6,7 +6,8 @@ import { HowItWorksSection } from '../../../components/sections/HowItWorksSectio
 import { PracticeAreasSection } from '../../../components/sections/PracticeAreasSection';
 import { TestimonialsSection } from '../../../components/sections/TestimonialsSection';
 import { TrustSafetySection } from '../../../components/sections/TrustSafetySection';
-import { PricingSection } from '../../../components/sections/PricingSection';
+import { PricingSection }     from '../../../components/sections/PricingSection';
+import { AiMatcherSection }   from '../../../components/sections/AiMatcherSection';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('home.hero');
@@ -25,6 +26,7 @@ export default function HomePage() {
       <PracticeAreasSection />
       <TestimonialsSection />
       <TrustSafetySection />
+      <AiMatcherSection />
       <PricingSection />
     </>
   );

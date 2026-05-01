@@ -14,7 +14,7 @@ export function StepPersonal({ data, update }: StepProps) {
       <Field label={t('email')}>
         <Input type="email" value={data.email} onChange={(e) => update('email', e.target.value)} />
       </Field>
-      <Field label={t('phone')}>
+      <Field label={t('phoneNumber')}>
         <Input value={data.phone} onChange={(e) => update('phone', e.target.value)} />
       </Field>
       <Field label={t('experience')}>
