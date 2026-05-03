@@ -5,6 +5,7 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import authConfig from './config/auth.config';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DatabaseModule } from './database/database.module';
       { name: 'authenticated', ttl: 60_000, limit: 1_000 },
     ]),
     DatabaseModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

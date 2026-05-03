@@ -1,4 +1,21 @@
 {
+  "nav": {
+    "signIn": "Sign In",
+    "getStarted": "Get Started",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "user": {
+      "openUserMenu": "Open user menu",
+      "goToPortal": "Go to Portal",
+      "goToClientPortal": "Go to Client Portal",
+      "goToLawyerPortal": "Go to Lawyer Portal",
+      "signOut": "Sign Out",
+      "notifications": "Notifications",
+      "openNotifications": "Open notifications",
+      "noNotifications": "You're all caught up",
+      "notificationsEmptyHint": "Appointment and message notifications will appear here."
+    }
+  },
   "home": {
     "hero": {
       "tagline": "The Trusted Legal Platform",
@@ -7,6 +24,8 @@
       "subtitle": "Connect with verified attorneys across 50+ practice areas. Transparent pricing, secure messaging, and instant booking.",
       "searchPlaceholder": "Search by practice area, lawyer name, or location…",
       "searchButton": "Search Lawyers",
+      "aiMatchHint": "Not sure who you need? Try our AI matcher.",
+      "aiMatchCta": "✦ AI Match",
       "practiceAreas": {
         "criminal": "Criminal Law",
         "family": "Family Law",
@@ -144,6 +163,8 @@
       "forgotPassword": "Forgot password?",
       "submit": "Sign In",
       "magicLink": "Send a magic link instead",
+      "invalidCredentials": "Invalid email or password.",
+      "genericError": "Something went wrong. Please try again.",
       "noAccount": "Don't have one?",
       "signUp": "Sign up",
       "google": "Continue with Google",

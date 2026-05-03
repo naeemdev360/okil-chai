@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import { Sparkles, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { SurfaceCard } from '@okil-chai/ui';
 import { ANALYZING_STEP_KEYS } from '../constants';
 
 export function AnalyzingStage() {
@@ -40,18 +41,25 @@ export function AnalyzingStage() {
         {/* Staggered step checklist */}
         <div className="flex flex-col gap-2.5 text-left" role="status" aria-live="polite">
           {ANALYZING_STEP_KEYS.map((key, i) => (
-            <motion.div
+            <SurfaceCard
               key={key}
-              initial={{ opacity: 0.15 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.7, duration: 0.4 }}
-              className="flex items-center gap-3 font-sans text-sm text-gray-800 bg-white rounded-lg px-4 py-3 border border-gray-100"
+              asChild
+              radius="lg"
+              elevation="none"
+              padding="none"
+              className="flex items-center gap-3 font-sans text-sm text-gray-800 px-4 py-3"
             >
+              <motion.div
+                initial={{ opacity: 0.15 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.7, duration: 0.4 }}
+              >
               <span className="size-5 rounded-full bg-gold flex items-center justify-center shrink-0">
                 <Check className="size-3 text-navy" strokeWidth={2.5} aria-hidden="true" />
               </span>
               {t(`analyzingSteps.${key}`)}
-            </motion.div>
+              </motion.div>
+            </SurfaceCard>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
-import { getTranslations } from 'next-intl/server';
 import { QuoteMarkIcon } from '@okil-chai/ui';
+import { getTranslations } from 'next-intl/server';
+import { TestimonialsAmbientBackdrop } from './TestimonialsAmbientBackdrop';
 
 const TESTIMONIAL_KEYS = ['priya', 'marcus', 'fatima'] as const;
 
@@ -13,11 +14,12 @@ export async function TestimonialsSection() {
   const t = await getTranslations('home.testimonials');
 
   return (
-    <section className="bg-navy py-20 px-6">
-      <div className="max-w-[1200px] mx-auto">
+    <section className="relative overflow-hidden bg-navy py-20 px-6">
+      <TestimonialsAmbientBackdrop />
+      <div className="relative z-10 mx-auto max-w-[1200px]">
 
         <div className="text-center mb-12">
-          <span className="font-sans text-xs font-semibold tracking-[0.1em] uppercase text-gold mb-3 block">
+          <span className="font-sans text-xs font-semibold tracking-[0.1em] uppercase text-gold-light mb-3 block">
             {t('sectionLabel')}
           </span>
           <h2 className="font-heading text-[36px] font-semibold text-white">
@@ -33,7 +35,7 @@ export async function TestimonialsSection() {
             >
               <QuoteMarkIcon className="size-7 text-gold opacity-85" />
 
-              <blockquote className="font-heading italic text-[17px] leading-[1.55] text-white/92 flex-1">
+              <blockquote className="font-heading italic text-[17px] leading-[1.55] text-cream flex-1">
                 &ldquo;{t(`items.${key}.quote`)}&rdquo;
               </blockquote>
 
@@ -48,7 +50,7 @@ export async function TestimonialsSection() {
                   <p className="font-sans text-sm font-semibold text-white">
                     {t(`items.${key}.name`)}
                   </p>
-                  <p className="font-sans text-xs text-white/55">
+                  <p className="font-sans text-xs text-gray-100">
                     {t(`items.${key}.role`)}
                   </p>
                 </div>

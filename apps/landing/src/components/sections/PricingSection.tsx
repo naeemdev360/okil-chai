@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Check, X } from 'lucide-react';
-import { Button, Badge, cn } from '@okil-chai/ui';
+import { Button, Badge, cn, SurfaceCard } from '@okil-chai/ui';
 
 interface PlanConfig {
   readonly key: 'basic' | 'pro' | 'business';
@@ -26,17 +26,48 @@ function PricingCard({ plan, annual }: { plan: PlanConfig; annual: boolean }) {
 
   const monthlyPrice = annual ? plan.price : Math.round(plan.price * 1.25);
   const isHighlight = plan.highlight;
-  const hasUnavailable = plan.unavailableFrom < plan.featureCount;
+  if (isHighlight) {
+    return (
+      <div
+        className={cn(
+          'relative rounded-2xl p-9 flex flex-col gap-7',
+          'bg-navy shadow-[0_20px_60px_rgba(15,31,61,0.22)] scale-[1.03]',
+        )}
+      >
+        <PricingCardInner
+          plan={plan}
+          isHighlight
+          monthlyPrice={monthlyPrice}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div
-      className={cn(
-        'relative rounded-2xl p-9 flex flex-col gap-7',
-        isHighlight
-          ? 'bg-navy shadow-[0_20px_60px_rgba(15,31,61,0.22)] scale-[1.03]'
-          : 'bg-white border border-gray-100 shadow-sm',
-      )}
-    >
+    <SurfaceCard elevation="sm" padding="none" className="relative p-9 flex flex-col gap-7">
+      <PricingCardInner
+        plan={plan}
+        isHighlight={false}
+        monthlyPrice={monthlyPrice}
+      />
+    </SurfaceCard>
+  );
+}
+
+interface PricingCardInnerProps {
+  readonly plan: PlanConfig;
+  readonly isHighlight: boolean;
+  readonly monthlyPrice: number;
+}
+
+function PricingCardInner({
+  plan, isHighlight, monthlyPrice,
+}: PricingCardInnerProps) {
+  const t = useTranslations('home.pricing');
+  const locale = useLocale();
+
+  return (
+    <>
       {/* Badge */}
       {t.raw(`plans.${plan.key}.badge` as never) && (
         <Badge
@@ -127,7 +158,7 @@ function PricingCard({ plan, annual }: { plan: PlanConfig; annual: boolean }) {
           );
         })}
       </ul>
-    </div>
+    </>
   );
 }
 
@@ -185,7 +216,12 @@ export function PricingSection() {
         </div>
 
         {/* Enterprise note */}
-        <div className="text-center mt-12 py-7 px-8 bg-white rounded-lg border border-gray-100">
+        <SurfaceCard
+          radius="lg"
+          elevation="none"
+          padding="none"
+          className="text-center mt-12 py-7 px-8"
+        >
           <span className="font-sans text-sm text-gray-600">
             {t('enterpriseNote')}&nbsp;
             <Link
@@ -195,7 +231,7 @@ export function PricingSection() {
               {t('enterpriseCta')}
             </Link>
           </span>
-        </div>
+        </SurfaceCard>
       </div>
     </section>
   );

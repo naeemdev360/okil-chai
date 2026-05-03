@@ -2,7 +2,7 @@
 
 import { Sparkles, ArrowRight, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { cn, Button, TogglePill } from '@okil-chai/ui';
+import { cn, Button, TogglePill, SurfaceCard } from '@okil-chai/ui';
 import { SAMPLE_KEYS, URGENCY_KEYS, BUDGET_KEYS } from '../constants';
 import type { UrgencyKey, BudgetKey } from '../types';
 
@@ -77,10 +77,7 @@ export function IntroStage({
 
       {/* Floating card overlapping the header */}
       <div className="max-w-[760px] mx-auto px-4 sm:px-6 -mt-[72px] relative">
-        <div
-          className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8"
-          style={{ boxShadow: 'var(--shadow-lg)' }}
-        >
+        <SurfaceCard elevation="lg" padding="none" className="p-6 sm:p-8">
           {/* Textarea */}
           <label className="block font-sans text-sm font-semibold text-navy mb-2.5">
             {t('inputLabel')}
@@ -172,7 +169,7 @@ export function IntroStage({
             <Lock className="size-3 shrink-0" aria-hidden="true" />
             {t('privacy')}
           </p>
-        </div>
+        </SurfaceCard>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
-import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { useRouter } from 'next/navigation';
+import { DocumentSVG, GavelSVG, Scales3D } from '../icons';
+import { AiMatchInlineCta } from '../ui/AiMatchInlineCta';
 import { LegalSearchBar } from '../ui/LegalSearchBar';
-import { Scales3D, GavelSVG, DocumentSVG } from '../icons';
 
 const AREA_KEYS = [
   'criminal', 'family', 'corporate', 'immigration',
@@ -363,6 +364,8 @@ export function HeroSection() {
             onSearch={handleSearch}
           />
         </div>
+
+        <AiMatchInlineCta className="mt-8 hero-fade-up" style={{ animationDelay: '420ms' }} />
       </motion.div>
 
       {/* ── 12. Bottom vignette ── */}

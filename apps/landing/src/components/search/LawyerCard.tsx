@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, Video, Phone, Building2, Star } from 'lucide-react';
+import { MapPin, Video, Phone, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { cn, Button, Badge } from '@okil-chai/ui';
+import { cn, Button, Badge, SurfaceCard, StarRating } from '@okil-chai/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 
@@ -26,14 +26,20 @@ export function LawyerCard({ lawyer }: LawyerCardProps) {
   const t = useTranslations('search');
 
   return (
-    <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <SurfaceCard
+      asChild
+      radius="xl"
+      elevation={hovered ? 'lg' : 'sm'}
+      padding="none"
       className={cn(
-        'bg-white border border-gray-100 rounded-xl p-5 md:p-6 flex gap-4 items-start transition-all duration-200',
-        hovered ? 'shadow-[0_8px_32px_rgba(15,31,61,0.12)] -translate-y-0.5' : 'shadow-[0_1px_4px_rgba(15,31,61,0.06)]',
+        'flex gap-4 items-start transition-all duration-200 p-5 md:p-6',
+        hovered && '-translate-y-0.5',
       )}
     >
+      <article
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
       <LawyerAvatar initials={lawyer.initials} verified={lawyer.verified} />
 
       {/* Body */}
@@ -57,11 +63,7 @@ export function LawyerCard({ lawyer }: LawyerCardProps) {
 
         {/* Rating + location */}
         <div className="flex items-center gap-3 flex-wrap mb-2.5">
-          <span className="flex items-center gap-1 font-sans text-sm">
-            <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />
-            <span className="font-medium text-navy">{lawyer.rating}</span>
-            <span className="text-gray-400">({lawyer.reviewCount})</span>
-          </span>
+          <StarRating rating={lawyer.rating} count={lawyer.reviewCount} />
           <span className="flex items-center gap-1 font-sans text-xs text-gray-400">
             <MapPin className="size-3 shrink-0" aria-hidden="true" />
             {lawyer.city}
@@ -101,6 +103,7 @@ export function LawyerCard({ lawyer }: LawyerCardProps) {
           </div>
         </div>
       </div>
-    </article>
+      </article>
+    </SurfaceCard>
   );
 }

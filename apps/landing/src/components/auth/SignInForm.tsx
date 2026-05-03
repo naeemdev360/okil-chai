@@ -1,12 +1,17 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { isApiError } from '@okil-chai/api-client';
+import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@okil-chai/ui';
 import { ChevronLeft, Mail } from 'lucide-react';
-import { Button, Input, Label, Separator, cn, GoogleIcon, AppleIcon, PasswordInput } from '@okil-chai/ui';
+import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { api } from '../../lib/api/client';
+import { useAuthStore } from '../../lib/store/auth.store';
 
 const signInSchema = z.object({
   email:    z.string().email(),
@@ -16,8 +21,11 @@ const signInSchema = z.object({
 type SignInFields = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
-  const t = useTranslations('auth.signIn');
+  const t      = useTranslations('auth.signIn');
   const locale = useLocale();
+  const router = useRouter();
+  const login  = useAuthStore((s) => s.login);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -25,8 +33,19 @@ export function SignInForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignInFields>({ resolver: zodResolver(signInSchema) });
 
-  const onSubmit = async (_data: SignInFields) => {
-    // TODO: wire to auth API
+  const onSubmit = async (data: SignInFields): Promise<void> => {
+    setServerError(null);
+    try {
+      const tokens = await api.auth.login(data);
+      await login(tokens);
+      router.push(`/${locale}`);
+    } catch (error) {
+      console.error('error', error);
+      const message = isApiError(error) && error.statusCode === 401
+        ? t('invalidCredentials')
+        : t('genericError');
+      setServerError(message);
+    }
   };
 
   return (
@@ -104,6 +123,12 @@ export function SignInForm() {
               {...register('password')}
             />
           </div>
+
+          {serverError && (
+            <p role="alert" className="font-sans text-xs text-red-600 text-center -mt-1">
+              {serverError}
+            </p>
+          )}
 
           <Button
             type="submit"

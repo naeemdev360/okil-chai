@@ -1,9 +1,11 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { NotificationsPage } from './routes/notifications/NotificationsPage';
 
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<div className="p-8 font-bold text-4xl">OkilChai Client — coming soon</div>} />
+      <Route path="/" element={<Navigate to="/notifications" replace />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
     </Routes>
   );
 }

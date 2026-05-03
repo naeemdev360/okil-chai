@@ -1,5 +1,14 @@
 import type { Role } from '@okil-chai/shared';
 
+export interface UserProfile {
+  readonly id: string;
+  readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly role: Role;
+  readonly avatarUrl: string | null;
+}
+
 export interface SignupDto {
   readonly email: string;
   readonly password: string;

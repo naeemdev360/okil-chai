@@ -243,6 +243,13 @@ export default async function UsersPage() {
 - Props interfaces must be explicit — never use `any` or object spread for props.
 - Extract any logic > 5 lines from JSX into a custom hook or utility.
 
+### Design system reuse (monorepo)
+
+- **Shared visual primitives** (surfaces, controls, consistent shells) belong in `packages/ui` and are imported as `@okil-chai/ui`. Prefer variants (`cva`) and design-token shadows/radii over duplicated class strings or ad hoc hex values.
+- **Extract when** the same styling pattern appears in more than one place or app, or when a second use is clearly imminent — keep one component with props/variants instead of copy-paste.
+- **Keep local** when the UI is a one-off layout or tightly tied to one feature’s domain; compose smaller primitives rather than forcing premature abstraction.
+- Cursor: see `.cursor/rules/design-system-reuse.mdc` for the full extraction checklist.
+
 ```typescript
 // components/ui/Button.tsx
 interface ButtonProps {

@@ -1,7 +1,7 @@
 import { getTranslations, getLocale } from 'next-intl/server';
 import Link                            from 'next/link';
 import { Sparkles, Check, ArrowRight } from 'lucide-react';
-import { Button }                      from '@okil-chai/ui';
+import { Button, SurfaceCard }         from '@okil-chai/ui';
 
 const FEATURE_KEYS = ['feature0', 'feature1', 'feature2'] as const;
 
@@ -13,9 +13,9 @@ function MockMatcherPreview() {
   ] as const;
 
   return (
-    <div
-      className="rounded-2xl border border-gray-100 bg-white p-6 relative overflow-hidden"
-      style={{ boxShadow: 'var(--shadow-lg)' }}
+    <SurfaceCard
+      elevation="lg"
+      className="relative overflow-hidden"
       aria-hidden="true"
     >
       {/* Ambient glow */}
@@ -62,7 +62,7 @@ function MockMatcherPreview() {
           </div>
         </div>
       ))}
-    </div>
+    </SurfaceCard>
   );
 }
 

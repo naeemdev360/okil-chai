@@ -7,7 +7,7 @@ import {
   User, Shield, Briefcase, DollarSign, Calendar, Camera, Lock,
   ChevronLeft, ChevronRight, Check,
 } from 'lucide-react';
-import { Button, cn } from '@okil-chai/ui';
+import { Button, cn, SurfaceCard } from '@okil-chai/ui';
 import { StepIcon } from './wizard/ui';
 import {
   StepAccount, StepPersonal, StepCredentials,
@@ -69,7 +69,7 @@ export function LawyerOnboardingWizard() {
 
       {/* Wizard card */}
       <div className="max-w-[880px] mx-auto -mt-14 px-6">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <SurfaceCard elevation="lg" padding="none" className="overflow-hidden">
 
           {/* Stepper */}
           <div className="px-9 pt-7 border-b border-gray-100">
@@ -136,7 +136,7 @@ export function LawyerOnboardingWizard() {
               </Button>
             )}
           </div>
-        </div>
+        </SurfaceCard>
       </div>
     </div>
   );

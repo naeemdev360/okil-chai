@@ -4,6 +4,17 @@ export { cn } from './utils/cn';
 // Icons
 export * from './icons';
 
+// Navigation
+export { TabBar } from './components/navigation/tab-bar';
+export type { TabItem } from './components/navigation/tab-bar';
+
+// Data display
+export { StarRating } from './components/data-display/star-rating';
+
+// Cards
+export { ReviewCard } from './components/cards/review-card';
+export type { ReviewData } from './components/cards/review-card';
+
 // Composite primitives
 export { ToggleChip }     from './components/ui/toggle-chip';
 export { TogglePill, togglePillVariants } from './components/ui/toggle-pill';
@@ -28,6 +39,9 @@ export type { BadgeProps } from './components/ui/badge';
 
 export { Separator } from './components/ui/separator';
 
+export { SurfaceCard, surfaceCardVariants } from './components/ui/surface-card';
+export type { SurfaceCardProps } from './components/ui/surface-card';
+
 export { Checkbox } from './components/ui/checkbox';
 export type { CheckboxProps } from './components/ui/checkbox';
 
@@ -36,6 +50,31 @@ export type { RadioItemProps } from './components/ui/radio-group';
 
 export { Textarea } from './components/ui/textarea';
 export type { TextareaProps } from './components/ui/textarea';
+
+export { Avatar } from './components/ui/avatar';
+
+export { ToggleSwitch } from './components/ui/toggle-switch';
+
+// Notifications
+export { NotificationIcon } from './components/notifications/NotificationIcon';
+export { NotificationPreview } from './components/notifications/NotificationPreview';
+export { NotificationRow } from './components/notifications/NotificationRow';
+export { NotificationPreferencesPanel } from './components/notifications/NotificationPreferencesPanel';
+export type { PrefSection } from './components/notifications/NotificationPreferencesPanel';
+export type { NotificationItem, NotificationType } from './components/notifications/notification.types';
+
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuRadioGroup,
+} from './components/ui/dropdown-menu';
 
 export {
   Select,

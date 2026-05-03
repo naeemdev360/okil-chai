@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { cn, SurfaceCard } from '@okil-chai/ui';
+import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { LayoutList, LayoutGrid } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import type { Lawyer } from '../../lib/search/mock-lawyers';
+import { MOCK_LAWYERS } from '../../lib/search/mock-lawyers';
 import { LawyerCard } from './LawyerCard';
 import { LawyerCardGrid } from './LawyerCardGrid';
-import { MOCK_LAWYERS } from '../../lib/search/mock-lawyers';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
 
 type FilterKey = 'all' | 'availableToday' | 'video' | 'under150' | 'topRated';
 type ViewMode  = 'list' | 'grid';
@@ -52,8 +52,11 @@ interface ViewToggleProps {
 
 function ViewToggle({ view, onChange }: ViewToggleProps) {
   return (
-    <div
-      className="inline-flex items-center gap-0.5 bg-white border border-gray-200 rounded-lg p-1 shadow-[0_1px_4px_rgba(15,31,61,0.06)]"
+    <SurfaceCard
+      radius="lg"
+      elevation="sm"
+      padding="none"
+      className="inline-flex items-center gap-0.5 border-gray-200 p-1"
       role="group"
       aria-label="View mode"
     >
@@ -83,7 +86,7 @@ function ViewToggle({ view, onChange }: ViewToggleProps) {
       >
         <LayoutGrid className="size-3.5" aria-hidden />
       </button>
-    </div>
+    </SurfaceCard>
   );
 }
 

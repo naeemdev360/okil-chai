@@ -5,6 +5,7 @@ import type {
   LoginDto,
   RefreshDto,
   SignupDto,
+  UserProfile,
 } from '../types/auth.types';
 
 export function createAuthApi(http: Http) {
@@ -23,5 +24,8 @@ export function createAuthApi(http: Http) {
 
     lawyerOnboarding: (dto: LawyerOnboardingDto) =>
       http.post('/auth/lawyer-onboarding', dto),
+
+    getMe: () =>
+      http.get<UserProfile>('/auth/me'),
   } as const;
 }

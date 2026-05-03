@@ -67,3 +67,28 @@
   .hero-float, .hero-float-b, .hero-ring, .hero-dot { animation: none; }
   .hero-fade-up { animation: none; }
 }
+
+/* ── Testimonials ambient (subtle 3D legal motifs) ─────────────────── */
+@keyframes testimonials-ambient-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes testimonials-ambient-float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
+}
+
+.testimonials-ambient-float {
+  animation: testimonials-ambient-float 15s ease-in-out infinite;
+}
+.testimonials-ambient-float-slow {
+  animation: testimonials-ambient-float-slow 22s ease-in-out infinite;
+}
+.testimonials-ambient-delay-a { animation-delay: 0.8s; }
+.testimonials-ambient-delay-b { animation-delay: 3.2s; }
+.testimonials-ambient-delay-c { animation-delay: 1.6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-ambient-float,
+  .testimonials-ambient-float-slow { animation: none; }
+}

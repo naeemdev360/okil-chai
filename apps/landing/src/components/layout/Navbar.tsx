@@ -2,13 +2,17 @@
 
 import { Button, cn } from '@okil-chai/ui';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'motion/react';
-import { useLocale } from 'next-intl';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useAuthStore } from '../../lib/store/auth.store';
+import { getPortalUrl } from '../../lib/auth/portal-routes';
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { Logo } from './Logo';
+import { NotificationBell } from './NotificationBell';
+import { UserMenu } from './UserMenu';
 
 const NAV_LINKS = [
   { href: '/search',                  label: 'Browse Lawyers' },
@@ -33,6 +37,10 @@ export function Navbar() {
   const locale                      = useLocale();
   const pathname                    = usePathname();
   const { scrollY }                 = useScroll();
+  const t                           = useTranslations('nav');
+  const user                        = useAuthStore((s) => s.user);
+  const isLoading                   = useAuthStore((s) => s.isLoading);
+  const isLoggedIn                  = user !== null;
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     setScrolled(y > SCROLL_THRESHOLD);
@@ -100,30 +108,46 @@ export function Navbar() {
         <div className="hidden lg:flex items-center gap-2.5 flex-shrink-0">
           <LocaleSwitcher />
 
-          <Link
-            href={href('/auth/signin')}
-            className={cn(
-              'font-sans text-sm font-medium px-3 py-2 rounded-md transition-colors duration-200',
-              isLinkActive(pathname, locale, '/auth/signin')
-                ? 'text-navy font-semibold'
-                : 'text-gray-600 hover:text-navy',
-            )}
-            aria-current={isLinkActive(pathname, locale, '/auth/signin') ? 'page' : undefined}
-          >
-            Sign In
-          </Link>
-
-          <Button variant="gold" size="md" asChild>
-            <Link href={href('/auth/signup')}>Get Started</Link>
-          </Button>
+          {isLoading ? (
+            <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" aria-hidden="true" />
+          ) : isLoggedIn ? (
+            <>
+              <NotificationBell role={user.role} />
+              <UserMenu user={user} />
+            </>
+          ) : (
+            <>
+              <Link
+                href={href('/auth/signin')}
+                className={cn(
+                  'font-sans text-sm font-medium px-3 py-2 rounded-md transition-colors duration-200',
+                  isLinkActive(pathname, locale, '/auth/signin')
+                    ? 'text-navy font-semibold'
+                    : 'text-gray-600 hover:text-navy',
+                )}
+                aria-current={isLinkActive(pathname, locale, '/auth/signin') ? 'page' : undefined}
+              >
+                {t('signIn')}
+              </Link>
+              <Button variant="gold" size="md" asChild>
+                <Link href={href('/auth/signup')}>{t('getStarted')}</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Tablet: show locale + CTA, hide full nav */}
         <div className="hidden md:flex lg:hidden items-center gap-2 ml-auto flex-shrink-0">
           <LocaleSwitcher />
-          <Button variant="gold" size="sm" asChild>
-            <Link href={href('/auth/signup')}>Get Started</Link>
-          </Button>
+          {isLoading ? (
+            <div className="w-7 h-7 rounded-full bg-gray-100 animate-pulse" aria-hidden="true" />
+          ) : isLoggedIn ? (
+            <UserMenu user={user} />
+          ) : (
+            <Button variant="gold" size="sm" asChild>
+              <Link href={href('/auth/signup')}>{t('getStarted')}</Link>
+            </Button>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -133,7 +157,7 @@ export function Navbar() {
             'text-gray-600 hover:text-navy hover:bg-gray-50',
           )}
           onClick={() => setMobileOpen((o) => !o)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-label={mobileOpen ? t('closeMenu') : t('openMenu')}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
         >
@@ -147,7 +171,7 @@ export function Navbar() {
             'text-gray-600 hover:text-navy hover:bg-gray-50',
           )}
           onClick={() => setMobileOpen((o) => !o)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-label={mobileOpen ? t('closeMenu') : t('openMenu')}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
         >
@@ -185,16 +209,26 @@ export function Navbar() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2 mt-2">
-                <Button variant="outline" size="md" asChild className="w-full sm:flex-1 justify-center">
-                  <Link href={href('/auth/signin')} onClick={() => setMobileOpen(false)}>
-                    Sign In
-                  </Link>
-                </Button>
-                <Button variant="gold" size="md" asChild className="w-full sm:flex-1 justify-center">
-                  <Link href={href('/auth/signup')} onClick={() => setMobileOpen(false)}>
-                    Get Started
-                  </Link>
-                </Button>
+                {isLoggedIn ? (
+                  <Button variant="gold" size="md" asChild className="w-full justify-center">
+                    <Link href={getPortalUrl(user.role)} onClick={() => setMobileOpen(false)}>
+                      {t('user.goToPortal')}
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button variant="outline" size="md" asChild className="w-full sm:flex-1 justify-center">
+                      <Link href={href('/auth/signin')} onClick={() => setMobileOpen(false)}>
+                        {t('signIn')}
+                      </Link>
+                    </Button>
+                    <Button variant="gold" size="md" asChild className="w-full sm:flex-1 justify-center">
+                      <Link href={href('/auth/signup')} onClick={() => setMobileOpen(false)}>
+                        {t('getStarted')}
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

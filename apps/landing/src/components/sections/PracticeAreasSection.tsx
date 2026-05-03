@@ -5,6 +5,7 @@ import {
   UserCheck, Lightbulb, Receipt,
   type LucideIcon,
 } from 'lucide-react';
+import { SurfaceCard } from '@okil-chai/ui';
 
 const AREA_KEYS = [
   'criminal', 'family', 'corporate', 'immigration',
@@ -48,11 +49,15 @@ export async function PracticeAreasSection() {
           {AREA_KEYS.map((key) => {
             const Icon = AREA_ICONS[key];
             return (
-              <Link
+              <SurfaceCard
                 key={key}
-                href={`/${locale}/search?area=${key}`}
-                className="group bg-white border border-gray-100 rounded-lg p-7 flex flex-col gap-3 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:border-gold transition-all duration-200"
+                asChild
+                radius="lg"
+                elevation="sm"
+                padding="none"
+                className="group flex flex-col gap-3 p-7 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-gold"
               >
+                <Link href={`/${locale}/search?area=${key}`}>
                 <div className="size-12 rounded-md bg-gold/12 flex items-center justify-center">
                   <Icon className="size-6 text-gold" strokeWidth={1.6} aria-hidden="true" />
                 </div>
@@ -64,7 +69,8 @@ export async function PracticeAreasSection() {
                     {t(`areas.${key}.desc`)}
                   </p>
                 </div>
-              </Link>
+                </Link>
+              </SurfaceCard>
             );
           })}
         </div>

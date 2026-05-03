@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@okil-chai/ui';
+import { SurfaceCard } from '@okil-chai/ui';
 import { ArrowRight, Briefcase, Check, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -50,43 +50,46 @@ export function RoleChooser() {
               const Icon = ROLE_ICONS[role];
               const bullets = t.raw(`${role}.bullets`) as string[];
               return (
-                <Link
+                <SurfaceCard
                   key={role}
-                  href={role === 'lawyer' ? `/${locale}/onboarding/lawyer` : `/${locale}/auth/signup?role=${role}`}
-                  className={cn(
-                    'group bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-9',
-                    'hover:border-gold hover:-translate-y-0.5 hover:shadow-lg',
-                    'transition-all duration-200',
-                  )}
+                  asChild
+                  borderWidth="bold"
+                  elevation="sm"
+                  padding="none"
+                  className="group p-9 transition-all duration-200 hover:border-gold hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  {/* Icon */}
-                  <div className="size-14 rounded-lg bg-gold-pale flex items-center justify-center mb-5">
-                    <Icon className="size-7 text-gold" strokeWidth={1.6} aria-hidden="true" />
-                  </div>
+                  <Link
+                    href={role === 'lawyer' ? `/${locale}/onboarding/lawyer` : `/${locale}/auth/signup?role=${role}`}
+                  >
+                    {/* Icon */}
+                    <div className="size-14 rounded-lg bg-gold-pale flex items-center justify-center mb-5">
+                      <Icon className="size-7 text-gold" strokeWidth={1.6} aria-hidden="true" />
+                    </div>
 
-                  <h2 className="font-heading text-2xl font-semibold text-navy mb-2.5">
-                    {t(`${role}.title`)}
-                  </h2>
-                  <p className="font-sans text-sm text-gray-600 leading-relaxed mb-5">
-                    {t(`${role}.blurb`)}
-                  </p>
+                    <h2 className="font-heading text-2xl font-semibold text-navy mb-2.5">
+                      {t(`${role}.title`)}
+                    </h2>
+                    <p className="font-sans text-sm text-gray-600 leading-relaxed mb-5">
+                      {t(`${role}.blurb`)}
+                    </p>
 
-                  {/* Bullets */}
-                  <ul className="flex flex-col gap-1.5 mb-6 list-none">
-                    {bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2 font-sans text-xs text-gray-800">
-                        <Check className="size-3.5 text-success shrink-0" strokeWidth={2.4} aria-hidden="true" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
+                    {/* Bullets */}
+                    <ul className="flex flex-col gap-1.5 mb-6 list-none">
+                      {bullets.map((bullet) => (
+                        <li key={bullet} className="flex items-center gap-2 font-sans text-xs text-gray-800">
+                          <Check className="size-3.5 text-success shrink-0" strokeWidth={2.4} aria-hidden="true" />
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
 
-                  {/* Footer CTA */}
-                  <div className="flex items-center justify-between pt-5 border-t border-gray-100 font-sans text-sm font-semibold text-navy">
-                    {t(`${role}.cta`)}
-                    <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-150" aria-hidden="true" />
-                  </div>
-                </Link>
+                    {/* Footer CTA */}
+                    <div className="flex items-center justify-between pt-5 border-t border-gray-100 font-sans text-sm font-semibold text-navy">
+                      {t(`${role}.cta`)}
+                      <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform duration-150" aria-hidden="true" />
+                    </div>
+                  </Link>
+                </SurfaceCard>
               );
             })}
           </div>

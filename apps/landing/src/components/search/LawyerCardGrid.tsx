@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, Video, Phone, Building2, Star } from 'lucide-react';
+import { MapPin, Video, Phone, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { cn, Badge, VerifiedCheckIcon } from '@okil-chai/ui';
+import { cn, Badge, VerifiedCheckIcon, SurfaceCard, StarRating } from '@okil-chai/ui';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 
 type ConsultType = 'video' | 'phone' | 'in-person';
@@ -51,19 +51,23 @@ export function LawyerCardGrid({ lawyer }: LawyerCardGridProps) {
   const t = useTranslations('search');
 
   return (
-    <Link
-      href={`/${locale}/lawyers/${lawyer.id}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <SurfaceCard
+      asChild
+      elevation="sm"
+      padding="none"
       className={cn(
-        'group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100',
-        'transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2',
+        'group flex flex-col overflow-hidden transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2',
         hovered
           ? 'shadow-[0_20px_60px_rgba(15,31,61,0.18)] -translate-y-1.5 scale-[1.012]'
-          : 'shadow-[0_1px_4px_rgba(15,31,61,0.07)] scale-100',
+          : 'scale-100',
       )}
-      aria-label={`View ${lawyer.name}'s profile — ${lawyer.specialization}`}
     >
+      <Link
+        href={`/${locale}/lawyers/${lawyer.id}`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        aria-label={`View ${lawyer.name}'s profile — ${lawyer.specialization}`}
+      >
       {/* ── Visual header ───────────────────────────────── */}
       <div className="relative bg-gradient-to-b from-navy via-navy to-navy-mid pt-6 pb-5 px-5 flex flex-col items-center">
 
@@ -97,11 +101,7 @@ export function LawyerCardGrid({ lawyer }: LawyerCardGridProps) {
 
         {/* Rating + city row */}
         <div className="flex items-center justify-between mb-3">
-          <span className="flex items-center gap-1">
-            <Star className="size-3.5 fill-gold text-gold shrink-0" aria-hidden />
-            <span className="font-sans text-sm font-semibold text-navy">{lawyer.rating}</span>
-            <span className="font-sans text-xs text-gray-400">({lawyer.reviewCount})</span>
-          </span>
+          <StarRating rating={lawyer.rating} count={lawyer.reviewCount} />
           <span className="flex items-center gap-1 font-sans text-xs text-gray-400">
             <MapPin className="size-3 shrink-0" aria-hidden />
             {lawyer.city}
@@ -146,6 +146,7 @@ export function LawyerCardGrid({ lawyer }: LawyerCardGridProps) {
           </span>
         </div>
       </div>
-    </Link>
+      </Link>
+    </SurfaceCard>
   );
 }

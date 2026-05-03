@@ -1,10 +1,10 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Star, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
-import { cn, Button } from '@okil-chai/ui';
+import { Button, SurfaceCard, StarRating } from '@okil-chai/ui';
 import { LawyerAvatar } from '../../shared/LawyerAvatar';
 import { MatchScoreBadge } from './MatchScoreBadge';
 import type { MatchResult } from '../types';
@@ -20,15 +20,18 @@ export function ResultCard({ result, rank }: ResultCardProps) {
   const isBest = rank === 0;
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: rank * 0.1, duration: 0.3, ease: [0.2, 0, 0, 1] }}
-      className={cn(
-        'relative bg-white rounded-xl border border-gray-100 overflow-hidden',
-        isBest ? 'shadow-lg' : 'shadow-sm',
-      )}
+    <SurfaceCard
+      asChild
+      radius="xl"
+      elevation={isBest ? 'lg' : 'sm'}
+      padding="none"
+      className="relative overflow-hidden"
     >
+      <motion.article
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: rank * 0.1, duration: 0.3, ease: [0.2, 0, 0, 1] }}
+      >
       {/* Gold top accent on best match */}
       {isBest && (
         <div
@@ -63,11 +66,7 @@ export function ResultCard({ result, rank }: ResultCardProps) {
           </p>
 
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="flex items-center gap-1.5 font-sans text-sm">
-              <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />
-              <span className="font-semibold text-navy">{result.rating}</span>
-              <span className="text-gray-400">({result.reviewCount})</span>
-            </span>
+            <StarRating rating={result.rating} count={result.reviewCount} />
             <span className="flex items-center gap-1 font-sans text-xs text-gray-400">
               <MapPin className="size-3 shrink-0" aria-hidden="true" />
               {result.city}
@@ -104,6 +103,7 @@ export function ResultCard({ result, rank }: ResultCardProps) {
           </div>
         </div>
       </div>
-    </motion.article>
+      </motion.article>
+    </SurfaceCard>
   );
 }

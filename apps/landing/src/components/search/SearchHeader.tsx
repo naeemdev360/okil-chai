@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
 import { ArrowLeft } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { LegalSearchBar } from '../ui/LegalSearchBar';
 
 const AREA_KEYS = [

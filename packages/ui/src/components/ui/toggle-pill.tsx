@@ -17,10 +17,18 @@ const togglePillVariants = cva(
           'hover:border-gold/60',
           'data-[active=true]:bg-gold data-[active=true]:text-navy data-[active=true]:border-gold data-[active=true]:font-semibold',
         ],
+        // Vertical card layout — use for option cards with icon + label + description stacked
+        card: [
+          'flex flex-col items-center justify-start text-center',
+          'bg-white text-navy border-gray-200',
+          'hover:border-navy/40',
+          'data-[active=true]:bg-navy data-[active=true]:text-white data-[active=true]:border-navy data-[active=true]:font-semibold',
+        ],
       },
       size: {
-        sm: 'text-xs px-2.5 py-1.5 rounded-md',
-        md: 'text-sm px-3.5 py-2 rounded-md',
+        sm:   'text-xs px-2.5 py-1.5 rounded-md',
+        md:   'text-sm px-3.5 py-2 rounded-md',
+        card: 'py-3.5 px-2.5 rounded-lg w-full',
       },
     },
     defaultVariants: {
