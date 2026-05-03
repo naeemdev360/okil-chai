@@ -7,19 +7,23 @@ interface LawyerVerificationRejectedProps {
   readonly lawyerName: string;
   readonly reason?: string;
   readonly supportUrl: string;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
 export function LawyerVerificationRejected({
   lawyerName,
   reason,
   supportUrl,
+  appName,
+  appTagline,
 }: LawyerVerificationRejectedProps) {
   return (
-    <EmailLayout preview="Update required for your OkilChai lawyer application">
+    <EmailLayout preview={`Update required for your ${appName} lawyer application`} appName={appName} appTagline={appTagline}>
       <Heading style={headingStyle}>Application Update Required</Heading>
       <Text style={bodyTextStyle}>Hi {lawyerName},</Text>
       <Text style={bodyTextStyle}>
-        Thank you for applying to join OkilChai. After reviewing your application, we were
+        Thank you for applying to join {appName}. After reviewing your application, we were
         unable to verify your credentials at this time.
       </Text>
 

@@ -6,18 +6,22 @@ import { EmailButton } from '../components/EmailButton';
 interface LawyerVerificationApprovedProps {
   readonly lawyerName: string;
   readonly dashboardUrl: string;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
 export function LawyerVerificationApproved({
   lawyerName,
   dashboardUrl,
+  appName,
+  appTagline,
 }: LawyerVerificationApprovedProps) {
   return (
-    <EmailLayout preview="Your OkilChai lawyer profile has been approved!">
-      <Heading style={headingStyle}>You're live on OkilChai!</Heading>
+    <EmailLayout preview={`Your ${appName} lawyer profile has been approved!`} appName={appName} appTagline={appTagline}>
+      <Heading style={headingStyle}>You're live on {appName}!</Heading>
       <Text style={bodyTextStyle}>Hi {lawyerName},</Text>
       <Text style={bodyTextStyle}>
-        Congratulations! Your profile has been verified and is now live on OkilChai. Clients
+        Congratulations! Your profile has been verified and is now live on {appName}. Clients
         can find you and book appointments starting right now.
       </Text>
 
@@ -34,7 +38,7 @@ export function LawyerVerificationApproved({
         </EmailButton>
       </Section>
 
-      <Text style={noteStyle}>Welcome to the OkilChai network. We're glad to have you.</Text>
+      <Text style={noteStyle}>Welcome to the {appName} network. We're glad to have you.</Text>
     </EmailLayout>
   );
 }

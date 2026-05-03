@@ -7,15 +7,17 @@ interface PasswordResetProps {
   readonly userName: string;
   readonly resetUrl: string;
   readonly expiresInMinutes: number;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
-export function PasswordReset({ userName, resetUrl, expiresInMinutes }: PasswordResetProps) {
+export function PasswordReset({ userName, resetUrl, expiresInMinutes, appName, appTagline }: PasswordResetProps) {
   return (
-    <EmailLayout preview="Reset your OkilChai password">
+    <EmailLayout preview={`Reset your ${appName} password`} appName={appName} appTagline={appTagline}>
       <Heading style={headingStyle}>Reset Your Password</Heading>
       <Text style={bodyTextStyle}>Hi {userName},</Text>
       <Text style={bodyTextStyle}>
-        We received a request to reset your OkilChai password. Click the button below to set
+        We received a request to reset your {appName} password. Click the button below to set
         a new password.
       </Text>
 

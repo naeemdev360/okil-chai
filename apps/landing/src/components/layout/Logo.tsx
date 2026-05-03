@@ -1,4 +1,5 @@
 import { cn, ScalesLogoIcon } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 
 interface LogoProps {
   readonly variant?: 'dark' | 'light';
@@ -26,7 +27,7 @@ export function Logo({ variant = 'dark', size = 'md', className }: LogoProps) {
           variant === 'dark' ? 'text-navy' : 'text-white',
         )}
       >
-        OkilChai
+        {brand.name}
       </span>
     </div>
   );

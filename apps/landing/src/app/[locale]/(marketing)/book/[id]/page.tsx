@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MOCK_LAWYERS } from '../../../../../lib/search/mock-lawyers';
 import { BookingView } from '../../../../../components/booking/BookingView';
+import { brand } from '../../../../../lib/brand';
 
 interface BookingPageProps {
   readonly params:       Promise<{ locale: string; id: string }>;
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: BookingPageProps): Promise<Me
   if (!lawyer) return { title: 'Booking Not Found' };
 
   return {
-    title:       `Book ${lawyer.name} — OkilChai`,
+    title:       `Book ${lawyer.name} — ${brand.name}`,
     description: lawyer.bio,
   };
 }

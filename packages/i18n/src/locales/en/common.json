@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "OkilChai",
-    "tagline": "Find a Lawyer. Book in Minutes."
+    "tagline": "Find a Lawyer. Book in Minutes.",
+    "legalDisclaimer": "{appName} is not a law firm and does not provide legal advice."
   },
   "nav": {
     "findLawyer": "Find a Lawyer",

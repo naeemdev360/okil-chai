@@ -8,6 +8,7 @@ import {
   ChevronLeft, ChevronRight, Check,
 } from 'lucide-react';
 import { Button, cn, SurfaceCard } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 import { StepIcon } from './wizard/ui';
 import {
   StepAccount, StepPersonal, StepCredentials,
@@ -45,7 +46,7 @@ export function LawyerOnboardingWizard() {
     : `calc(${(stepIdx / (STEPS.length - 1)) * 100}% - 38px)`;
 
   const handleSubmit = () => {
-    localStorage.setItem('okilchai_lawyer_pending', 'true');
+    localStorage.setItem(`${brand.storagePrefix}_lawyer_pending`, 'true');
     const portalUrl = process.env.NEXT_PUBLIC_LAWYER_PORTAL_URL;
     if (portalUrl) {
       window.location.href = `${portalUrl}/dashboard`;

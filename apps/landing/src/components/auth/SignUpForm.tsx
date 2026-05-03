@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { User, Mail, Briefcase, ChevronLeft } from 'lucide-react';
 import { Button, Input, Label, Separator, Checkbox, Badge, cn, GoogleIcon, AppleIcon, PasswordInput } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 
 const signUpSchema = z.object({
   fullName: z.string().min(2),
@@ -20,7 +21,8 @@ type SignUpFields = z.infer<typeof signUpSchema>;
 type Role = 'client' | 'lawyer';
 
 export function SignUpForm() {
-  const t = useTranslations('auth.signUp');
+  const t      = useTranslations('auth.signUp');
+  const tAuth  = useTranslations('auth');
   const locale = useLocale();
   const searchParams = useSearchParams();
   const role = (searchParams.get('role') ?? 'client') as Role;
@@ -163,7 +165,7 @@ export function SignUpForm() {
       </div>
 
       <p className="font-sans text-[11px] text-gray-400 text-center mt-8 leading-relaxed">
-        Protected by reCAPTCHA · OkilChai is not a law firm.
+        {tAuth('disclaimer', { appName: brand.name })}
       </p>
     </div>
   );

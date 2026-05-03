@@ -22,7 +22,7 @@
     "share": "Share"
   },
   "onboarding": {
-    "title": "Join OkilChai as a Lawyer",
+    "title": "Join {appName} as a Lawyer",
     "subtitle": "Reach more clients and grow your practice",
     "steps": {
       "personal": "Personal Information",

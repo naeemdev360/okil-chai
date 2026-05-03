@@ -1,6 +1,7 @@
-import { getTranslations } from 'next-intl/server';
-import { ShieldCheck, Lock, RefreshCw, HeadphonesIcon } from 'lucide-react';
+import { brand } from '@/lib/brand';
 import type { LucideIcon } from 'lucide-react';
+import { HeadphonesIcon, Lock, RefreshCw, ShieldCheck } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 const TRUST_KEYS = ['verified', 'secure', 'refund', 'support'] as const;
 
@@ -19,8 +20,10 @@ export async function TrustSafetySection() {
       <div className="max-w-[1200px] mx-auto">
 
         <div className="text-center mb-12">
-          <span className="font-sans text-xs font-semibold tracking-[0.1em] uppercase text-gold mb-3 block">
-            {t('sectionLabel')}
+          <span className="font-sans text-xs font-semibold tracking-[0.1em] uppercase text-gold mb-3 block">  
+            {t('sectionLabel',{
+              appName: brand.name,
+            })}
           </span>
           <h2 className="font-heading text-[36px] font-semibold text-navy">
             {t('title')}

@@ -1,6 +1,6 @@
+import { brand } from '@/lib/brand';
+import { CalendarCheck, Search, UserCheck, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { Search, CalendarCheck, UserCheck, type LucideIcon } from 'lucide-react';
-
 const STEP_ICONS = {
   search: Search,
   book:   CalendarCheck,
@@ -21,7 +21,9 @@ export async function HowItWorksSection() {
             {t('sectionLabel')}
           </span>
           <h2 className="font-heading text-[36px] font-semibold text-navy">
-            {t('title')}
+            {t('title',{
+              appName: brand.name,
+            })}
           </h2>
         </div>
 

@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { api } from '../../lib/api/client';
 import { useAuthStore } from '../../lib/store/auth.store';
+import { brand } from '../../lib/brand';
 
 const signInSchema = z.object({
   email:    z.string().email(),
@@ -22,6 +23,7 @@ type SignInFields = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
   const t      = useTranslations('auth.signIn');
+  const tAuth  = useTranslations('auth');
   const locale = useLocale();
   const router = useRouter();
   const login  = useAuthStore((s) => s.login);
@@ -150,7 +152,7 @@ export function SignInForm() {
       </div>
 
       <p className="font-sans text-[11px] text-gray-400 text-center mt-8 leading-relaxed">
-        Protected by reCAPTCHA · OkilChai is not a law firm.
+        {tAuth('disclaimer', { appName: brand.name })}
       </p>
     </div>
   );

@@ -45,7 +45,7 @@
     },
     "howItWorks": {
       "sectionLabel": "সহজ প্রক্রিয়া",
-      "title": "OkilChai কীভাবে কাজ করে",
+      "title": "{appName} কীভাবে কাজ করে",
       "steps": {
         "search": {
           "number": "০১",
@@ -89,7 +89,7 @@
       }
     },
     "trust": {
-      "sectionLabel": "কেন OkilChai",
+      "sectionLabel": "কেন {appName}",
       "title": "বিশ্বাস ও স্বচ্ছতার উপর নির্মিত",
       "items": {
         "verified":  { "title": "যাচাইকৃত শংসাপত্র",   "body": "প্ল্যাটফর্মে যোগ দেওয়ার আগে প্রতিটি আইনজীবী বার-যাচাইকৃত এবং পটভূমি-পরীক্ষিত।" },
@@ -137,8 +137,8 @@
   },
   "auth": {
     "roleChooser": {
-      "tagline": "OkilChai-তে স্বাগতম",
-      "title": "আপনি কীভাবে OkilChai ব্যবহার করবেন?",
+      "tagline": "{appName}-তে স্বাগতম",
+      "title": "আপনি কীভাবে {appName} ব্যবহার করবেন?",
       "subtitle": "আপনার অ্যাকাউন্টের ধরন বেছে নিন। আপনি পরে অন্য ভূমিকার জন্য একটি পৃথক অ্যাকাউন্ট তৈরি করতে পারবেন।",
       "alreadyHave": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
       "signIn": "সাইন ইন করুন",
@@ -174,12 +174,12 @@
     "signUp": {
       "heading": "আপনার অ্যাকাউন্ট তৈরি করুন",
       "subHeadingClient": "মিনিটের মধ্যে একজন যাচাইকৃত আইনজীবী খুঁজুন।",
-      "subHeadingLawyer": "OkilChai-তে ২৫,০০০+ আইনজীবীর সাথে যোগ দিন।",
+      "subHeadingLawyer": "{appName}-তে ২৫,০০০+ আইনজীবীর সাথে যোগ দিন।",
       "fullName": "পূর্ণ নাম",
       "email": "ইমেইল ঠিকানা",
       "password": "পাসওয়ার্ড",
       "submit": "অ্যাকাউন্ট তৈরি করুন",
-      "terms": "আমি OkilChai-এর সাথে একমত",
+      "terms": "আমি {appName}-এর সাথে একমত",
       "termsLink": "সেবার শর্তাবলী",
       "and": "এবং",
       "privacyLink": "গোপনীয়তা নীতি",
@@ -212,11 +212,11 @@
       },
       "security": "আপনার ডেটা এন্ড-টু-এন্ড এনক্রিপ্টেড এবং কখনো বিক্রি হয় না।"
     },
-    "disclaimer": "reCAPTCHA দ্বারা সুরক্ষিত · OkilChai একটি আইন সংস্থা নয়।"
+    "disclaimer": "reCAPTCHA দ্বারা সুরক্ষিত · {appName} একটি আইন সংস্থা নয়।"
   },
   "onboarding": {
     "lawyer": {
-      "tagline": "OkilChai-তে যোগ দিন",
+      "tagline": "{appName}-তে যোগ দিন",
       "title": "আইনজীবী অনবোর্ডিং",
       "subtitle": "৭টি সহজ ধাপে আপনার প্রোফাইল সেট আপ করুন। বেশিরভাগ আইনজীবী ১০ মিনিটের মধ্যে সম্পন্ন করেন।",
       "steps": {
@@ -237,7 +237,7 @@
         "password": "পাসওয়ার্ড",
         "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
         "confirmPwHint": "আপনার পাসওয়ার্ডের সাথে মিলতে হবে",
-        "termsLabel": "আমি OkilChai-এর সাথে একমত",
+        "termsLabel": "আমি {appName}-এর সাথে একমত",
         "termsLink": "সেবার শর্তাবলী",
         "termsAnd": "এবং",
         "privacyLink": "গোপনীয়তা নীতি",
@@ -364,7 +364,7 @@
     }
   },
   "search": {
-    "pageTitle": "আইনজীবী খুঁজুন — OkilChai",
+    "pageTitle": "আইনজীবী খুঁজুন — {appName}",
     "pageDescription": "অনুশীলন ক্ষেত্র, অবস্থান এবং বাজেট অনুযায়ী যাচাইকৃত আইনজীবী খুঁজুন।",
     "sectionLabel": "আইনজীবী ব্রাউজ করুন",
     "heading": "আপনার নিখুঁত",

@@ -27,7 +27,7 @@ void i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'okil-chai-locale',
+      lookupLocalStorage: `${import.meta.env.VITE_APP_SLUG ?? 'okilchai'}-locale`,
     },
   });
 

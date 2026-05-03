@@ -10,6 +10,8 @@ interface PayoutProcessedProps {
   readonly periodEnd: string;
   readonly appointmentCount: number;
   readonly dashboardUrl: string;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
 export function PayoutProcessed({
@@ -19,9 +21,11 @@ export function PayoutProcessed({
   periodEnd,
   appointmentCount,
   dashboardUrl,
+  appName,
+  appTagline,
 }: PayoutProcessedProps) {
   return (
-    <EmailLayout preview={`Your OkilChai payout of ${amount} has been processed`}>
+    <EmailLayout preview={`Your ${appName} payout of ${amount} has been processed`} appName={appName} appTagline={appTagline}>
       <Heading style={headingStyle}>Payout Processed</Heading>
       <Text style={bodyTextStyle}>Hi {lawyerName},</Text>
       <Text style={bodyTextStyle}>

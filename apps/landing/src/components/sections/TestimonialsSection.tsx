@@ -1,3 +1,4 @@
+import { brand } from '@/lib/brand';
 import { QuoteMarkIcon } from '@okil-chai/ui';
 import { getTranslations } from 'next-intl/server';
 import { TestimonialsAmbientBackdrop } from './TestimonialsAmbientBackdrop';
@@ -36,7 +37,9 @@ export async function TestimonialsSection() {
               <QuoteMarkIcon className="size-7 text-gold opacity-85" />
 
               <blockquote className="font-heading italic text-[17px] leading-[1.55] text-cream flex-1">
-                &ldquo;{t(`items.${key}.quote`)}&rdquo;
+                &ldquo;{t(`items.${key}.quote`,{
+                  appName: brand.name,
+                })}&rdquo;
               </blockquote>
 
               <figcaption className="flex items-center gap-3 pt-4 border-t border-white/10">

@@ -45,7 +45,7 @@
     },
     "howItWorks": {
       "sectionLabel": "Simple Process",
-      "title": "How OkilChai Works",
+      "title": "How {appName} Works",
       "steps": {
         "search": {
           "number": "01",
@@ -83,13 +83,13 @@
       "sectionLabel": "Client Stories",
       "title": "Trusted by Thousands",
       "items": {
-        "priya":   { "quote": "Found an immigration lawyer in 10 minutes and had my case filed within the week. OkilChai made an overwhelming process feel manageable.", "name": "Priya Sharma",      "role": "Verified Client" },
+        "priya":   { "quote": "Found an immigration lawyer in 10 minutes and had my case filed within the week. {appName} made an overwhelming process feel manageable.", "name": "Priya Sharma",      "role": "Verified Client" },
         "marcus":  { "quote": "The booking flow is seamless. I compared three family law attorneys, read their reviews, and booked a video consultation the same day.",  "name": "Marcus Chen",       "role": "Verified Client" },
         "fatima":  { "quote": "Every lawyer is actually vetted. That mattered to me — I didn't want to scroll through random directories. Highly recommend.",             "name": "Fatima Al-Rashid", "role": "Verified Client" }
       }
     },
     "trust": {
-      "sectionLabel": "Why OkilChai",
+      "sectionLabel": "Why {appName}",
       "title": "Built on Trust & Transparency",
       "items": {
         "verified":  { "title": "Verified Credentials",    "body": "Every lawyer is bar-verified and background-checked before joining the platform." },
@@ -137,8 +137,8 @@
   },
   "auth": {
     "roleChooser": {
-      "tagline": "Welcome to OkilChai",
-      "title": "How will you use OkilChai?",
+      "tagline": "Welcome to {appName}",
+      "title": "How will you use {appName}?",
       "subtitle": "Choose your account type. You can always create a separate account for the other role later.",
       "alreadyHave": "Already have an account?",
       "signIn": "Sign in",
@@ -174,12 +174,12 @@
     "signUp": {
       "heading": "Create your account",
       "subHeadingClient": "Find a verified lawyer in minutes — not days.",
-      "subHeadingLawyer": "Join 25,000+ lawyers building their practice on OkilChai.",
+      "subHeadingLawyer": "Join 25,000+ lawyers building their practice on {appName}.",
       "fullName": "Full name",
       "email": "Email address",
       "password": "Password",
       "submit": "Create Account",
-      "terms": "I agree to OkilChai's",
+      "terms": "I agree to {appName}'s",
       "termsLink": "Terms of Service",
       "and": "and",
       "privacyLink": "Privacy Policy",
@@ -212,11 +212,11 @@
       },
       "security": "Your data is encrypted end-to-end and never sold."
     },
-    "disclaimer": "Protected by reCAPTCHA · OkilChai is not a law firm.\nUse of this platform does not create an attorney-client relationship."
+    "disclaimer": "Protected by reCAPTCHA · {appName} is not a law firm.\nUse of this platform does not create an attorney-client relationship."
   },
   "onboarding": {
     "lawyer": {
-      "tagline": "Join OkilChai",
+      "tagline": "Join {appName}",
       "title": "Lawyer Onboarding",
       "subtitle": "Set up your profile in 7 simple steps. Most lawyers complete this in under 10 minutes.",
       "steps": {
@@ -237,7 +237,7 @@
         "password": "Password",
         "confirmPassword": "Confirm Password",
         "confirmPwHint": "Must match your password",
-        "termsLabel": "I agree to OkilChai's",
+        "termsLabel": "I agree to {appName}'s",
         "termsLink": "Terms of Service",
         "termsAnd": "and",
         "privacyLink": "Privacy Policy",
@@ -364,7 +364,7 @@
     }
   },
   "search": {
-    "pageTitle": "Find a Lawyer — OkilChai",
+    "pageTitle": "Find a Lawyer — {appName}",
     "pageDescription": "Search verified lawyers by practice area, location, and budget.",
     "sectionLabel": "Browse Lawyers",
     "heading": "Find Your Perfect",

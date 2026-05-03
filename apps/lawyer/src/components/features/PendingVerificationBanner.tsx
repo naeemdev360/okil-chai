@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Clock, X, Mail } from 'lucide-react';
+import { brand } from '../../lib/brand';
 
-const STORAGE_KEY = 'okilchai_lawyer_pending';
-const SESSION_DISMISSED_KEY = 'okilchai_lawyer_pending_dismissed';
+const STORAGE_KEY = `${brand.storagePrefix}_lawyer_pending`;
+const SESSION_DISMISSED_KEY = `${brand.storagePrefix}_lawyer_pending_dismissed`;
 
 export function PendingVerificationBanner() {
   const isPending = localStorage.getItem(STORAGE_KEY) === 'true';
@@ -35,7 +36,7 @@ export function PendingVerificationBanner() {
           <div className="flex items-center gap-1.5 mt-1.5">
             <Mail className="size-3 text-warning" aria-hidden="true" />
             <span className="font-sans text-xs text-gray-600">
-              Check your inbox for a confirmation email from OkilChai.
+              Check your inbox for a confirmation email from {brand.name}.
             </span>
           </div>
         </div>

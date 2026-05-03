@@ -38,8 +38,10 @@ async function bootstrap(): Promise<void> {
 
   app.useGlobalFilters(new AllExceptionsFilter());
 
+  const appName = configService.get<string>('app.name') ?? 'OkilChai';
+
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('OkilChai API')
+    .setTitle(`${appName} API`)
     .setDescription('Lawyer Discovery & Appointment Platform — REST API')
     .setVersion('1.0')
     .addBearerAuth()

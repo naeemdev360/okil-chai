@@ -1,6 +1,7 @@
 'use client';
 
 import { SurfaceCard } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 import { ArrowRight, Briefcase, Check, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -23,7 +24,7 @@ export function RoleChooser() {
       <div className="py-5 px-8 border-b border-gray-100 bg-white">
         <div className="max-w-[1200px] mx-auto">
           <Link href={`/${locale}`} className="font-heading font-bold text-xl text-navy tracking-tight">
-            OkilChai
+            {brand.name}
           </Link>
         </div>
       </div>

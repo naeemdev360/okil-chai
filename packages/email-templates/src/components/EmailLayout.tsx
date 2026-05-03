@@ -5,9 +5,11 @@ import { colors } from '@okil-chai/design-tokens';
 interface EmailLayoutProps {
   readonly preview: string;
   readonly children: ReactNode;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
-export function EmailLayout({ preview, children }: EmailLayoutProps) {
+export function EmailLayout({ preview, children, appName, appTagline }: EmailLayoutProps) {
   return (
     <Html lang="en">
       <Head />
@@ -15,8 +17,8 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
       <Body style={bodyStyle}>
         <Container style={containerStyle}>
           <Section style={headerStyle}>
-            <Text style={logoTextStyle}>OkilChai</Text>
-            <Text style={taglineStyle}>Find a Lawyer. Book in Minutes.</Text>
+            <Text style={logoTextStyle}>{appName}</Text>
+            <Text style={taglineStyle}>{appTagline}</Text>
           </Section>
 
           <Section style={contentStyle}>{children}</Section>
@@ -25,10 +27,10 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
 
           <Section style={footerStyle}>
             <Text style={footerTextStyle}>
-              © {new Date().getFullYear()} OkilChai. All rights reserved.
+              © {new Date().getFullYear()} {appName}. All rights reserved.
             </Text>
             <Text style={footerLinkStyle}>
-              You're receiving this email because you have an account on OkilChai.
+              You're receiving this email because you have an account on {appName}.
             </Text>
           </Section>
         </Container>

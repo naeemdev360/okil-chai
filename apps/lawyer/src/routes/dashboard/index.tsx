@@ -1,5 +1,6 @@
 import { Calendar, Eye, MessageSquare, TrendingUp } from 'lucide-react';
 import { PendingVerificationBanner } from '../../components/features/PendingVerificationBanner';
+import { brand } from '../../lib/brand';
 
 interface StatCardProps {
   readonly icon: React.ElementType;
@@ -32,7 +33,7 @@ export function DashboardPage() {
       <header className="bg-white border-b border-gray-100 px-8 py-4">
         <div className="max-w-[1200px] mx-auto flex items-center justify-between">
           <span className="font-heading font-bold text-xl text-navy tracking-tight">
-            OkilChai
+            {brand.name}
           </span>
           <div className="size-9 rounded-full bg-navy flex items-center justify-center font-heading font-bold text-sm text-white">
             L

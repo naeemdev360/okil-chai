@@ -1,6 +1,7 @@
 'use client';
 
 import { Button, cn } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -85,7 +86,7 @@ export function Navbar() {
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href={href('/')} aria-label="OkilChai home" className="flex-shrink-0">
+        <Link href={href('/')} aria-label={`${brand.name} home`} className="flex-shrink-0">
           <Logo size="md" variant="dark" />
         </Link>
 

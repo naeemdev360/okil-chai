@@ -7,6 +7,8 @@ interface WelcomeEmailProps {
   readonly userName: string;
   readonly role: 'client' | 'lawyer';
   readonly ctaUrl: string;
+  readonly appName: string;
+  readonly appTagline: string;
 }
 
 const CLIENT_STEPS = [
@@ -21,14 +23,14 @@ const LAWYER_STEPS = [
   'Start receiving bookings from clients',
 ] as const;
 
-export function WelcomeEmail({ userName, role, ctaUrl }: WelcomeEmailProps) {
+export function WelcomeEmail({ userName, role, ctaUrl, appName, appTagline }: WelcomeEmailProps) {
   const isLawyer = role === 'lawyer';
   const steps = isLawyer ? LAWYER_STEPS : CLIENT_STEPS;
   const ctaLabel = isLawyer ? 'Complete My Profile' : 'Find a Lawyer';
 
   return (
-    <EmailLayout preview={`Welcome to OkilChai, ${userName}!`}>
-      <Heading style={headingStyle}>Welcome to OkilChai, {userName}!</Heading>
+    <EmailLayout preview={`Welcome to ${appName}, ${userName}!`} appName={appName} appTagline={appTagline}>
+      <Heading style={headingStyle}>Welcome to {appName}, {userName}!</Heading>
       <Text style={bodyTextStyle}>
         {isLawyer
           ? "We're excited to have you join our network of verified legal professionals."
@@ -50,7 +52,7 @@ export function WelcomeEmail({ userName, role, ctaUrl }: WelcomeEmailProps) {
       </Section>
 
       <Text style={signoffStyle}>Welcome aboard,</Text>
-      <Text style={signoffNameStyle}>The OkilChai Team</Text>
+      <Text style={signoffNameStyle}>The {appName} Team</Text>
     </EmailLayout>
   );
 }

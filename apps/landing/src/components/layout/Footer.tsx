@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { XTwitterIcon, LinkedInIcon, FacebookIcon } from '@okil-chai/ui';
+import { brand } from '../../lib/brand';
 import { Logo } from './Logo';
 
 const FOOTER_COLS = [
@@ -109,7 +110,7 @@ export function Footer({ locale }: FooterProps) {
         {/* Legal bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 flex-wrap">
           <p className="font-sans text-xs text-white/45">
-            © {new Date().getFullYear()} OkilChai. All rights reserved.
+            © {new Date().getFullYear()} {brand.name}. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-5 justify-center">
             {LEGAL_LINKS.map((label) => (
@@ -125,10 +126,7 @@ export function Footer({ locale }: FooterProps) {
         </div>
 
         <p className="mt-6 pt-5 border-t border-white/8 font-sans text-[11px] text-white/35 leading-relaxed">
-          OkilChai is not a law firm and does not provide legal advice. Connecting a client with
-          a lawyer through our platform does not constitute an attorney-client relationship.
-          Lawyer profiles are independently verified. Use of this site is subject to our Terms
-          of Service.
+          {brand.legalDisclaimer}
         </p>
       </div>
     </footer>

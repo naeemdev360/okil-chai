@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Playfair_Display, DM_Sans } from 'next/font/google';
 import type { Locale } from '@okil-chai/i18n';
 import { routing } from '../../i18n/routing';
+import { brand } from '../../lib/brand';
 import { Providers } from './providers';
 import '../globals.css';
 
@@ -25,8 +26,8 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | OkilChai',
-    default: 'OkilChai — Find Your Lawyer',
+    template: `%s | ${brand.name}`,
+    default: `${brand.name} — ${brand.tagline}`,
   },
   description:
     'Legal help as easy as booking a doctor. Find trusted, verified lawyers in Bangladesh.',
