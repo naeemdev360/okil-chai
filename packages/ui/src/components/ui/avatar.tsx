@@ -3,9 +3,11 @@
 import * as React from 'react';
 import { cn } from '../../utils/cn';
 
-interface AvatarProps {
+export interface AvatarProps {
   readonly initials: string;
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Shows a presence dot when the subject is online. */
+  readonly isOnline?: boolean;
   readonly className?: string;
 }
 
@@ -16,17 +18,35 @@ const SIZE_CLASSES: Record<NonNullable<AvatarProps['size']>, string> = {
   xl: 'w-14 h-14 text-base',
 };
 
-export function Avatar({ initials, size = 'md', className }: AvatarProps) {
+const ONLINE_DOT_CLASSES: Record<NonNullable<AvatarProps['size']>, string> = {
+  sm: 'size-2',
+  md: 'size-2.5',
+  lg: 'size-3',
+  xl: 'size-3.5',
+};
+
+export function Avatar({ initials, size = 'md', isOnline = false, className }: AvatarProps) {
   return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        'inline-flex items-center justify-center rounded-full bg-navy text-white font-semibold select-none shrink-0',
-        SIZE_CLASSES[size],
-        className,
-      )}
-    >
-      {initials.slice(0, 2).toUpperCase()}
+    <span className="relative inline-flex shrink-0">
+      <span
+        aria-hidden="true"
+        className={cn(
+          'inline-flex items-center justify-center rounded-full bg-navy font-semibold text-white select-none',
+          SIZE_CLASSES[size],
+          className,
+        )}
+      >
+        {initials.slice(0, 2).toUpperCase()}
+      </span>
+      {isOnline ? (
+        <span
+          className={cn(
+            'absolute bottom-0 right-0 rounded-full border-2 border-white bg-success',
+            ONLINE_DOT_CLASSES[size],
+          )}
+          aria-hidden
+        />
+      ) : null}
     </span>
   );
 }

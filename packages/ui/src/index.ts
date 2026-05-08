@@ -1,6 +1,14 @@
 // Utilities
 export { cn } from './utils/cn';
 
+// Layout
+export { SidebarNav } from './components/layout/sidebar-nav';
+export type { SidebarNavItem, SidebarNavUser, SidebarNavProps } from './components/layout/sidebar-nav';
+
+// Cards
+export { StatCard } from './components/cards/stat-card';
+export type { StatCardProps } from './components/cards/stat-card';
+
 // Icons
 export * from './icons';
 
@@ -10,6 +18,15 @@ export type { TabItem } from './components/navigation/tab-bar';
 
 // Data display
 export { StarRating } from './components/data-display/star-rating';
+export {
+  SelectableStackedList,
+  SelectableStackedListItem,
+  stackedListItemVariants,
+} from './components/data-display/selectable-stacked-list';
+export type {
+  SelectableStackedListItemProps,
+  SelectableStackedListProps,
+} from './components/data-display/selectable-stacked-list';
 
 // Cards
 export { ReviewCard } from './components/cards/review-card';
@@ -42,6 +59,9 @@ export { Separator } from './components/ui/separator';
 export { SurfaceCard, surfaceCardVariants } from './components/ui/surface-card';
 export type { SurfaceCardProps } from './components/ui/surface-card';
 
+export { DecorativeOrb, decorativeOrbVariants } from './components/ui/decorative-orb';
+export type { DecorativeOrbProps } from './components/ui/decorative-orb';
+
 export { Checkbox } from './components/ui/checkbox';
 export type { CheckboxProps } from './components/ui/checkbox';
 
@@ -52,6 +72,7 @@ export { Textarea } from './components/ui/textarea';
 export type { TextareaProps } from './components/ui/textarea';
 
 export { Avatar } from './components/ui/avatar';
+export type { AvatarProps } from './components/ui/avatar';
 
 export { ToggleSwitch } from './components/ui/toggle-switch';
 

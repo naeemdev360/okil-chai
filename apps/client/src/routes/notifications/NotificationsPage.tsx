@@ -99,13 +99,12 @@ export function NotificationsPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-cream pb-20">
-      <div className="max-w-[880px] mx-auto px-8 py-10">
-
+    <div className="mx-auto w-full max-w-[880px] pb-8">
+      <div className="py-2 sm:py-4">
         {/* Header */}
-        <div className="flex items-start justify-between mb-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-7">
           <div>
-            <h1 className="font-heading text-[32px] font-bold text-navy leading-tight mb-1">
+            <h1 className="font-heading text-[26px] sm:text-[32px] font-bold text-navy leading-tight mb-1">
               Notifications
             </h1>
             <p className="font-sans text-sm text-gray-600">
@@ -119,7 +118,7 @@ export function NotificationsPage() {
               )}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {counts.unread > 0 && (
               <button
                 onClick={markAll}

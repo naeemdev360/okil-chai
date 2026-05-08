@@ -1,3 +1,4 @@
+import { DecorativeOrb } from '@okil-chai/ui';
 import { Shield } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
@@ -12,13 +13,33 @@ export async function AuthMarketingPanel() {
     <div className="relative h-full min-h-screen bg-navy text-white flex flex-col justify-between overflow-hidden px-14 py-12">
 
       {/* Background decoration: concentric rings */}
-      <div className="absolute -top-20 -right-20 size-[500px] rounded-full border border-white/[0.04] pointer-events-none" />
-      <div className="absolute -top-20 -right-20 size-[360px] rounded-full border border-white/[0.06] pointer-events-none" />
-      <div className="absolute -top-20 -right-20 size-[220px] rounded-full border border-white/[0.05] pointer-events-none" />
+      <DecorativeOrb
+        appearance="white-outline-faint"
+        size="none"
+        className="-top-20 -right-20 size-[500px]"
+      />
+      <DecorativeOrb
+        appearance="white-outline-muted"
+        size="none"
+        className="-top-20 -right-20 size-[360px]"
+      />
+      <DecorativeOrb
+        appearance="white-outline-soft"
+        size="none"
+        className="-top-20 -right-20 size-[220px]"
+      />
 
       {/* Gold glow orbs */}
-      <div className="absolute top-1/3 -right-28 size-[340px] rounded-full bg-gold/10 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -left-16 size-[280px] rounded-full bg-gold/8 blur-2xl pointer-events-none" />
+      <DecorativeOrb
+        appearance="gold-fill"
+        size="none"
+        className="top-1/3 -right-28 size-[340px] blur-3xl"
+      />
+      <DecorativeOrb
+        appearance="gold-fill-soft"
+        size="none"
+        className="-bottom-20 -left-16 size-[280px] blur-2xl"
+      />
 
       {/* Vertical accent line */}
       <div className="absolute right-0 inset-y-0 w-px bg-gradient-to-b from-transparent via-gold/20 to-transparent pointer-events-none" />

@@ -243,6 +243,28 @@ export default async function UsersPage() {
 - Props interfaces must be explicit — never use `any` or object spread for props.
 - Extract any logic > 5 lines from JSX into a custom hook or utility.
 
+
+## UI Components
+
+### Always Check Before Creating
+Before creating any new UI component, ALWAYS check `packages/ui/src` (or the relevant subdirectory) to see if it already exists. Search by:
+- Component name
+- Similar functionality (e.g., don't create `Button.tsx` if `BaseButton.tsx` exists)
+
+### Reusable = Shared
+If a new component could reasonably be used in more than one place, create it in `packages/ui` instead of locally. Ask yourself:
+- Could another feature/page use this?
+- Is it generic enough (Button, Modal, Card, Input, Badge, etc.)?
+
+If yes → `packages/ui/src/components/YourComponent.tsx`
+If no (very feature-specific) → local to the feature
+
+### Component Checklist
+1. `ls packages/ui/src/components` — does it already exist?
+2. Is this reusable? → `packages/ui`
+3. Export it from `packages/ui/src/index.ts`
+4. Import from `@your-org/ui` in consuming packages
+
 ### Design system reuse (monorepo)
 
 - **Shared visual primitives** (surfaces, controls, consistent shells) belong in `packages/ui` and are imported as `@okil-chai/ui`. Prefer variants (`cva`) and design-token shadows/radii over duplicated class strings or ad hoc hex values.

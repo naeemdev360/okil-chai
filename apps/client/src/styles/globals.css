@@ -20,4 +20,8 @@
     @apply bg-cream text-navy;
     margin: 0;
   }
+
+  .client-portal-layout {
+    --client-sidebar-width: 260px;
+  }
 }

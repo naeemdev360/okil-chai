@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "noEmit": true,
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "ES2022"],
     "types": ["vite/client"],
