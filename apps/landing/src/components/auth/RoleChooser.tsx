@@ -1,10 +1,10 @@
 'use client';
 
 import { SurfaceCard } from '@okil-chai/ui';
-import { brand } from '../../lib/brand';
 import { ArrowRight, Briefcase, Check, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { brand } from '../../lib/brand';
 
 const ROLES = ['client', 'lawyer'] as const;
 type Role = typeof ROLES[number];
@@ -35,10 +35,14 @@ export function RoleChooser() {
           {/* Heading */}
           <div className="text-center mb-12">
             <span className="font-sans text-xs font-semibold tracking-[0.1em] uppercase text-gold mb-3 block">
-              {t('tagline')}
+              {t('tagline',{
+                appName: brand.name,
+              })}
             </span>
             <h1 className="font-heading text-[40px] font-bold text-navy mb-3">
-              {t('title')}
+              {t('title',{
+                appName: brand.name,
+              })} 
             </h1>
             <p className="font-sans text-base text-gray-600 max-w-[520px] mx-auto leading-relaxed">
               {t('subtitle')}

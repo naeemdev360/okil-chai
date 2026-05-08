@@ -1,13 +1,13 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import Link from 'next/link';
+import { AppleIcon, Badge, Button, Checkbox, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@okil-chai/ui';
+import { Briefcase, ChevronLeft, Mail, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { User, Mail, Briefcase, ChevronLeft } from 'lucide-react';
-import { Button, Input, Label, Separator, Checkbox, Badge, cn, GoogleIcon, AppleIcon, PasswordInput } from '@okil-chai/ui';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { brand } from '../../lib/brand';
 
 const signUpSchema = z.object({
@@ -73,7 +73,9 @@ export function SignUpForm() {
           {t('heading')}
         </h1>
         <p className="font-sans text-[15px] text-gray-600 mb-7 leading-relaxed">
-          {role === 'lawyer' ? t('subHeadingLawyer') : t('subHeadingClient')}
+          {role === 'lawyer' ? t('subHeadingLawyer',{
+            appName: brand.name,
+          }) : t('subHeadingClient')}
         </p>
 
         {/* OAuth */}
@@ -145,7 +147,9 @@ export function SignUpForm() {
               htmlFor="signup-terms"
               className="font-sans text-xs text-gray-600 leading-relaxed cursor-pointer"
             >
-              {t('terms')}{' '}
+              {t('terms',{
+                appName: brand.name,
+              })}{' '}
               <Link href="#" className="text-navy font-medium hover:underline">{t('termsLink')}</Link>
               {' '}{t('and')}{' '}
               <Link href="#" className="text-navy font-medium hover:underline">{t('privacyLink')}</Link>.

@@ -1,15 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { ClientPortalLayout }  from './components/layout/ClientPortalLayout';
-import { HomePage }            from './routes/home/HomePage';
-import { AppointmentsPage }    from './routes/appointments/AppointmentsPage';
-import { SavedLawyersPage }    from './routes/lawyers/SavedLawyersPage';
-import { MessagesPage }        from './routes/messages/MessagesPage';
-import { DocumentsPage }       from './routes/documents/DocumentsPage';
-import { PaymentsPage }        from './routes/payments/PaymentsPage';
-import { SettingsPage }        from './routes/profile/SettingsPage';
-import { NotificationsPage }   from './routes/notifications/NotificationsPage';
+import { ClientPortalLayout } from './components/layout/ClientPortalLayout';
+import { AppointmentsPage } from './routes/appointments/AppointmentsPage';
+import { DocumentsPage } from './routes/documents/DocumentsPage';
+import { HomePage } from './routes/home/HomePage';
+import { SavedLawyersPage } from './routes/lawyers/SavedLawyersPage';
+import { MessagesPage } from './routes/messages/MessagesPage';
+import { NotificationsPage } from './routes/notifications/NotificationsPage';
+import { PaymentsPage } from './routes/payments/PaymentsPage';
+import { SettingsPage } from './routes/profile/SettingsPage';
 
 export function App() {
+
   return (
     <Routes>
       <Route element={<ClientPortalLayout />}>

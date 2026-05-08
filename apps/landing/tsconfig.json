@@ -27,7 +27,7 @@
         "../../packages/i18n/src/locales/*"
       ],
       "@okil-chai/shared": [
-        "../../packages/shared/src/index.ts"
+        "../../packages/shared"
       ],
       "@okil-chai/api-client": [
         "../../packages/api-client/src/index.ts"

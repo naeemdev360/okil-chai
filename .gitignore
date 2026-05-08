@@ -8,6 +8,12 @@ dist
 .next
 out
 build
+packages/shared/src/**/*.js
+packages/api-client/src/**/*.js
+packages/hooks/src/**/*.js
+packages/ui/src/**/*.js
+packages/design-tokens/src/**/*.js
+packages/i18n/src/**/*.js
 
 # Turbo
 .turbo

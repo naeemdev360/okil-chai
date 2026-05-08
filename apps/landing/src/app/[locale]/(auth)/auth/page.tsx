@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { RoleChooser } from '../../../../components/auth/RoleChooser';
+import { brand } from '../../../../lib/brand';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('auth.roleChooser');
-  return { title: t('title') };
+  return { title: t('title', { appName: brand.name }) };
 }
 
 export default function AuthPage() {

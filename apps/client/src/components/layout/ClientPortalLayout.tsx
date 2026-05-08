@@ -1,32 +1,22 @@
-import type { SidebarNavItem } from '@okil-chai/ui';
-import { DecorativeOrb, SidebarNav } from '@okil-chai/ui';
+import {
+  DecorativeOrb,
+  PortalFooter,
+  PortalMobileHeader,
+  PortalMobileNavDrawer,
+  SidebarNav,
+} from '@okil-chai/ui';
 import {
   Bell,
-  Calendar,
-  CreditCard,
-  FileText,
-  Heart,
-  LayoutDashboard,
-  Menu,
-  MessageSquare,
-  Settings,
-  X,
 } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { brand } from '../../lib/brand';
 import { CURRENT_USER } from '../../lib/mock-data';
-
-const NAV_ITEMS: readonly SidebarNavItem[] = [
-  { key: '/dashboard',     label: 'Dashboard',        icon: <LayoutDashboard size={18} /> },
-  { key: '/appointments',  label: 'My Appointments',  icon: <Calendar       size={18} />, count: 3 },
-  { key: '/saved',         label: 'Saved Lawyers',    icon: <Heart          size={18} />, count: 7 },
-  { key: '/messages',      label: 'Messages',         icon: <MessageSquare  size={18} />, count: 2 },
-  { key: '/documents',     label: 'Documents',        icon: <FileText       size={18} /> },
-  { key: '/payments',      label: 'Payments',         icon: <CreditCard     size={18} /> },
-  { key: '/notifications', label: 'Notifications',    icon: <Bell           size={18} /> },
-  { key: '/settings',      label: 'Settings',         icon: <Settings       size={18} /> },
-];
+import {
+  CLIENT_PORTAL_LEGAL_LINKS,
+  CLIENT_PORTAL_NAV_ITEMS,
+  CLIENT_PORTAL_QUICK_LINKS,
+} from './client-portal.constants';
 
 const PremiumUpsell = (
   <div className="bg-navy rounded-lg p-4 relative overflow-hidden">
@@ -49,7 +39,7 @@ export function ClientPortalLayout() {
   const location = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const activeKey = NAV_ITEMS.find(
+  const activeKey = CLIENT_PORTAL_NAV_ITEMS.find(
     (item) => location.pathname === item.key || location.pathname.startsWith(item.key + '/'),
   )?.key ?? '/dashboard';
 
@@ -73,7 +63,7 @@ export function ClientPortalLayout() {
 
   const sidebar = (
     <SidebarNav
-      items={NAV_ITEMS}
+      items={CLIENT_PORTAL_NAV_ITEMS}
       activeItem={activeKey}
       onItemChange={onNavItemChange}
       user={{
@@ -89,76 +79,48 @@ export function ClientPortalLayout() {
 
   return (
     <div className="client-portal-layout flex min-h-screen flex-col overflow-x-hidden bg-cream lg:flex-row">
-      <header className="sticky top-0 z-40 flex shrink-0 items-center justify-between gap-3 border-b border-gray-100 bg-white px-4 py-3 lg:hidden">
-        <button
-          type="button"
-          aria-expanded={mobileNavOpen}
-          aria-controls="client-portal-mobile-nav"
-          onClick={() => setMobileNavOpen(true)}
-          className="inline-flex size-10 items-center justify-center rounded-md text-navy hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-        >
-          <Menu size={22} strokeWidth={1.75} aria-hidden />
-          <span className="sr-only">Open menu</span>
-        </button>
-        <span className="font-heading text-base font-semibold text-navy truncate">OkilChai</span>
-        <Link
-          to="/notifications"
-          className="inline-flex size-10 items-center justify-center rounded-md text-navy hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-          aria-label="Notifications"
-        >
-          <Bell size={20} strokeWidth={1.75} aria-hidden />
-        </Link>
-      </header>
+      <PortalMobileHeader
+        mobileNavOpen={mobileNavOpen}
+        navId="client-portal-mobile-nav"
+        title={brand.name}
+        onOpenNav={() => setMobileNavOpen(true)}
+        rightAction={(
+          <Link
+            to="/notifications"
+            className="inline-flex size-10 items-center justify-center rounded-md text-navy hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            aria-label="Notifications"
+          >
+            <Bell size={20} strokeWidth={1.75} aria-hidden />
+          </Link>
+        )}
+      />
 
       <div className="sticky top-0 z-30 hidden h-screen shrink-0 lg:fixed lg:block lg:w-[var(--client-sidebar-width)]">
         {sidebar}
       </div>
 
-      <AnimatePresence>
-        {mobileNavOpen ? (
-          <motion.div
-            key="client-portal-nav-backdrop"
-            role="presentation"
-            className="fixed inset-0 z-50 bg-navy/40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-            aria-hidden
-            onClick={() => setMobileNavOpen(false)}
-          />
-        ) : null}
-        {mobileNavOpen ? (
-          <motion.div
-            key="client-portal-nav-panel"
-            id="client-portal-mobile-nav"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Main navigation"
-            className="fixed left-0 top-0 z-[51] flex h-full w-[min(280px,92vw)] max-w-full flex-col border-r border-gray-100 bg-white shadow-xl lg:hidden"
-            initial={{ x: '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 320, mass: 0.85 }}
-          >
-            <div className="flex items-center justify-end border-b border-gray-100 px-2 py-2">
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md text-gray-600 hover:bg-gray-50 hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                aria-label="Close menu"
-              >
-                <X size={20} strokeWidth={1.75} aria-hidden />
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto">{sidebar}</div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {/*  mobile nav */}
 
-      <main className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
-        <div className="mx-auto w-full min-w-0 max-w-[1060px] px-4 py-6 sm:px-6 sm:py-8 lg:ml-[var(--client-sidebar-width)] lg:px-8">
+      <PortalMobileNavDrawer
+        mobileNavOpen={mobileNavOpen}
+        onCloseNav={() => setMobileNavOpen(false)}
+        navId="client-portal-mobile-nav"
+      >
+        {sidebar}
+      </PortalMobileNavDrawer>
+
+      <main className="min-h-0 min-w-0 flex flex-1 flex-col overflow-x-hidden">
+        <div className="mx-auto w-full min-w-0 max-w-[1060px] flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:ml-[var(--client-sidebar-width)] lg:px-8">
           <Outlet />
+        </div>
+        <div className="mx-auto w-full min-w-0 max-w-[1060px] lg:ml-[var(--client-sidebar-width)]">
+          <PortalFooter
+            brandName={brand.name}
+            tagline="Find verified legal help and manage your appointments in minutes."
+            quickLinks={CLIENT_PORTAL_QUICK_LINKS}
+            legalLinks={CLIENT_PORTAL_LEGAL_LINKS}
+            disclaimer={`${brand.name} is not a law firm. Use of this platform does not create an attorney-client relationship.`}
+          />
         </div>
       </main>
     </div>

@@ -4,6 +4,12 @@ export { cn } from './utils/cn';
 // Layout
 export { SidebarNav } from './components/layout/sidebar-nav';
 export type { SidebarNavItem, SidebarNavUser, SidebarNavProps } from './components/layout/sidebar-nav';
+export { PortalMobileHeader } from './components/layout/portal-mobile-header';
+export type { PortalMobileHeaderProps } from './components/layout/portal-mobile-header';
+export { PortalMobileNavDrawer } from './components/layout/portal-mobile-nav-drawer';
+export type { PortalMobileNavDrawerProps } from './components/layout/portal-mobile-nav-drawer';
+export { PortalFooter } from './components/layout/portal-footer';
+export type { PortalFooterLink, PortalFooterProps } from './components/layout/portal-footer';
 
 // Cards
 export { StatCard } from './components/cards/stat-card';
