@@ -1,8 +1,8 @@
 'use client';
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, NotificationPreview } from '@okil-chai/ui';
-import type { NotificationItem } from '@okil-chai/ui';
-import { Role } from '@okil-chai/shared';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, NotificationPreview } from '@repo/ui';
+import type { NotificationItem } from '@repo/ui';
+import { Role } from '@repo/shared';
 import { Bell } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';

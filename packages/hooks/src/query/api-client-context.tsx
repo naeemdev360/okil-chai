@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { ApiClient } from '@okil-chai/api-client';
+import type { ApiClient } from '@repo/api-client';
 
 const ApiClientContext = createContext<ApiClient | null>(null);
 

@@ -1,5 +1,5 @@
 {
-  "name": "@okil-chai/landing",
+  "name": "@repo/landing",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
-    "@okil-chai/api-client": "workspace:*",
-    "@okil-chai/design-tokens": "workspace:*",
-    "@okil-chai/hooks": "workspace:*",
-    "@okil-chai/i18n": "workspace:*",
-    "@okil-chai/shared": "workspace:*",
-    "@okil-chai/ui": "workspace:*",
+    "@repo/api-client": "workspace:*",
+    "@repo/design-tokens": "workspace:*",
+    "@repo/hooks": "workspace:*",
+    "@repo/i18n": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.60.0",
     "@tanstack/react-query-devtools": "^5.60.0",
     "lucide-react": "^1.14.0",

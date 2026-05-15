@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { AuthTokens, UserProfile } from '@okil-chai/api-client';
+import type { AuthTokens, UserProfile } from '@repo/api-client';
 import { api } from '../api/client';
 import { clearTokens, getAccessToken, setTokens } from '../auth/auth-storage';
 

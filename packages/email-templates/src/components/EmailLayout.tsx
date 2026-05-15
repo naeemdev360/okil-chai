@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Body, Container, Head, Hr, Html, Preview, Section, Text } from 'react-email';
-import { colors } from '@okil-chai/design-tokens';
+import { colors } from '@repo/design-tokens';
 
 interface EmailLayoutProps {
   readonly preview: string;

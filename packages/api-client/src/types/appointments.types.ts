@@ -1,4 +1,4 @@
-import type { AppointmentStatus, ConsultationType } from '@okil-chai/shared';
+import type { AppointmentStatus, ConsultationType } from '@repo/shared';
 
 export interface CreateAppointmentDto {
   readonly lawyerId: string;

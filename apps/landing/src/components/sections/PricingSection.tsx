@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Check, X } from 'lucide-react';
-import { Button, Badge, cn, SurfaceCard } from '@okil-chai/ui';
+import { Button, Badge, cn, SurfaceCard } from '@repo/ui';
 
 interface PlanConfig {
   readonly key: 'basic' | 'pro' | 'business';

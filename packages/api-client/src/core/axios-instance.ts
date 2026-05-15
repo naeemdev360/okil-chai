@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import type { ApiError as ApiErrorShape } from '@okil-chai/shared';
+import type { ApiError as ApiErrorShape } from '@repo/shared';
 import { ApiError } from './errors';
 import type { ApiClientConfig } from './types';
 

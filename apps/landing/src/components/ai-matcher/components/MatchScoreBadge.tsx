@@ -1,4 +1,4 @@
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 
 interface MatchScoreBadgeProps {
   readonly score:  number;

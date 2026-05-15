@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { SurfaceCard } from '@okil-chai/ui';
+import { SurfaceCard } from '@repo/ui';
 import type { Lawyer } from '../../../lib/search/mock-lawyers';
 
 const CREDENTIALS = [

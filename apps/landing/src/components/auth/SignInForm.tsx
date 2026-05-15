@@ -1,8 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isApiError } from '@okil-chai/api-client';
-import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@okil-chai/ui';
+import { isApiError } from '@repo/api-client';
+import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@repo/ui';
 import { ChevronLeft, Mail } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';

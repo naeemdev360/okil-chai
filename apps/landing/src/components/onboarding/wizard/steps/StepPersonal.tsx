@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Input, Textarea } from '@okil-chai/ui';
+import { Input, Textarea } from '@repo/ui';
 import { Field } from '../ui';
 import type { StepProps } from '../types';
 

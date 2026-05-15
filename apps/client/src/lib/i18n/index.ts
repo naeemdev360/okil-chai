@@ -1,16 +1,16 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@okil-chai/i18n';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@repo/i18n';
 
-import authBn from '@okil-chai/i18n/locales/bn/auth.json';
-import bookingBn from '@okil-chai/i18n/locales/bn/booking.json';
-import commonBn from '@okil-chai/i18n/locales/bn/common.json';
-import lawyerBn from '@okil-chai/i18n/locales/bn/lawyer.json';
-import authEn from '@okil-chai/i18n/locales/en/auth.json';
-import bookingEn from '@okil-chai/i18n/locales/en/booking.json';
-import commonEn from '@okil-chai/i18n/locales/en/common.json';
-import lawyerEn from '@okil-chai/i18n/locales/en/lawyer.json';
+import authBn from '@repo/i18n/locales/bn/auth.json';
+import bookingBn from '@repo/i18n/locales/bn/booking.json';
+import commonBn from '@repo/i18n/locales/bn/common.json';
+import lawyerBn from '@repo/i18n/locales/bn/lawyer.json';
+import authEn from '@repo/i18n/locales/en/auth.json';
+import bookingEn from '@repo/i18n/locales/en/booking.json';
+import commonEn from '@repo/i18n/locales/en/common.json';
+import lawyerEn from '@repo/i18n/locales/en/lawyer.json';
 
 void i18n
   .use(LanguageDetector)

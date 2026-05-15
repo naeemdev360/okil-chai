@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import type { ApiError } from '@okil-chai/shared';
+import type { ApiError } from '@repo/shared';
 import type { Request, Response } from 'express';
 
 @Catch()
@@ -45,6 +45,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         exception instanceof Error ? exception.stack : undefined,
       );
     }
+
+    
 
     const body: ApiError = {
       success: false,

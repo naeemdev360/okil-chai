@@ -1,4 +1,4 @@
-import { Label } from '@okil-chai/ui';
+import { Label } from '@repo/ui';
 
 interface FieldProps {
   readonly label: string;

@@ -1,4 +1,4 @@
-import type { ConsultationType } from '@okil-chai/shared';
+import type { ConsultationType } from '@repo/shared';
 
 export interface LawyerSearchParams {
   readonly specialization?: string;

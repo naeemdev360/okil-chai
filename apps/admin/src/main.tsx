@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { QueryProvider, ApiClientProvider } from '@okil-chai/hooks';
+import { QueryProvider, ApiClientProvider } from '@repo/hooks';
 import './styles/globals.css';
 import { App } from './App';
 import { api } from './lib/api/client';

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
-import { Button, Input, Label, cn } from '@okil-chai/ui';
+import { Button, Input, Label, cn } from '@repo/ui';
 
 const forgotSchema = z.object({
   email: z.string().email(),

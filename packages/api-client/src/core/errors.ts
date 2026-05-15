@@ -1,4 +1,4 @@
-import type { ApiError as ApiErrorShape } from '@okil-chai/shared';
+import type { ApiError as ApiErrorShape } from '@repo/shared';
 
 export class ApiError extends Error {
   readonly statusCode: number;

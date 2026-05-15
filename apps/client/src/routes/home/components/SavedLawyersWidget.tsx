@@ -1,4 +1,4 @@
-import { Avatar, Button, StarRating } from '@okil-chai/ui';
+import { Avatar, Button, StarRating } from '@repo/ui';
 import { Link, useNavigate } from 'react-router-dom';
 import { SAVED_LAWYERS } from '../../../lib/mock-data';
 

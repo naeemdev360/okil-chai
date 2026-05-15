@@ -1,4 +1,4 @@
-import type { NotificationItem, NotificationType } from '@okil-chai/ui';
+import type { NotificationItem, NotificationType } from '@repo/ui';
 
 export type { NotificationType };
 

@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
-import { ReviewCard, StarRating, SurfaceCard } from '@okil-chai/ui';
-import type { ReviewData } from '@okil-chai/ui';
+import { ReviewCard, StarRating, SurfaceCard } from '@repo/ui';
+import type { ReviewData } from '@repo/ui';
 import type { Lawyer } from '../../../lib/search/mock-lawyers';
 
 const MOCK_REVIEWS: readonly ReviewData[] = [

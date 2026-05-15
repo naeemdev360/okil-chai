@@ -1,9 +1,17 @@
 // Utilities
 export { cn } from './utils/cn';
 
+// Animation
+export { Reveal, RevealGroup } from './components/animation/reveal';
+export type { RevealProps, RevealGroupProps } from './components/animation/reveal';
+
 // Layout
 export { SidebarNav } from './components/layout/sidebar-nav';
 export type { SidebarNavItem, SidebarNavUser, SidebarNavProps } from './components/layout/sidebar-nav';
+export { DarkSidebarNav } from './components/layout/dark-sidebar-nav';
+export type { DarkNavItem, DarkNavSection, DarkSidebarNavProps } from './components/layout/dark-sidebar-nav';
+export { PortalTopbar } from './components/layout/portal-topbar';
+export type { PortalTopbarProps, PortalTopbarUser } from './components/layout/portal-topbar';
 export { PortalMobileHeader } from './components/layout/portal-mobile-header';
 export type { PortalMobileHeaderProps } from './components/layout/portal-mobile-header';
 export { PortalMobileNavDrawer } from './components/layout/portal-mobile-nav-drawer';
@@ -21,6 +29,8 @@ export * from './icons';
 // Navigation
 export { TabBar } from './components/navigation/tab-bar';
 export type { TabItem } from './components/navigation/tab-bar';
+export { Pagination } from './components/navigation/pagination';
+export type { PaginationProps } from './components/navigation/pagination';
 
 // Data display
 export { StarRating } from './components/data-display/star-rating';
@@ -47,6 +57,10 @@ export { PasswordInput }  from './components/ui/password-input';
 // Shared cross-framework components
 export { LanguageSwitcher } from './components/shared/language-switcher';
 export type { LanguageSwitcherProps, LocaleOption } from './components/shared/language-switcher';
+
+// Auth
+export { PortalAuthGate } from './components/auth/portal-auth-gate';
+export type { PortalAuthGateProps, PortalKind } from './components/auth/portal-auth-gate';
 
 // Primitives
 export { Button, buttonVariants } from './components/ui/button';

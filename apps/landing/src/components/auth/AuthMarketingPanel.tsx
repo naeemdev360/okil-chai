@@ -1,4 +1,4 @@
-import { DecorativeOrb } from '@okil-chai/ui';
+import { DecorativeOrb } from '@repo/ui';
 import { Shield } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

@@ -196,7 +196,7 @@ export class CreateUserDto {
 ### Guards & Interceptors
 
 - Authentication: JWT `AuthGuard` applied globally, with `@Public()` decorator to opt out.
-- Authorization: `RolesGuard` with `@Roles(Role.ADMIN)` decorator.
+- Authorization: `RolesGuard` with `@Roles(Role.PLATFORM_ADMIN)` decorator.
 - Logging: `LoggingInterceptor` on all routes.
 - Response transformation: `TransformInterceptor` to wrap all responses in `{ data, meta }`.
 

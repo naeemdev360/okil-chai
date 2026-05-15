@@ -1,4 +1,4 @@
-import type { PaginationMeta, PaginationQuery } from '@okil-chai/shared';
+import type { PaginationMeta, PaginationQuery } from '@repo/shared';
 
 interface PaginationResult {
   readonly offset: number;

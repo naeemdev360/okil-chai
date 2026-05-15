@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 
 interface StepIconProps {
   readonly icon: React.ElementType;

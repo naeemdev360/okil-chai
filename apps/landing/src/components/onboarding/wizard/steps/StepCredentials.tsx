@@ -1,6 +1,6 @@
 import { Check, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@okil-chai/ui';
+import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui';
 import { Field } from '../ui';
 import { BAR_COUNCILS } from '../constants';
 import type { StepProps } from '../types';

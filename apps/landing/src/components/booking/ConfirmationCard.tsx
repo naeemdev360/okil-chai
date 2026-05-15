@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Calendar, Clock, Lock, Mail, Star, Video } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 import { CONSULT_META } from './constants';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 import type { ConsultType } from './types';

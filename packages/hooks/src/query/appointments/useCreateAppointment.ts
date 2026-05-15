@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { appointmentsKeys, lawyersKeys } from '@okil-chai/api-client';
-import type { CreateAppointmentDto } from '@okil-chai/api-client';
+import { appointmentsKeys, lawyersKeys } from '@repo/api-client';
+import type { CreateAppointmentDto } from '@repo/api-client';
 import { useApiClient } from '../api-client-context';
 
 export function useCreateAppointment() {

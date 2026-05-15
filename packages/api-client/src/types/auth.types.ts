@@ -1,4 +1,4 @@
-import type { Role } from '@okil-chai/shared';
+import type { Role } from '@repo/shared';
 
 export interface UserProfile {
   readonly id: string;

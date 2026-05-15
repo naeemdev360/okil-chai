@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { XTwitterIcon, LinkedInIcon, FacebookIcon } from '@okil-chai/ui';
+import { XTwitterIcon, LinkedInIcon, FacebookIcon } from '@repo/ui';
 import { brand } from '../../lib/brand';
 import { Logo } from './Logo';
 

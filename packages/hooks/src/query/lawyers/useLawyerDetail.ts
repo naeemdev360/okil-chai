@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { lawyersKeys } from '@okil-chai/api-client';
+import { lawyersKeys } from '@repo/api-client';
 import { useApiClient } from '../api-client-context';
 
 export function useLawyerDetail(id: string) {

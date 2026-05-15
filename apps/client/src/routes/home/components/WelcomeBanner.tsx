@@ -1,4 +1,4 @@
-import { Button, DecorativeOrb, StatCard } from '@okil-chai/ui';
+import { Button, DecorativeOrb, StatCard } from '@repo/ui';
 import { Calendar, Clock, CreditCard, Heart, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CURRENT_USER } from '../../../lib/mock-data';

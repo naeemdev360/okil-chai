@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
-import { Button, SurfaceCard, TogglePill } from '@okil-chai/ui';
+import { Button, SurfaceCard, TogglePill } from '@repo/ui';
 import type { Lawyer } from '../../../lib/search/mock-lawyers';
 
 const WEEK_DAYS = [

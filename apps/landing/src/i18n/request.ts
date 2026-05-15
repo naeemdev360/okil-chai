@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
-import { getMessages, type Locale } from '@okil-chai/i18n';
+import { getMessages, type Locale } from '@repo/i18n';
 import { routing } from './routing';
 
 export default getRequestConfig(async ({ requestLocale }) => {

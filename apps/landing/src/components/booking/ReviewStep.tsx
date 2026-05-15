@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Lock, CheckCircle, ArrowLeft } from 'lucide-react';
-import { cn, Input, Label, Checkbox } from '@okil-chai/ui';
+import { cn, Input, Label, Checkbox } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import { CONSULT_META, WEEK_DAYS } from './constants';
 import { consultFee, computeFees } from './utils';

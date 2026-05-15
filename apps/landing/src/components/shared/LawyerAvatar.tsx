@@ -1,4 +1,4 @@
-import { cn, VerifiedCheckIcon } from '@okil-chai/ui';
+import { cn, VerifiedCheckIcon } from '@repo/ui';
 
 interface LawyerAvatarProps {
   readonly initials: string;

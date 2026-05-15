@@ -1,22 +1,78 @@
 import { pgEnum } from 'drizzle-orm/pg-core';
-import { AppointmentStatus, AuthProvider, ConsultationType, Role } from '@okil-chai/shared';
+import {
+  AppointmentStatus,
+  AuthProvider,
+  AuthTokenType,
+  ConsultationType,
+  DocumentType,
+  Role,
+  StripeAccountStatus,
+  SubscriptionTier,
+  VerificationStatus,
+} from '@repo/shared';
 
-const roleValues = [Role.CLIENT, Role.LAWYER, Role.ADMIN] as const;
+const userRoleValues = [
+  Role.CLIENT,
+  Role.LAWYER,
+  Role.PLATFORM_ADMIN,
+  Role.SUPPORT_AGENT,
+  Role.FIRM_ADMIN,
+  Role.FIRM_MANAGER,
+] as const;
 const authProviderValues = [AuthProvider.LOCAL, AuthProvider.GOOGLE, AuthProvider.FACEBOOK] as const;
 const appointmentStatusValues = [
-  AppointmentStatus.PENDING,
+  AppointmentStatus.DRAFT,
+  AppointmentStatus.PENDING_PAYMENT,
   AppointmentStatus.CONFIRMED,
-  AppointmentStatus.CANCELLED,
+  AppointmentStatus.RESCHEDULE_REQUESTED,
+  AppointmentStatus.RESCHEDULED,
+  AppointmentStatus.IN_PROGRESS,
   AppointmentStatus.COMPLETED,
-  AppointmentStatus.NO_SHOW,
+  AppointmentStatus.CANCELLED_BY_CLIENT,
+  AppointmentStatus.CANCELLED_BY_LAWYER,
+  AppointmentStatus.CANCELLED_BY_ADMIN,
+  AppointmentStatus.NO_SHOW_CLIENT,
+  AppointmentStatus.NO_SHOW_LAWYER,
+  AppointmentStatus.REFUNDED,
+  AppointmentStatus.DISPUTED,
 ] as const;
 const consultationTypeValues = [
   ConsultationType.VIDEO,
   ConsultationType.PHONE,
   ConsultationType.IN_PERSON,
 ] as const;
+const verificationStatusValues = [
+  VerificationStatus.PENDING,
+  VerificationStatus.UNDER_REVIEW,
+  VerificationStatus.APPROVED,
+  VerificationStatus.REJECTED,
+  VerificationStatus.REQUIRES_RESUBMISSION,
+] as const;
+const authTokenTypeValues = [
+  AuthTokenType.EMAIL_VERIFICATION,
+  AuthTokenType.PASSWORD_RESET,
+] as const;
+const documentTypeValues = [
+  DocumentType.BAR_CERTIFICATE,
+  DocumentType.LAW_DEGREE,
+  DocumentType.GOVERNMENT_ID,
+  DocumentType.CERTIFICATION,
+  DocumentType.OTHER,
+] as const;
+const subscriptionTierValues = [SubscriptionTier.FREE, SubscriptionTier.PRO] as const;
+const stripeAccountStatusValues = [
+  StripeAccountStatus.NOT_CONNECTED,
+  StripeAccountStatus.PENDING,
+  StripeAccountStatus.ACTIVE,
+  StripeAccountStatus.RESTRICTED,
+] as const;
 
-export const roleEnum = pgEnum('role', roleValues);
+export const userRoleEnum = pgEnum('user_role', userRoleValues);
 export const authProviderEnum = pgEnum('auth_provider', authProviderValues);
+export const authTokenTypeEnum = pgEnum('auth_token_type', authTokenTypeValues);
 export const appointmentStatusEnum = pgEnum('appointment_status', appointmentStatusValues);
 export const consultationTypeEnum = pgEnum('consultation_type', consultationTypeValues);
+export const verificationStatusEnum = pgEnum('verification_status', verificationStatusValues);
+export const documentTypeEnum = pgEnum('document_type', documentTypeValues);
+export const subscriptionTierEnum = pgEnum('subscription_tier', subscriptionTierValues);
+export const stripeAccountStatusEnum = pgEnum('stripe_account_status', stripeAccountStatusValues);

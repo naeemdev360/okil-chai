@@ -1,6 +1,6 @@
 import { Check, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Button } from '@okil-chai/ui';
+import { Button } from '@repo/ui';
 import type { WizardData } from '../types';
 
 interface StepPhotoProps {

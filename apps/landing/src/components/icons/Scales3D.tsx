@@ -1,1 +1,1 @@
-export { Scales3DSVG as Scales3D } from '@okil-chai/ui';
+export { Scales3DSVG as Scales3D } from '@repo/ui';

@@ -1,0 +1,6 @@
+export enum StripeAccountStatus {
+  NOT_CONNECTED = 'NOT_CONNECTED',
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  RESTRICTED = 'RESTRICTED',
+}

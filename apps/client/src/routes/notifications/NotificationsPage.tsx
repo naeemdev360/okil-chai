@@ -1,5 +1,5 @@
-import type { NotificationItem, PrefSection, TabItem } from '@okil-chai/ui';
-import { cn, NotificationPreferencesPanel, NotificationRow, TabBar } from '@okil-chai/ui';
+import type { NotificationItem, PrefSection, TabItem } from '@repo/ui';
+import { cn, NotificationPreferencesPanel, NotificationRow, Reveal, RevealGroup, TabBar } from '@repo/ui';
 import { Bell, Check, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -99,86 +99,90 @@ export function NotificationsPage() {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-[880px] pb-8">
+    <RevealGroup className="mx-auto w-full max-w-[880px] pb-8">
       <div className="py-2 sm:py-4">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-7">
-          <div>
-            <h1 className="font-heading text-[26px] sm:text-[32px] font-bold text-navy leading-tight mb-1">
-              Notifications
-            </h1>
-            <p className="font-sans text-sm text-gray-600">
-              {counts.unread > 0 ? (
-                <>
-                  <strong className="text-navy">{counts.unread} unread</strong>
-                  {' '}notification{counts.unread !== 1 ? 's' : ''}
-                </>
-              ) : (
-                'All caught up!'
+        <Reveal>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-7">
+            <div>
+              <h1 className="font-heading text-[26px] sm:text-[32px] font-bold text-navy leading-tight mb-1">
+                Notifications
+              </h1>
+              <p className="font-sans text-sm text-gray-600">
+                {counts.unread > 0 ? (
+                  <>
+                    <strong className="text-navy">{counts.unread} unread</strong>
+                    {' '}notification{counts.unread !== 1 ? 's' : ''}
+                  </>
+                ) : (
+                  'All caught up!'
+                )}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              {counts.unread > 0 && (
+                <button
+                  onClick={markAll}
+                  className="inline-flex items-center gap-1.5 px-[14px] py-[9px] rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-[13px] font-medium text-navy hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  <Check className="size-3.5" aria-hidden="true" />
+                  Mark all read
+                </button>
               )}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {counts.unread > 0 && (
               <button
-                onClick={markAll}
-                className="inline-flex items-center gap-1.5 px-[14px] py-[9px] rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-[13px] font-medium text-navy hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={() => setShowPrefs((v) => !v)}
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-[14px] py-[9px] rounded-md border-[1.5px] font-sans text-[13px] font-medium transition-colors cursor-pointer',
+                  showPrefs
+                    ? 'bg-navy text-white border-navy'
+                    : 'bg-white text-navy border-gray-200 hover:bg-gray-50',
+                )}
               >
-                <Check className="size-3.5" aria-hidden="true" />
-                Mark all read
+                <Settings
+                  className={cn('size-3.5', showPrefs ? 'text-white' : 'text-navy')}
+                  aria-hidden="true"
+                />
+                Preferences
               </button>
-            )}
-            <button
-              onClick={() => setShowPrefs((v) => !v)}
-              className={cn(
-                'inline-flex items-center gap-1.5 px-[14px] py-[9px] rounded-md border-[1.5px] font-sans text-[13px] font-medium transition-colors cursor-pointer',
-                showPrefs
-                  ? 'bg-navy text-white border-navy'
-                  : 'bg-white text-navy border-gray-200 hover:bg-gray-50',
-              )}
-            >
-              <Settings
-                className={cn('size-3.5', showPrefs ? 'text-white' : 'text-navy')}
-                aria-hidden="true"
-              />
-              Preferences
-            </button>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
-        {/* Preferences panel */}
         {showPrefs && (
-          <div className="mb-6">
-            <NotificationPreferencesPanel
-              sections={PREF_SECTIONS}
-              prefs={prefs}
-              onPrefChange={setPref}
-              onSave={savePrefs}
-              onCancel={cancelPrefs}
-            />
-          </div>
+          <Reveal>
+            <div className="mb-6">
+              <NotificationPreferencesPanel
+                sections={PREF_SECTIONS}
+                prefs={prefs}
+                onPrefChange={setPref}
+                onSave={savePrefs}
+                onCancel={cancelPrefs}
+              />
+            </div>
+          </Reveal>
         )}
 
-        {/* Tabs + list card */}
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-          <TabBar
-            items={tabsWithCounts}
-            active={activeTab}
-            onChange={(id) => setActiveTab(id as TabId)}
-            variant="light"
-            className="border-b border-gray-100 px-2"
-          />
+        <Reveal>
+          <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+            <TabBar
+              items={tabsWithCounts}
+              active={activeTab}
+              onChange={(id) => setActiveTab(id as TabId)}
+              variant="light"
+              className="border-b border-gray-100 px-2"
+            />
 
-          {items.length === 0 ? (
-            <EmptyState tab={activeTab} />
-          ) : (
-            items.map((n) => (
-              <NotificationRow key={n.id} notification={n} renderLink={renderLink} />
-            ))
-          )}
-        </div>
-
+            {items.length === 0 ? (
+              <EmptyState tab={activeTab} />
+            ) : (
+              items.map((n) => (
+                <Reveal key={n.id}>
+                  <NotificationRow notification={n} renderLink={renderLink} />
+                </Reveal>
+              ))
+            )}
+          </div>
+        </Reveal>
       </div>
-    </div>
+    </RevealGroup>
   );
 }

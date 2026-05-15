@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { LanguageSwitcher, type LocaleOption } from '@okil-chai/ui';
+import { LanguageSwitcher, type LocaleOption } from '@repo/ui';
 
 const LOCALES: LocaleOption[] = [
   { code: 'en', label: 'EN'  },

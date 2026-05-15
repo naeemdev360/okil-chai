@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react';
-import { SurfaceCard } from '@okil-chai/ui';
+import { SurfaceCard } from '@repo/ui';
 
 export function LocationTab() {
   return (

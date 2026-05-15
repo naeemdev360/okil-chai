@@ -1,4 +1,4 @@
-import { Button, DecorativeOrb } from '@okil-chai/ui';
+import { Button, DecorativeOrb } from '@repo/ui';
 import { Zap } from 'lucide-react';
 
 export function PremiumUpsellCard() {

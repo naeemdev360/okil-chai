@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from './schema';
+import { DatabaseHealthService } from './database.health';
+import { DATABASE_TOKEN, type DatabaseInstance } from './database.tokens';
 
-export const DATABASE_TOKEN = Symbol('DATABASE');
-export type DatabaseInstance = ReturnType<typeof drizzle<typeof schema>>;
+export { DATABASE_TOKEN, type DatabaseInstance } from './database.tokens';
 
 @Global()
 @Module({
@@ -21,6 +22,7 @@ export type DatabaseInstance = ReturnType<typeof drizzle<typeof schema>>;
         return drizzle(pool, { schema });
       },
     },
+    DatabaseHealthService,
   ],
   exports: [DATABASE_TOKEN],
 })

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowLeft, Lock } from 'lucide-react';
-import { Input, Label, Textarea } from '@okil-chai/ui';
+import { Input, Label, Textarea } from '@repo/ui';
 
 export interface UserDetailsStepProps {
   readonly onBack: () => void;

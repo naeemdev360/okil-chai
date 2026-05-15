@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { lawyersKeys, reviewsKeys } from '@okil-chai/api-client';
-import type { CreateReviewDto } from '@okil-chai/api-client';
+import { lawyersKeys, reviewsKeys } from '@repo/api-client';
+import type { CreateReviewDto } from '@repo/api-client';
 import { useApiClient } from '../api-client-context';
 
 export function useCreateReview() {

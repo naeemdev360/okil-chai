@@ -1,1 +1,1 @@
-export { GavelSVG } from '@okil-chai/ui';
+export { GavelSVG } from '@repo/ui';

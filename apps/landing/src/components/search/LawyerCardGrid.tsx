@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { MapPin, Video, Phone, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { cn, Badge, VerifiedCheckIcon, SurfaceCard, StarRating } from '@okil-chai/ui';
+import { cn, Badge, VerifiedCheckIcon, SurfaceCard, StarRating } from '@repo/ui';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 
 type ConsultType = 'video' | 'phone' | 'in-person';

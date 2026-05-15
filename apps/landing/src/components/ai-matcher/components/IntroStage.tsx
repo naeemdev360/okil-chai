@@ -2,7 +2,7 @@
 
 import { Sparkles, ArrowRight, Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { cn, Button, TogglePill, SurfaceCard } from '@okil-chai/ui';
+import { cn, Button, TogglePill, SurfaceCard } from '@repo/ui';
 import { SAMPLE_KEYS, URGENCY_KEYS, BUDGET_KEYS } from '../constants';
 import type { UrgencyKey, BudgetKey } from '../types';
 

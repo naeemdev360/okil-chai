@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Input, cn } from '@okil-chai/ui';
+import { Input, cn } from '@repo/ui';
 import { Field } from '../ui';
 import { CONSULTATION_TYPES } from '../constants';
 import type { ConsultationType, StepProps } from '../types';

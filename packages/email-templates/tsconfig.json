@@ -10,7 +10,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "paths": {
-      "@okil-chai/design-tokens": ["../design-tokens/src/index.ts"]
+      "@repo/design-tokens": ["../design-tokens/src/index.ts"]
     }
   },
   "include": ["src/**/*"],

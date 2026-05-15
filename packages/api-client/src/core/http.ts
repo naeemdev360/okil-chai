@@ -1,5 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
-import type { ApiResponse } from '@okil-chai/shared';
+import type { ApiResponse } from '@repo/shared';
 
 /**
  * Typed wrapper around AxiosInstance.

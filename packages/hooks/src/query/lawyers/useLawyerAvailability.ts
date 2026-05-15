@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { lawyersKeys } from '@okil-chai/api-client';
-import type { LawyerAvailabilityParams } from '@okil-chai/api-client';
+import { lawyersKeys } from '@repo/api-client';
+import type { LawyerAvailabilityParams } from '@repo/api-client';
 import { useApiClient } from '../api-client-context';
 
 export function useLawyerAvailability(id: string, params: LawyerAvailabilityParams) {

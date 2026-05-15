@@ -2,10 +2,12 @@ import {
   Avatar,
   Button,
   Input,
+  Reveal,
+  RevealGroup,
   SelectableStackedList,
   SelectableStackedListItem,
   cn,
-} from '@okil-chai/ui';
+} from '@repo/ui';
 import { ChevronLeft, Video } from 'lucide-react';
 import { useState } from 'react';
 import { CHAT_MESSAGES, CONVERSATIONS } from '../../lib/mock-data';
@@ -24,13 +26,16 @@ export function MessagesPage() {
   }
 
   return (
-    <div>
-      <h1 className="font-heading text-[22px] font-semibold text-navy sm:text-[26px] mb-4 sm:mb-6">
-        Messages
-      </h1>
+    <RevealGroup>
+      <Reveal>
+        <h1 className="font-heading text-[22px] font-semibold text-navy sm:text-[26px] mb-4 sm:mb-6">
+          Messages
+        </h1>
+      </Reveal>
 
-      <div
-        className={cn(
+      <Reveal>
+        <div
+          className={cn(
           'bg-white rounded-xl border border-gray-100 overflow-hidden',
           'flex flex-col md:grid md:grid-cols-[minmax(0,300px)_1fr]',
           'h-[min(560px,calc(100dvh-9rem))] md:h-[560px]',
@@ -134,6 +139,7 @@ export function MessagesPage() {
           </div>
         </div>
       </div>
-    </div>
+      </Reveal>
+    </RevealGroup>
   );
 }

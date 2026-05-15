@@ -1,4 +1,4 @@
-import { okilChaiPreset } from '@okil-chai/design-tokens/tailwind';
+import { okilChaiPreset } from '@repo/design-tokens/tailwind';
 import forms from '@tailwindcss/forms';
 import type { Config } from 'tailwindcss';
 

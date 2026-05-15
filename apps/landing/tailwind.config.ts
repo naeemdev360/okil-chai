@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import animate from 'tailwindcss-animate';
-import { okilChaiPreset } from '@okil-chai/design-tokens/tailwind';
+import { okilChaiPreset } from '@repo/design-tokens/tailwind';
 
 const config: Config = {
   presets: [okilChaiPreset],

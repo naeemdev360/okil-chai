@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { Sparkles, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { SurfaceCard } from '@okil-chai/ui';
+import { SurfaceCard } from '@repo/ui';
 import { ANALYZING_STEP_KEYS } from '../constants';
 
 export function AnalyzingStage() {

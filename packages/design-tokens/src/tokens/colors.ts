@@ -1,5 +1,6 @@
 export const colors = {
   navy: {
+    dark:    '#0A1628',
     DEFAULT: '#0F1F3D',
     mid:     '#1B2A4A',
     light:   '#2A3F6B',

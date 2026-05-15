@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { RequireAuth } from './components/auth/RequireAuth';
 import { ClientPortalLayout } from './components/layout/ClientPortalLayout';
 import { AppointmentsPage } from './routes/appointments/AppointmentsPage';
 import { DocumentsPage } from './routes/documents/DocumentsPage';
@@ -13,7 +14,13 @@ export function App() {
 
   return (
     <Routes>
-      <Route element={<ClientPortalLayout />}>
+      <Route
+        element={
+          <RequireAuth>
+            <ClientPortalLayout />
+          </RequireAuth>
+        }
+      >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard"     element={<HomePage />} />
         <Route path="/appointments"  element={<AppointmentsPage />} />

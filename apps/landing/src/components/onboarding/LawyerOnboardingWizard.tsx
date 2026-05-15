@@ -7,7 +7,7 @@ import {
   User, Shield, Briefcase, DollarSign, Calendar, Camera, Lock,
   ChevronLeft, ChevronRight, Check,
 } from 'lucide-react';
-import { Button, cn, SurfaceCard } from '@okil-chai/ui';
+import { Button, cn, SurfaceCard } from '@repo/ui';
 import { brand } from '../../lib/brand';
 import { StepIcon } from './wizard/ui';
 import {

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { MapPin } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
-import { Button, SurfaceCard, StarRating } from '@okil-chai/ui';
+import { Button, SurfaceCard, StarRating } from '@repo/ui';
 import { LawyerAvatar } from '../../shared/LawyerAvatar';
 import { MatchScoreBadge } from './MatchScoreBadge';
 import type { MatchResult } from '../types';

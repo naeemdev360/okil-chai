@@ -1,4 +1,6 @@
-export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+import type { VerificationStatus } from '@repo/shared';
+
+export type { VerificationStatus };
 
 export interface VerificationRequest {
   readonly id: string;

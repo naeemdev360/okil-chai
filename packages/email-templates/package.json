@@ -1,5 +1,5 @@
 {
-  "name": "@okil-chai/email-templates",
+  "name": "@repo/email-templates",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "react-email": "latest",
-    "@okil-chai/design-tokens": "workspace:*"
+    "@repo/design-tokens": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.0.0"

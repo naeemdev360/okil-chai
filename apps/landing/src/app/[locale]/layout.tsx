@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Playfair_Display, DM_Sans } from 'next/font/google';
-import type { Locale } from '@okil-chai/i18n';
+import type { Locale } from '@repo/i18n';
 import { routing } from '../../i18n/routing';
 import { brand } from '../../lib/brand';
 import { Providers } from './providers';

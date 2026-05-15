@@ -1,5 +1,5 @@
 import { brand } from '@/lib/brand';
-import { QuoteMarkIcon } from '@okil-chai/ui';
+import { QuoteMarkIcon } from '@repo/ui';
 import { getTranslations } from 'next-intl/server';
 import { TestimonialsAmbientBackdrop } from './TestimonialsAmbientBackdrop';
 

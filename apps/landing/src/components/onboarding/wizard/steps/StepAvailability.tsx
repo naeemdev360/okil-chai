@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Input } from '@okil-chai/ui';
+import { Input } from '@repo/ui';
 import { Field, ToggleChip } from '../ui';
 import { DAYS, SLOT_DURATIONS } from '../constants';
 import type { DayKey, StepProps } from '../types';

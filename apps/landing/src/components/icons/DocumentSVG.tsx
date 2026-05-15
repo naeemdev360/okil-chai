@@ -1,1 +1,1 @@
-export { DocumentSVG } from '@okil-chai/ui';
+export { DocumentSVG } from '@repo/ui';

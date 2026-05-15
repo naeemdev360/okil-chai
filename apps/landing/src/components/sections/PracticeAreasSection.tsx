@@ -5,7 +5,7 @@ import {
   UserCheck, Lightbulb, Receipt,
   type LucideIcon,
 } from 'lucide-react';
-import { SurfaceCard } from '@okil-chai/ui';
+import { SurfaceCard } from '@repo/ui';
 
 const AREA_KEYS = [
   'criminal', 'family', 'corporate', 'immigration',

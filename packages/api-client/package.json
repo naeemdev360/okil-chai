@@ -1,5 +1,5 @@
 {
-  "name": "@okil-chai/api-client",
+  "name": "@repo/api-client",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,7 +19,7 @@
     "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
-    "@okil-chai/shared": "workspace:*",
+    "@repo/shared": "workspace:*",
     "axios": "^1.15.2"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Input, PasswordInput, Checkbox, GoogleIcon, AppleIcon } from '@okil-chai/ui';
+import { Input, PasswordInput, Checkbox, GoogleIcon, AppleIcon } from '@repo/ui';
 import { Field } from '../ui';
 import type { StepProps } from '../types';
 

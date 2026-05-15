@@ -1,6 +1,6 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
@@ -31,14 +31,14 @@ async function bootstrap(): Promise<void> {
 
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(
-    new LoggingInterceptor(),
-    new ClassSerializerInterceptor(reflector),
-    new TransformInterceptor(),
+    new LoggingInterceptor(), // to log the request and response
+    new ClassSerializerInterceptor(reflector), // to exclude the fields that are not in the response DTO
+    new TransformInterceptor(), // to transform the response to the ApiResponse<TData>
   );
 
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter()); // to handle all exceptions and return the ApiError
 
-  const appName = configService.get<string>('app.name') ?? 'OkilChai';
+  const appName = configService.getOrThrow<string>('app.name');
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle(`${appName} API`)

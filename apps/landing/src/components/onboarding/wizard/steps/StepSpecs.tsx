@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Input } from '@okil-chai/ui';
+import { Input } from '@repo/ui';
 import { Field, ToggleChip } from '../ui';
 import { SPECIALIZATION_OPTIONS, LANGUAGE_OPTIONS } from '../constants';
 import type { StepProps } from '../types';

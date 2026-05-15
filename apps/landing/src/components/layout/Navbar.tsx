@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, cn } from '@okil-chai/ui';
+import { Button, cn } from '@repo/ui';
 import { brand } from '../../lib/brand';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';

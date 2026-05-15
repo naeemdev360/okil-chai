@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button } from '@okil-chai/ui';
+import { Avatar, Badge, Button, Reveal, RevealGroup } from '@repo/ui';
 import { MapPin, Phone, Plus, Video } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -36,34 +36,37 @@ export function AppointmentsPage() {
     filter === 'all' ? APPOINTMENTS : APPOINTMENTS.filter((a) => a.status === filter);
 
   return (
-    <div>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-5">
-        <h1 className="font-heading text-[22px] font-semibold text-navy sm:text-[26px]">My Appointments</h1>
-        <Button variant="gold" onClick={() => navigate('/search')} className="w-full shrink-0 sm:w-auto">
-          <Plus size={14} /> Book New
-        </Button>
-      </div>
+    <RevealGroup>
+      <Reveal>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-5">
+          <h1 className="font-heading text-[22px] font-semibold text-navy sm:text-[26px]">My Appointments</h1>
+          <Button variant="gold" onClick={() => navigate('/search')} className="w-full shrink-0 sm:w-auto">
+            <Plus size={14} /> Book New
+          </Button>
+        </div>
 
-      {/* Filter pills */}
-      <div className="flex flex-wrap gap-2 mb-5">
-        {FILTERS.map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setFilter(f.key)}
-            className={`px-4 py-2 rounded-full text-[13px] font-sans transition-all border-[1.5px] ${
-              filter === f.key
-                ? 'bg-navy text-white border-navy font-semibold'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-navy hover:text-navy'
-            }`}
-          >
-            {f.label} ({f.count})
-          </button>
-        ))}
-      </div>
+        {/* Filter pills */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              className={`px-4 py-2 rounded-full text-[13px] font-sans transition-all border-[1.5px] ${
+                filter === f.key
+                  ? 'bg-navy text-white border-navy font-semibold'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-navy hover:text-navy'
+              }`}
+            >
+              {f.label} ({f.count})
+            </button>
+          ))}
+        </div>
+      </Reveal>
 
       {/* Cards */}
-      <div className="flex flex-col gap-3.5">
-        {filtered.map((a) => (
+      <Reveal>
+        <div className="flex flex-col gap-3.5">
+          {filtered.map((a) => (
           <div
             key={a.id}
             className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4"
@@ -103,8 +106,9 @@ export function AppointmentsPage() {
               )}
             </div>
           </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </Reveal>
+    </RevealGroup>
   );
 }

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Star } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 import type { FeeBreakdown } from './utils';

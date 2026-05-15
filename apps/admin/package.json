@@ -1,5 +1,5 @@
 {
-  "name": "@okil-chai/admin",
+  "name": "@repo/admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,12 +23,12 @@
     "@hookform/resolvers": "^3.9.0",
     "zod": "^3.24.0",
     "axios": "^1.7.0",
-    "@okil-chai/i18n": "workspace:*",
-    "@okil-chai/shared": "workspace:*",
-    "@okil-chai/api-client": "workspace:*",
-    "@okil-chai/hooks": "workspace:*",
-    "@okil-chai/ui": "workspace:*",
-    "@okil-chai/design-tokens": "workspace:*",
+    "@repo/i18n": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "@repo/api-client": "workspace:*",
+    "@repo/hooks": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@repo/design-tokens": "workspace:*",
     "i18next": "^23.0.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "react-i18next": "^15.0.0"

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '@okil-chai/shared';
+import { Role } from '@repo/shared';
 
 export class UserProfileDto {
   @ApiProperty()

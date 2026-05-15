@@ -1,4 +1,4 @@
-import type { SidebarNavItem } from '@okil-chai/ui';
+import type { DarkNavSection } from '@repo/ui';
 import {
   Bell,
   Calendar,
@@ -7,28 +7,44 @@ import {
   Heart,
   LayoutDashboard,
   MessageSquare,
+  Scale,
   Settings,
 } from 'lucide-react';
+import { brand } from '../../lib/brand';
 
-export const CLIENT_PORTAL_NAV_ITEMS: readonly SidebarNavItem[] = [
-  { key: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-  { key: '/appointments', label: 'My Appointments', icon: <Calendar size={18} />, count: 3 },
-  { key: '/saved', label: 'Saved Lawyers', icon: <Heart size={18} />, count: 7 },
-  { key: '/messages', label: 'Messages', icon: <MessageSquare size={18} />, count: 2 },
-  { key: '/documents', label: 'Documents', icon: <FileText size={18} /> },
-  { key: '/payments', label: 'Payments', icon: <CreditCard size={18} /> },
-  { key: '/notifications', label: 'Notifications', icon: <Bell size={18} /> },
-  { key: '/settings', label: 'Settings', icon: <Settings size={18} /> },
+export const CLIENT_PORTAL_NAV_SECTIONS: readonly DarkNavSection[] = [
+  {
+    label: 'My Portal',
+    items: [
+      { key: '/dashboard',     label: 'Dashboard',       icon: <LayoutDashboard size={16} strokeWidth={1.5} /> },
+      { key: '/appointments',  label: 'My Appointments', icon: <Calendar size={16} strokeWidth={1.5} />, count: 3 },
+      { key: '/saved',         label: 'Saved Lawyers',   icon: <Heart size={16} strokeWidth={1.5} />, count: 7 },
+      { key: '/messages',      label: 'Messages',        icon: <MessageSquare size={16} strokeWidth={1.5} />, count: 2 },
+      { key: '/documents',     label: 'Documents',       icon: <FileText size={16} strokeWidth={1.5} /> },
+      { key: '/payments',      label: 'Payments',        icon: <CreditCard size={16} strokeWidth={1.5} /> },
+      { key: '/notifications', label: 'Notifications',   icon: <Bell size={16} strokeWidth={1.5} /> },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { key: '/settings', label: 'Settings', icon: <Settings size={16} strokeWidth={1.5} /> },
+    ],
+  },
 ];
 
-export const CLIENT_PORTAL_QUICK_LINKS = [
-  { label: 'Help Center', href: '/help' },
-  { label: 'Contact Support', href: '/contact' },
-  { label: 'Safety & Privacy', href: '/privacy' },
-] as const;
-
-export const CLIENT_PORTAL_LEGAL_LINKS = [
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Service', href: '/terms' },
-  { label: 'Cookie Settings', href: '/cookies' },
-] as const;
+export const CLIENT_PORTAL_LOGO = (
+  <div className="flex items-center gap-3">
+    <div className="w-8 h-8 rounded bg-gold flex items-center justify-center shrink-0">
+      <Scale size={18} strokeWidth={1.8} className="text-navy" />
+    </div>
+    <div>
+      <div className="text-[10px] font-semibold tracking-[0.12em] uppercase text-gold font-sans leading-none mb-0.5">
+        Client Portal
+      </div>
+      <div className="font-heading text-[17px] font-semibold text-white leading-tight">
+        {brand.name}
+      </div>
+    </div>
+  </div>
+);

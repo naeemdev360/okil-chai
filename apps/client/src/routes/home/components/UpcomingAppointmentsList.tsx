@@ -1,4 +1,4 @@
-import { Avatar } from '@okil-chai/ui';
+import { Avatar } from '@repo/ui';
 import { Link } from 'react-router-dom';
 import { UPCOMING_APPOINTMENTS, type ConsultationType } from '../../../lib/mock-data';
 

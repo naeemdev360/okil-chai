@@ -1,5 +1,5 @@
 import { Calendar, Clock, CheckCircle } from 'lucide-react';
-import { StarRating } from '@okil-chai/ui';
+import { StarRating } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import { CONSULT_META } from './constants';
 import { consultFee } from './utils';

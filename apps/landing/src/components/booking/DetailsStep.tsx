@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, TogglePill } from '@okil-chai/ui';
+import { cn, TogglePill } from '@repo/ui';
 import { CONSULT_META, TIME_SLOTS, WEEK_DAYS } from './constants';
 import { consultFee } from './utils';
 import type { Lawyer } from '../../lib/search/mock-lawyers';

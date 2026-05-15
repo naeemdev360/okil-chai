@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { Lock, Phone, Video } from 'lucide-react';
-import { Button, SurfaceCard } from '@okil-chai/ui';
+import { Button, SurfaceCard } from '@repo/ui';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 
 interface BookingSidebarProps {

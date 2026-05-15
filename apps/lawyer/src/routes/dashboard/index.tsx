@@ -1,135 +1,155 @@
-import { Calendar, Eye, MessageSquare, TrendingUp } from 'lucide-react';
-import { PendingVerificationBanner } from '../../components/features/PendingVerificationBanner';
-import { brand } from '../../lib/brand';
+import { Badge, StarRating } from '@repo/ui';
+import { Sparkles } from 'lucide-react';
+import { Reveal, RevealGroup } from '@repo/ui';
+import { useNavigate } from 'react-router-dom';
+import { PendingRequestRow } from '../../components/features/bookings/PendingRequestRow';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SectionCard } from '../../components/ui/SectionCard';
+import type { MockData } from '../../types/lawyer.types';
+import { DashboardStatTile } from './DashboardStatTile';
+import { EarningsHeroCard } from './EarningsHeroCard';
+import { TodayBookingRow } from './TodayBookingRow';
 
-interface StatCardProps {
-  readonly icon: React.ElementType;
-  readonly label: string;
-  readonly value: string;
-  readonly sub: string;
+const STATS = [
+  { label: "Today's Bookings",  value: '4',  sub: '2 confirmed · 1 pending', accentClass: 'border-l-gold' },
+  { label: 'This Week',         value: '12', sub: '+3 vs last week',          accentClass: 'border-l-success' },
+  { label: 'Pending Requests',  value: '3',  sub: 'Awaiting your response',   accentClass: 'border-l-warning' },
+  { label: 'Unread Messages',   value: '7',  sub: 'From 4 clients',           accentClass: 'border-l-navy' },
+] as const;
+
+interface DashboardPageProps {
+  readonly data: MockData;
 }
 
-function StatCard({ icon: Icon, label, value, sub }: StatCardProps) {
+export function DashboardPage({ data }: DashboardPageProps) {
+  const navigate = useNavigate();
+
+  const todayBookings = data.bookings.filter(b => b.day === 'today').slice(0, 4);
+  const pendingRequests = data.bookings.filter(b => b.status === 'pending').slice(0, 3);
+
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-      <div className="flex items-center justify-between mb-4">
-        <p className="font-sans text-sm font-medium text-gray-600">{label}</p>
-        <div className="size-9 rounded-lg bg-gold-pale flex items-center justify-center">
-          <Icon className="size-4 text-gold" strokeWidth={1.6} aria-hidden="true" />
+    <RevealGroup className="flex flex-col gap-6">
+      {/* Hero: earnings + profile completeness */}
+      <Reveal>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-4">
+          <EarningsHeroCard earnings={data.earnings} />
+          <div className="flex flex-col gap-3">
+            <ProfileCompletenessCard onComplete={() => navigate('/profile')} />
+            <TopPerformerCard />
+          </div>
         </div>
+      </Reveal>
+
+      {/* Stats row */}
+      <Reveal>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {STATS.map(s => <DashboardStatTile key={s.label} {...s} />)}
+        </div>
+      </Reveal>
+
+      {/* Today's schedule + Pending requests */}
+      <Reveal>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-4">
+          <SectionCard
+            title="Today's schedule"
+            action={{ label: 'Open calendar →', onClick: () => navigate('/availability') }}
+          >
+            {todayBookings.length === 0 ? (
+              <EmptyState message="No bookings today." />
+            ) : (
+              todayBookings.map((b, i) => (
+                <TodayBookingRow key={b.id} booking={b} divider={i > 0} />
+              ))
+            )}
+          </SectionCard>
+
+          <SectionCard
+            title={
+              <span className="flex items-center gap-2">
+                Pending requests
+                <Badge variant="pending">{pendingRequests.length} new</Badge>
+              </span>
+            }
+            action={{ label: 'All requests →', onClick: () => navigate('/bookings') }}
+          >
+            {pendingRequests.length === 0 ? (
+              <EmptyState message="You're all caught up." />
+            ) : (
+              pendingRequests.map((b, i) => (
+                <PendingRequestRow
+                  key={b.id}
+                  booking={b}
+                  divider={i > 0}
+                  onAccept={() => data.act(b.id, 'confirmed')}
+                  onDecline={() => data.act(b.id, 'declined')}
+                />
+              ))
+            )}
+          </SectionCard>
+        </div>
+      </Reveal>
+
+      {/* Recent reviews */}
+      <Reveal>
+        <SectionCard
+          title="Recent reviews"
+          action={{ label: 'See all →', onClick: () => navigate('/reviews') }}
+        >
+          <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-3">
+            {data.reviews.slice(0, 3).map((r, i) => (
+              <div key={i} className="bg-cream rounded-lg p-4 border-t-[3px] border-t-gold">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-sans text-[13px] font-semibold text-navy">{r.name}</span>
+                  <StarRating rating={r.rating} size="xs" />
+                </div>
+                <p className="font-sans text-[13px] text-gray-800 leading-[1.55]">"{r.text}"</p>
+                <div className="text-[11px] text-gray-400 mt-2 font-sans">{r.date} · {r.area}</div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      </Reveal>
+    </RevealGroup>
+  );
+}
+
+/* ── Page-local sub-components ──────────────────────────── */
+
+function ProfileCompletenessCard({ onComplete }: { onComplete: () => void }) {
+  return (
+    <div className="bg-white rounded-xl p-5 border border-gray-100">
+      <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-gray-400 font-sans mb-2">
+        Profile completeness
       </div>
-      <p className="font-heading text-3xl font-bold text-navy mb-1">{value}</p>
-      <p className="font-sans text-xs text-gray-400">{sub}</p>
+      <div className="flex items-baseline gap-2 mb-2.5">
+        <span className="font-heading text-[28px] font-bold text-navy">92%</span>
+        <span className="text-[12px] text-gray-600 font-sans">· 1 task left</span>
+      </div>
+      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mb-3">
+        <div className="w-[92%] h-full bg-gold" />
+      </div>
+      <button
+        onClick={onComplete}
+        className="w-full py-2 rounded-md border border-gray-200 bg-white font-sans text-[12px] text-navy font-medium hover:bg-gray-50 transition-colors"
+      >
+        Add CV to finish →
+      </button>
     </div>
   );
 }
 
-export function DashboardPage() {
+function TopPerformerCard() {
   return (
-    <div className="min-h-screen bg-cream">
-      <PendingVerificationBanner />
-
-      {/* Top nav */}
-      <header className="bg-white border-b border-gray-100 px-8 py-4">
-        <div className="max-w-[1200px] mx-auto flex items-center justify-between">
-          <span className="font-heading font-bold text-xl text-navy tracking-tight">
-            {brand.name}
-          </span>
-          <div className="size-9 rounded-full bg-navy flex items-center justify-center font-heading font-bold text-sm text-white">
-            L
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-[1200px] mx-auto px-8 py-10">
-        {/* Greeting */}
-        <div className="mb-8">
-          <h1 className="font-heading text-[32px] font-bold text-navy mb-1">
-            Welcome to your dashboard
-          </h1>
-          <p className="font-sans text-[15px] text-gray-600">
-            Your profile is being reviewed. In the meantime, explore what's available.
-          </p>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          <StatCard
-            icon={Calendar}
-            label="Upcoming Appointments"
-            value="—"
-            sub="Available after verification"
-          />
-          <StatCard
-            icon={MessageSquare}
-            label="Messages"
-            value="—"
-            sub="Available after verification"
-          />
-          <StatCard
-            icon={Eye}
-            label="Profile Views"
-            value="—"
-            sub="Available after verification"
-          />
-          <StatCard
-            icon={TrendingUp}
-            label="This Month's Earnings"
-            value="—"
-            sub="Available after verification"
-          />
-        </div>
-
-        {/* Next steps */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-7">
-          <h2 className="font-heading text-xl font-semibold text-navy mb-5">
-            What happens next
-          </h2>
-          <ol className="flex flex-col gap-4 list-none">
-            {[
-              {
-                step: '01',
-                title: 'Profile review',
-                body: 'Our team verifies your bar credentials against official registries. This takes 24–48 hours.',
-                done: true,
-              },
-              {
-                step: '02',
-                title: 'Approval email',
-                body: "You'll receive an email once your profile is approved and live for clients to find.",
-                done: false,
-              },
-              {
-                step: '03',
-                title: 'Connect Stripe',
-                body: 'Set up your payout account to receive payments for consultations.',
-                done: false,
-              },
-              {
-                step: '04',
-                title: 'Start taking bookings',
-                body: 'Your profile goes live and clients can discover and book consultations with you.',
-                done: false,
-              },
-            ].map(({ step, title, body, done }) => (
-              <li key={step} className="flex gap-4 items-start">
-                <span
-                  className={[
-                    'shrink-0 font-sans text-xs font-bold tracking-widest px-2.5 py-1 rounded-full',
-                    done ? 'bg-gold text-navy' : 'bg-gray-100 text-gray-400',
-                  ].join(' ')}
-                >
-                  {step}
-                </span>
-                <div>
-                  <p className="font-sans text-sm font-semibold text-navy">{title}</p>
-                  <p className="font-sans text-xs text-gray-600 mt-0.5 leading-relaxed">{body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </main>
+    <div className="bg-gold-pale rounded-xl p-4 border border-gold/30">
+      <div className="flex items-center gap-2 mb-1.5">
+        <Sparkles size={14} className="text-gold" />
+        <span className="font-sans text-[12px] font-semibold text-navy tracking-[0.04em] uppercase">
+          Top 5%
+        </span>
+      </div>
+      <p className="font-heading text-[15px] font-semibold text-navy leading-snug">
+        You respond in under an hour — clients book 2.4&times; more often.
+      </p>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { getTranslations, getLocale } from 'next-intl/server';
 import Link                            from 'next/link';
 import { Sparkles, Check, ArrowRight } from 'lucide-react';
-import { Button, SurfaceCard }         from '@okil-chai/ui';
+import { Button, SurfaceCard }         from '@repo/ui';
 
 const FEATURE_KEYS = ['feature0', 'feature1', 'feature2'] as const;
 

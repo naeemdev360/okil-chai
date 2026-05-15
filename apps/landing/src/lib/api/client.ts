@@ -1,4 +1,4 @@
-import { createApiClient } from '@okil-chai/api-client';
+import { createApiClient } from '@repo/api-client';
 
 export const api = createApiClient({
   baseUrl: process.env.NEXT_PUBLIC_API_URL ?? '',

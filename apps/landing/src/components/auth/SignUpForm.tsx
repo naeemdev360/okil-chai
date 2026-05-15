@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AppleIcon, Badge, Button, Checkbox, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@okil-chai/ui';
+import { AppleIcon, Badge, Button, Checkbox, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@repo/ui';
 import { Briefcase, ChevronLeft, Mail, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';

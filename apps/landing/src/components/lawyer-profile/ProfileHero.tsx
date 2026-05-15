@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { ArrowLeft, MapPin } from 'lucide-react';
-import { Badge, Button, StarRating, TabBar } from '@okil-chai/ui';
-import type { TabItem } from '@okil-chai/ui';
+import { Badge, Button, StarRating, TabBar } from '@repo/ui';
+import type { TabItem } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 import type { Tab } from './types';

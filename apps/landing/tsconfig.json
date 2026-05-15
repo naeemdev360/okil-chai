@@ -20,28 +20,28 @@
       "@/*": [
         "./src/*"
       ],
-      "@okil-chai/i18n": [
+      "@repo/i18n": [
         "../../packages/i18n/src/index.ts"
       ],
-      "@okil-chai/i18n/locales/*": [
+      "@repo/i18n/locales/*": [
         "../../packages/i18n/src/locales/*"
       ],
-      "@okil-chai/shared": [
+      "@repo/shared": [
         "../../packages/shared"
       ],
-      "@okil-chai/api-client": [
+      "@repo/api-client": [
         "../../packages/api-client/src/index.ts"
       ],
-      "@okil-chai/hooks": [
+      "@repo/hooks": [
         "../../packages/hooks/src/index.ts"
       ],
-      "@okil-chai/ui": [
+      "@repo/ui": [
         "../../packages/ui/src/index.ts"
       ],
-      "@okil-chai/design-tokens": [
+      "@repo/design-tokens": [
         "../../packages/design-tokens/src/index.ts"
       ],
-      "@okil-chai/design-tokens/tailwind": [
+      "@repo/design-tokens/tailwind": [
         "../../packages/design-tokens/src/tailwind/preset.ts"
       ]
     },

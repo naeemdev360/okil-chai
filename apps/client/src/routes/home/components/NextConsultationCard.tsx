@@ -1,4 +1,4 @@
-import { Avatar, Button, DecorativeOrb } from '@okil-chai/ui';
+import { Avatar, Button, DecorativeOrb } from '@repo/ui';
 import { CalendarClock, Clock, CreditCard, Video } from 'lucide-react';
 import { NEXT_APPOINTMENT } from '../../../lib/mock-data';
 

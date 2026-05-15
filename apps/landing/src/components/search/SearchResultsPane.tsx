@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, SurfaceCard } from '@okil-chai/ui';
+import { cn, SurfaceCard } from '@repo/ui';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';

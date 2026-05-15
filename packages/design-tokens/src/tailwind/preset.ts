@@ -23,6 +23,13 @@ export const okilChaiPreset: Partial<Config> = {
         heading: [...fontFamily.heading],
         mono:    [...fontFamily.mono],
       },
+      opacity: {
+        6:  '0.06',
+        8:  '0.08',
+        12: '0.12',
+        15: '0.15',
+        35: '0.35',
+      },
       boxShadow,
       borderRadius,
       transitionDuration,

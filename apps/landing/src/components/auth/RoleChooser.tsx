@@ -1,6 +1,6 @@
 'use client';
 
-import { SurfaceCard } from '@okil-chai/ui';
+import { SurfaceCard } from '@repo/ui';
 import { ArrowRight, Briefcase, Check, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';

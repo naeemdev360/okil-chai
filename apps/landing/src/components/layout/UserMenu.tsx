@@ -9,16 +9,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@okil-chai/ui';
-import { Role } from '@okil-chai/shared';
-import type { UserProfile } from '@okil-chai/api-client';
+} from '@repo/ui';
+import type { UserProfile } from '@repo/api-client';
 import { ChevronDown, ExternalLink, LogOut } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import { useAuthStore } from '../../lib/store/auth.store';
-import { getPortalUrl } from '../../lib/auth/portal-routes';
+import { getPortalUrl, usesLawyerPortal } from '../../lib/auth/portal-routes';
 
 interface UserMenuProps {
   readonly user: UserProfile;
@@ -35,7 +34,9 @@ export function UserMenu({ user }: UserMenuProps) {
   const logout = useAuthStore((s) => s.logout);
 
   const portalUrl   = getPortalUrl(user.role);
-  const portalLabel = user.role === Role.LAWYER ? t('goToLawyerPortal') : t('goToClientPortal');
+  const portalLabel = usesLawyerPortal(user.role)
+    ? t('goToLawyerPortal')
+    : t('goToClientPortal');
   const initials    = getInitials(user.firstName, user.lastName);
 
   const handleSignOut = useCallback(async () => {

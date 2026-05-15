@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Check } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 import { BOOKING_STEPS } from './constants';
 import type { BookingStep } from './types';
 

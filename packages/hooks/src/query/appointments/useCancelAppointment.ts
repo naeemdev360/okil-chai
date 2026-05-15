@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { appointmentsKeys } from '@okil-chai/api-client';
+import { appointmentsKeys } from '@repo/api-client';
 import { useApiClient } from '../api-client-context';
 
 export function useCancelAppointment() {

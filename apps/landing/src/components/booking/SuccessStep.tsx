@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { CheckCircle, Calendar, Download, Share2, X, ArrowRight } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 import { consultFee, computeFees, generateBookingRef } from './utils';
 import { CancelModal } from './CancelModal';
 import { ConfirmationCard } from './ConfirmationCard';

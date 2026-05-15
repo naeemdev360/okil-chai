@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Button } from 'react-email';
-import { colors } from '@okil-chai/design-tokens';
+import { colors } from '@repo/design-tokens';
 
 interface EmailButtonProps {
   readonly href: string;

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { MapPin, Video, Phone, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { cn, Button, Badge, SurfaceCard, StarRating } from '@okil-chai/ui';
+import { cn, Button, Badge, SurfaceCard, StarRating } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import type { Lawyer } from '../../lib/search/mock-lawyers';
 

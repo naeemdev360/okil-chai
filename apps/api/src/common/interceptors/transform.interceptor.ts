@@ -1,5 +1,5 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import type { ApiResponse } from '@okil-chai/shared';
+import type { ApiResponse } from '@repo/shared';
 import type { Request } from 'express';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

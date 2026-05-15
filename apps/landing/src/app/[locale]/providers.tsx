@@ -1,6 +1,6 @@
 'use client';
 
-import { QueryProvider, ApiClientProvider } from '@okil-chai/hooks';
+import { QueryProvider, ApiClientProvider } from '@repo/hooks';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ReactNode } from 'react';
 import { api } from '../../lib/api/client';

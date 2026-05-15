@@ -1,5 +1,5 @@
 import { Heading, Section, Text } from 'react-email';
-import { colors } from '@okil-chai/design-tokens';
+import { colors } from '@repo/design-tokens';
 import { EmailLayout } from '../components/EmailLayout';
 import { EmailButton } from '../components/EmailButton';
 

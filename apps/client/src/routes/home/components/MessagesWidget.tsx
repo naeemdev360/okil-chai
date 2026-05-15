@@ -1,4 +1,4 @@
-import { Avatar } from '@okil-chai/ui';
+import { Avatar } from '@repo/ui';
 import { Link } from 'react-router-dom';
 import { CONVERSATIONS } from '../../../lib/mock-data';
 

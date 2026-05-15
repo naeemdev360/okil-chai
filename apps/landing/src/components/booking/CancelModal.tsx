@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Info } from 'lucide-react';
-import { cn } from '@okil-chai/ui';
+import { cn } from '@repo/ui';
 
 export interface CancelModalProps {
   readonly lawyerName: string;

@@ -1,4 +1,4 @@
-import { cn, ScalesLogoIcon } from '@okil-chai/ui';
+import { cn, ScalesLogoIcon } from '@repo/ui';
 import { brand } from '../../lib/brand';
 
 interface LogoProps {
