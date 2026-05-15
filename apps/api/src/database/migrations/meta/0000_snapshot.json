@@ -1,5 +1,5 @@
 {
-  "id": "dfaaa0d9-0aa0-4785-930c-d5998a8ccc6c",
+  "id": "9105b009-6106-439b-b728-5d9b69cc9b7a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -546,8 +546,32 @@
           "primaryKey": false,
           "notNull": false
         },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "years_of_experience": {
+          "name": "years_of_experience",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "bar_number": {
           "name": "bar_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year_admitted": {
+          "name": "year_admitted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bar_council": {
+          "name": "bar_council",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1606,6 +1630,19 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preferred_language": {
+          "name": "preferred_language",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en'"
         },
         "is_verified": {
           "name": "is_verified",

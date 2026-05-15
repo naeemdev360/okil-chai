@@ -6,11 +6,10 @@ import {
   Heading,
   Html,
   Preview,
+  render,
   Section,
   Text,
 } from 'react-email';
-import { render } from 'react-email';
-import * as React from 'react';
 
 interface VerificationEmailProps {
   readonly firstName: string;
