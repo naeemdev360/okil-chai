@@ -1,0 +1,44 @@
+---
+description: Mandatory software engineering principles — architecture, quality, types, tests, security
+alwaysApply: true
+---
+
+# Software engineering — mandatory standards
+
+**Authoritative source**: `CLAUDE.md` (read it before substantive changes). For features, read the relevant `SRS.md` sections; for UI, read `DESIGN.md` / design tokens.
+
+Agents must **not** treat these as optional. If a request conflicts with them, follow the standards and explain the tradeoff briefly to the user.
+
+## Architecture and boundaries
+
+- **Single responsibility**: One reason to change per module/class/function. Split when a unit does multiple jobs.
+- **Layering**: Business logic stays in services (backend) or appropriate domain/hooks (frontend). **No** business rules in controllers, route handlers, or presentational components.
+- **Abstractions**: Depend on interfaces/tokens where the project already uses DI or shared contracts; do not bypass established patterns.
+- **YAGNI**: Implement only what the task and SRS require; avoid speculative features or premature generalization.
+
+## Code quality (DRY, clarity, complexity)
+
+- **DRY**: No copy-paste logic; extract shared helpers, hooks, or services when the same pattern appears twice or is clearly reusable.
+- **Naming**: Self-documenting names; avoid `data`, `res`, `tmp`, `x` for anything non-trivial.
+- **Size and complexity**: Prefer small functions; if cyclomatic complexity grows, decompose (extract helpers, strategies). Avoid “god” modules.
+- **No dead noise**: No commented-out code; no `TODO` without a ticket/reference; no `console.log` in app code (use project logging patterns where applicable).
+
+## TypeScript and correctness
+
+- **Strict typing**: `strict` compliance; **no `any`**. Use `unknown` and narrow. Avoid `as` assertions unless necessary and **comment why**.
+- **Validation at boundaries**: Parse/validate external input (API, env, forms) with the project’s DTO/Zod/class-validator patterns — never trust raw input.
+
+## Testing and regressions
+
+- **New behavior**: Ship tests with the change per `CLAUDE.md` (backend: unit + integration as specified; frontend: Vitest/RTL/Playwright as applicable for the change).
+- **Do not skip tests** for new features or non-trivial fixes without explicit user agreement.
+
+## Security and operations
+
+- **Secrets**: Never hard-code credentials or tokens; use config/env as the codebase does.
+- **Safe data access**: Parameterized queries / ORM as intended; no string-built SQL for user input.
+- **Rate limits, CORS, headers**: Follow existing Nest/security configuration for new public surface area.
+
+## Scope discipline
+
+- Match the **smallest change** that satisfies the request and project rules. Avoid drive-by refactors or unrelated file edits unless the user asked for a broader cleanup.

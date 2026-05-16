@@ -1,0 +1,33 @@
+---
+description: Prefer shared design-system primitives and extract reusable UI when patterns repeat
+alwaysApply: true
+---
+
+# Design system — reuse and extraction
+
+## Default placement
+
+- **Visual primitives** (cards, buttons, inputs, badges, shells with consistent radius/border/shadow): implement in `packages/ui`, export from `packages/ui/src/index.ts`, consume via `@okil-chai/ui`.
+- **Tokens** (colors, shadows, radii): use `@okil-chai/design-tokens` / Tailwind preset — do not duplicate raw hex or one-off `shadow-[...]` when a token exists.
+- **App-only layout**: keep under `apps/<app>/src/components/` but compose from `@okil-chai/ui` where possible.
+
+## When to extract a shared component
+
+Extract to `packages/ui` (or `packages/shared` for types-only) when **any** of these are true:
+
+1. The same **class pattern** (e.g. white surface + border + radius + shadow) appears in **more than one file** or **more than one app**.
+2. A second use case is **likely** (marketing cards, summary panels, toggles) — prefer one primitive with variants (`cva`) over copy-paste.
+3. The piece is **presentational** (props in, JSX out) with no app-specific data fetching.
+
+Do **not** extract when the block is a one-off page section with unique layout, or tightly coupled to one feature’s domain model — keep it local and compose smaller primitives.
+
+## Implementation expectations
+
+- Use **variants** (`class-variance-authority`) for elevation, radius, padding, border width — not parallel components.
+- Support **`asChild`** (Radix `Slot`) when the shell must be a `Link`, `motion.*`, or other host element.
+- After adding a primitive, **migrate existing call sites** in the same change when scope is small; otherwise note follow-up.
+- Read `DESIGN.md` / design tokens before inventing new visual styles.
+
+## Session behavior
+
+Before finishing a task that introduces **repeated styling**, ask: *Should this live in `packages/ui`?* If yes, add or extend a primitive instead of duplicating class strings.
