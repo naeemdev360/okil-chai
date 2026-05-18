@@ -82,3 +82,50 @@ export const LawyerProfileSchema = z.object({
 });
 
 export type LawyerProfileResponse = z.infer<typeof LawyerProfileSchema>;
+
+// ── Public-facing profile (safe to expose to unauthenticated clients) ─────────
+
+export const LawyerPublicProfileSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string(),
+  lastName: z.string(),
+  photoUrl: z.string().url().nullable(),
+  bio: z.string().nullable(),
+  yearsOfExperience: z.number().nullable(),
+  city: z.string().nullable(),
+  country: z.string().nullable(),
+  pricePerHour: z.string().nullable(),
+  consultationTypes: z.array(z.nativeEnum(ConsultationType)),
+  specializations: z.array(z.object({ slug: z.string(), name: z.string(), isPrimary: z.boolean() })),
+  languages: z.array(z.string()),
+  avgRating: z.string().nullable(),
+  totalReviews: z.number().int(),
+  totalConsultations: z.number().int(),
+  isInstantBooking: z.boolean(),
+  createdAt: z.coerce.date(),
+});
+
+export type LawyerPublicProfileResponse = z.infer<typeof LawyerPublicProfileSchema>;
+
+export const PaginatedLawyersSchema = z.object({
+  data: z.array(LawyerPublicProfileSchema),
+  meta: z.object({
+    total: z.number().int(),
+    page: z.number().int(),
+    limit: z.number().int(),
+    totalPages: z.number().int(),
+  }),
+});
+
+export type PaginatedLawyersResponse = z.infer<typeof PaginatedLawyersSchema>;
+
+// ── Availability slots ────────────────────────────────────────────────────────
+
+export const AvailabilitySlotSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  dayOfWeek: z.number().int().min(0).max(6),
+  startTime: z.string(),
+  endTime: z.string(),
+});
+
+export type AvailabilitySlot = z.infer<typeof AvailabilitySlotSchema>;

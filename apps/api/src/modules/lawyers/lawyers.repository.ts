@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, DocumentType, VerificationStatus } from '@repo/shared';
-import type { LawyerProfileResponse } from '@repo/shared';
-import { and, eq, inArray } from 'drizzle-orm';
+import type { LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
+import { and, count, eq, gte, ilike, inArray, lte, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
+  availability,
   lawyerDocuments,
   lawyerLanguages,
   lawyerProfiles,
@@ -12,8 +13,10 @@ import {
 } from '../../database/schema';
 import { BaseRepository } from '../../common/utils/base.repository';
 import type {
+  AvailabilityRule,
   DocumentRecord,
   ILawyersRepository,
+  LawyerSearchFilters,
   ProfileUpdateData,
   StoredDocument,
 } from './interfaces/lawyers.interfaces';
@@ -152,5 +155,179 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
 
   async deleteDocument(documentId: string): Promise<void> {
     await this.db.delete(lawyerDocuments).where(eq(lawyerDocuments.id, documentId));
+  }
+
+  async searchLawyers(
+    filters: LawyerSearchFilters,
+  ): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }> {
+    const { specialization, city, lang, minPrice, maxPrice, rating, page = 1, limit = 20 } = filters;
+    const offset = (page - 1) * limit;
+
+    const conditions = [
+      eq(lawyerProfiles.isPublished, true),
+      eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
+    ];
+
+    if (city) conditions.push(ilike(lawyerProfiles.city, `%${city}%`));
+    if (minPrice !== undefined) conditions.push(gte(lawyerProfiles.pricePerHour, String(minPrice)));
+    if (maxPrice !== undefined) conditions.push(lte(lawyerProfiles.pricePerHour, String(maxPrice)));
+    if (rating !== undefined) conditions.push(gte(lawyerProfiles.avgRating, String(rating)));
+
+    if (specialization) {
+      conditions.push(
+        sql`EXISTS (
+          SELECT 1 FROM ${lawyerSpecializations}
+          INNER JOIN ${specializations} ON ${lawyerSpecializations.specializationId} = ${specializations.id}
+          WHERE ${lawyerSpecializations.lawyerId} = ${lawyerProfiles.id}
+            AND ${specializations.slug} = ${specialization}
+        )`,
+      );
+    }
+
+    if (lang) {
+      conditions.push(
+        sql`EXISTS (
+          SELECT 1 FROM ${lawyerLanguages}
+          WHERE ${lawyerLanguages.lawyerId} = ${lawyerProfiles.id}
+            AND lower(${lawyerLanguages.language}) = lower(${lang})
+        )`,
+      );
+    }
+
+    const where = and(...conditions);
+
+    const countResult = await this.db
+      .select({ total: count() })
+      .from(lawyerProfiles)
+      .where(where);
+    const total = countResult[0]?.total ?? 0;
+
+    const rows = await this.db
+      .select()
+      .from(lawyerProfiles)
+      .where(where)
+      .limit(limit)
+      .offset(offset);
+
+    const lawyerIds = rows.map((r) => r.id);
+    if (lawyerIds.length === 0) return { lawyers: [], total };
+
+    const [langRows, specRows] = await Promise.all([
+      this.db
+        .select({ lawyerId: lawyerLanguages.lawyerId, language: lawyerLanguages.language })
+        .from(lawyerLanguages)
+        .where(inArray(lawyerLanguages.lawyerId, lawyerIds)),
+      this.db
+        .select({
+          lawyerId: lawyerSpecializations.lawyerId,
+          slug: specializations.slug,
+          name: specializations.name,
+          isPrimary: lawyerSpecializations.isPrimary,
+        })
+        .from(lawyerSpecializations)
+        .innerJoin(specializations, eq(lawyerSpecializations.specializationId, specializations.id))
+        .where(inArray(lawyerSpecializations.lawyerId, lawyerIds)),
+    ]);
+
+    const langMap = new Map<string, string[]>();
+    for (const { lawyerId, language } of langRows) {
+      const arr = langMap.get(lawyerId) ?? [];
+      arr.push(language);
+      langMap.set(lawyerId, arr);
+    }
+
+    const specMap = new Map<string, { slug: string; name: string; isPrimary: boolean }[]>();
+    for (const { lawyerId, slug, name, isPrimary } of specRows) {
+      const arr = specMap.get(lawyerId) ?? [];
+      arr.push({ slug, name, isPrimary });
+      specMap.set(lawyerId, arr);
+    }
+
+    const lawyers: LawyerPublicProfileResponse[] = rows.map((p) => ({
+      id: p.id,
+      firstName: p.firstName,
+      lastName: p.lastName,
+      photoUrl: p.photoUrl,
+      bio: p.bio,
+      yearsOfExperience: p.yearsOfExperience,
+      city: p.city,
+      country: p.country,
+      pricePerHour: p.pricePerHour,
+      consultationTypes: (p.consultationTypes ?? []) as ConsultationType[],
+      specializations: specMap.get(p.id) ?? [],
+      languages: langMap.get(p.id) ?? [],
+      avgRating: p.avgRating,
+      totalReviews: p.totalReviews,
+      totalConsultations: p.totalConsultations,
+      isInstantBooking: p.isInstantBooking,
+      createdAt: p.createdAt,
+    }));
+
+    return { lawyers, total };
+  }
+
+  async findPublicProfileById(lawyerId: string): Promise<LawyerPublicProfileResponse | null> {
+    const [profile] = await this.db
+      .select()
+      .from(lawyerProfiles)
+      .where(
+        and(
+          eq(lawyerProfiles.id, lawyerId),
+          eq(lawyerProfiles.isPublished, true),
+          eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
+        ),
+      )
+      .limit(1);
+
+    if (!profile) return null;
+
+    const [langRows, specRows] = await Promise.all([
+      this.db
+        .select({ language: lawyerLanguages.language })
+        .from(lawyerLanguages)
+        .where(eq(lawyerLanguages.lawyerId, profile.id)),
+      this.db
+        .select({
+          slug: specializations.slug,
+          name: specializations.name,
+          isPrimary: lawyerSpecializations.isPrimary,
+        })
+        .from(lawyerSpecializations)
+        .innerJoin(specializations, eq(lawyerSpecializations.specializationId, specializations.id))
+        .where(eq(lawyerSpecializations.lawyerId, profile.id)),
+    ]);
+
+    return {
+      id: profile.id,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      photoUrl: profile.photoUrl,
+      bio: profile.bio,
+      yearsOfExperience: profile.yearsOfExperience,
+      city: profile.city,
+      country: profile.country,
+      pricePerHour: profile.pricePerHour,
+      consultationTypes: (profile.consultationTypes ?? []) as ConsultationType[],
+      specializations: specRows,
+      languages: langRows.map((l) => l.language),
+      avgRating: profile.avgRating,
+      totalReviews: profile.totalReviews,
+      totalConsultations: profile.totalConsultations,
+      isInstantBooking: profile.isInstantBooking,
+      createdAt: profile.createdAt,
+    };
+  }
+
+  async findAvailabilityByLawyerId(lawyerId: string): Promise<AvailabilityRule[]> {
+    const rows = await this.db
+      .select({
+        dayOfWeek: availability.dayOfWeek,
+        startTime: availability.startTime,
+        endTime: availability.endTime,
+      })
+      .from(availability)
+      .where(and(eq(availability.lawyerId, lawyerId), eq(availability.isRecurring, true)));
+
+    return rows;
   }
 }

@@ -1,8 +1,11 @@
 import type {
+  AvailabilitySlot,
   CompleteOnboardingRequest,
   ConsultationType,
   DocumentType,
   LawyerProfileResponse,
+  LawyerPublicProfileResponse,
+  PaginatedLawyersResponse,
   VerificationStatus,
 } from '@repo/shared';
 
@@ -58,11 +61,31 @@ export interface DocumentRecord {
   readonly sizeBytes: number;
 }
 
+export interface LawyerSearchFilters {
+  readonly specialization?: string;
+  readonly city?: string;
+  readonly lang?: string;
+  readonly minPrice?: number;
+  readonly maxPrice?: number;
+  readonly rating?: number;
+  readonly page?: number;
+  readonly limit?: number;
+}
+
+export interface AvailabilityRule {
+  readonly dayOfWeek: number;
+  readonly startTime: string;
+  readonly endTime: string;
+}
+
 export interface ILawyersService {
   completeOnboarding(input: CompleteOnboardingInput): Promise<LawyerProfileResponse>;
   submitOnboarding(userId: string): Promise<LawyerProfileResponse>;
   getProfile(userId: string): Promise<LawyerProfileResponse>;
   deleteDocument(userId: string, documentId: string): Promise<void>;
+  searchLawyers(filters: LawyerSearchFilters): Promise<PaginatedLawyersResponse>;
+  getPublicProfile(lawyerId: string): Promise<LawyerPublicProfileResponse>;
+  getAvailabilitySlots(lawyerId: string, from: string, to: string): Promise<AvailabilitySlot[]>;
 }
 
 export interface ILawyersRepository {
@@ -75,4 +98,7 @@ export interface ILawyersRepository {
   insertDocument(lawyerId: string, doc: DocumentRecord): Promise<void>;
   findDocumentByIdAndLawyerId(documentId: string, lawyerId: string): Promise<StoredDocument | null>;
   deleteDocument(documentId: string): Promise<void>;
+  searchLawyers(filters: LawyerSearchFilters): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }>;
+  findPublicProfileById(lawyerId: string): Promise<LawyerPublicProfileResponse | null>;
+  findAvailabilityByLawyerId(lawyerId: string): Promise<AvailabilityRule[]>;
 }

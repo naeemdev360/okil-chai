@@ -13,5 +13,17 @@ export type {
   DeactivateUserRequest,
 } from './user.schemas.js';
 
-export { CompleteOnboardingSchema, LawyerProfileSchema } from './lawyer.schemas.js';
-export type { CompleteOnboardingRequest, LawyerProfileResponse } from './lawyer.schemas.js';
+export {
+  CompleteOnboardingSchema,
+  LawyerProfileSchema,
+  LawyerPublicProfileSchema,
+  PaginatedLawyersSchema,
+  AvailabilitySlotSchema,
+} from './lawyer.schemas.js';
+export type {
+  CompleteOnboardingRequest,
+  LawyerProfileResponse,
+  LawyerPublicProfileResponse,
+  PaginatedLawyersResponse,
+  AvailabilitySlot,
+} from './lawyer.schemas.js';
