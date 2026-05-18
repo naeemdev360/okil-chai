@@ -1,4 +1,5 @@
 import type {
+  AvailabilityRuleResponse,
   AvailabilitySlot,
   CompleteOnboardingRequest,
   ConsultationType,
@@ -78,6 +79,12 @@ export interface AvailabilityRule {
   readonly endTime: string;
 }
 
+export interface CreateAvailabilityRuleInput {
+  readonly dayOfWeek: number;
+  readonly startTime: string;
+  readonly endTime: string;
+}
+
 export interface ILawyersService {
   completeOnboarding(input: CompleteOnboardingInput): Promise<LawyerProfileResponse>;
   submitOnboarding(userId: string): Promise<LawyerProfileResponse>;
@@ -86,6 +93,9 @@ export interface ILawyersService {
   searchLawyers(filters: LawyerSearchFilters): Promise<PaginatedLawyersResponse>;
   getPublicProfile(lawyerId: string): Promise<LawyerPublicProfileResponse>;
   getAvailabilitySlots(lawyerId: string, from: string, to: string): Promise<AvailabilitySlot[]>;
+  listAvailabilityRules(userId: string): Promise<AvailabilityRuleResponse[]>;
+  createAvailabilityRule(userId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse>;
+  deleteAvailabilityRule(userId: string, ruleId: string): Promise<void>;
 }
 
 export interface ILawyersRepository {
@@ -101,4 +111,8 @@ export interface ILawyersRepository {
   searchLawyers(filters: LawyerSearchFilters): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }>;
   findPublicProfileById(lawyerId: string): Promise<LawyerPublicProfileResponse | null>;
   findAvailabilityByLawyerId(lawyerId: string): Promise<AvailabilityRule[]>;
+  findAvailabilityRulesByLawyerId(lawyerId: string): Promise<AvailabilityRuleResponse[]>;
+  insertAvailabilityRule(lawyerId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse>;
+  findAvailabilityRuleByIdAndLawyerId(ruleId: string, lawyerId: string): Promise<AvailabilityRuleResponse | null>;
+  deleteAvailabilityRuleById(ruleId: string): Promise<void>;
 }

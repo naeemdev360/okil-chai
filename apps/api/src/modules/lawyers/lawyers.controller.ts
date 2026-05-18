@@ -23,13 +23,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { LawyerProfileResponse } from '@repo/shared';
+import type { AvailabilityRuleResponse, LawyerProfileResponse } from '@repo/shared';
 import { Role } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
+import { CreateAvailabilityRuleDto } from './dto/create-availability-rule.dto';
 import {
   LAWYERS_SERVICE,
   type ILawyersService,
@@ -112,5 +113,38 @@ export class LawyersController {
     @Param('documentId', ParseUUIDPipe) documentId: string,
   ): Promise<void> {
     return this.lawyersService.deleteDocument(user.userId, documentId);
+  }
+
+  @Get('me/availability')
+  @ApiOperation({ summary: 'List own recurring availability rules' })
+  @ApiResponse({ status: 200, description: 'List of availability rules' })
+  @ApiResponse({ status: 404, description: 'Profile not found' })
+  listAvailabilityRules(@CurrentUser() user: RequestUser): Promise<AvailabilityRuleResponse[]> {
+    return this.lawyersService.listAvailabilityRules(user.userId);
+  }
+
+  @Post('me/availability')
+  @ApiOperation({ summary: 'Create a recurring availability rule' })
+  @ApiResponse({ status: 201, description: 'Created availability rule' })
+  @ApiResponse({ status: 400, description: 'Invalid input or endTime not after startTime' })
+  @ApiResponse({ status: 404, description: 'Profile not found' })
+  createAvailabilityRule(
+    @CurrentUser() user: RequestUser,
+    @Body() dto: CreateAvailabilityRuleDto,
+  ): Promise<AvailabilityRuleResponse> {
+    return this.lawyersService.createAvailabilityRule(user.userId, dto);
+  }
+
+  @Delete('me/availability/:ruleId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a recurring availability rule' })
+  @ApiParam({ name: 'ruleId', type: String, format: 'uuid' })
+  @ApiResponse({ status: 204, description: 'Rule deleted' })
+  @ApiResponse({ status: 404, description: 'Rule not found' })
+  deleteAvailabilityRule(
+    @CurrentUser() user: RequestUser,
+    @Param('ruleId', ParseUUIDPipe) ruleId: string,
+  ): Promise<void> {
+    return this.lawyersService.deleteAvailabilityRule(user.userId, ruleId);
   }
 }

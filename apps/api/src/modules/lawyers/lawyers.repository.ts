@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, DocumentType, VerificationStatus } from '@repo/shared';
-import type { LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
+import type { AvailabilityRuleResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
 import { and, count, eq, gte, ilike, inArray, lte, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
@@ -14,6 +14,7 @@ import {
 import { BaseRepository } from '../../common/utils/base.repository';
 import type {
   AvailabilityRule,
+  CreateAvailabilityRuleInput,
   DocumentRecord,
   ILawyersRepository,
   LawyerSearchFilters,
@@ -329,5 +330,61 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
       .where(and(eq(availability.lawyerId, lawyerId), eq(availability.isRecurring, true)));
 
     return rows;
+  }
+
+  async findAvailabilityRulesByLawyerId(lawyerId: string): Promise<AvailabilityRuleResponse[]> {
+    const rows = await this.db
+      .select({
+        id: availability.id,
+        dayOfWeek: availability.dayOfWeek,
+        startTime: availability.startTime,
+        endTime: availability.endTime,
+        isRecurring: availability.isRecurring,
+      })
+      .from(availability)
+      .where(eq(availability.lawyerId, lawyerId));
+
+    return rows;
+  }
+
+  async insertAvailabilityRule(lawyerId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse> {
+    const [row] = await this.db
+      .insert(availability)
+      .values({
+        lawyerId,
+        dayOfWeek: input.dayOfWeek,
+        startTime: input.startTime,
+        endTime: input.endTime,
+        isRecurring: true,
+      })
+      .returning({
+        id: availability.id,
+        dayOfWeek: availability.dayOfWeek,
+        startTime: availability.startTime,
+        endTime: availability.endTime,
+        isRecurring: availability.isRecurring,
+      });
+
+    return row!;
+  }
+
+  async findAvailabilityRuleByIdAndLawyerId(ruleId: string, lawyerId: string): Promise<AvailabilityRuleResponse | null> {
+    const [row] = await this.db
+      .select({
+        id: availability.id,
+        dayOfWeek: availability.dayOfWeek,
+        startTime: availability.startTime,
+        endTime: availability.endTime,
+        isRecurring: availability.isRecurring,
+      })
+      .from(availability)
+      .where(and(eq(availability.id, ruleId), eq(availability.lawyerId, lawyerId)))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  async deleteAvailabilityRuleById(ruleId: string): Promise<void> {
+    await this.db.delete(availability).where(eq(availability.id, ruleId));
   }
 }

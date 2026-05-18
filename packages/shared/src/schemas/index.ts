@@ -19,6 +19,7 @@ export {
   LawyerPublicProfileSchema,
   PaginatedLawyersSchema,
   AvailabilitySlotSchema,
+  AvailabilityRuleResponseSchema,
 } from './lawyer.schemas.js';
 export type {
   CompleteOnboardingRequest,
@@ -26,4 +27,5 @@ export type {
   LawyerPublicProfileResponse,
   PaginatedLawyersResponse,
   AvailabilitySlot,
+  AvailabilityRuleResponse,
 } from './lawyer.schemas.js';

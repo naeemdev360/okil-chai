@@ -1,10 +1,11 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type { AvailabilitySlot, LawyerProfileResponse, LawyerPublicProfileResponse, PaginatedLawyersResponse } from '@repo/shared';
+import type { AvailabilityRuleResponse, AvailabilitySlot, LawyerProfileResponse, LawyerPublicProfileResponse, PaginatedLawyersResponse } from '@repo/shared';
 import { VerificationStatus } from '@repo/shared';
 import { STORAGE_SERVICE, type IStorageService } from '../storage/interfaces/storage.interfaces';
 import {
   LAWYERS_REPOSITORY,
   type CompleteOnboardingInput,
+  type CreateAvailabilityRuleInput,
   type ILawyersRepository,
   type ILawyersService,
   type LawyerSearchFilters,
@@ -124,6 +125,33 @@ export class LawyersService implements ILawyersService {
     const profile = await this.lawyersRepository.findPublicProfileById(lawyerId);
     if (!profile) throw new NotFoundException('Lawyer not found');
     return profile;
+  }
+
+  async listAvailabilityRules(userId: string): Promise<AvailabilityRuleResponse[]> {
+    const profile = await this.lawyersRepository.findProfileByUserId(userId);
+    if (!profile) throw new NotFoundException('Lawyer profile not found');
+    return this.lawyersRepository.findAvailabilityRulesByLawyerId(profile.id);
+  }
+
+  async createAvailabilityRule(userId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse> {
+    const profile = await this.lawyersRepository.findProfileByUserId(userId);
+    if (!profile) throw new NotFoundException('Lawyer profile not found');
+
+    if (input.startTime >= input.endTime) {
+      throw new BadRequestException('endTime must be after startTime');
+    }
+
+    return this.lawyersRepository.insertAvailabilityRule(profile.id, input);
+  }
+
+  async deleteAvailabilityRule(userId: string, ruleId: string): Promise<void> {
+    const profile = await this.lawyersRepository.findProfileByUserId(userId);
+    if (!profile) throw new NotFoundException('Lawyer profile not found');
+
+    const rule = await this.lawyersRepository.findAvailabilityRuleByIdAndLawyerId(ruleId, profile.id);
+    if (!rule) throw new NotFoundException('Availability rule not found');
+
+    await this.lawyersRepository.deleteAvailabilityRuleById(ruleId);
   }
 
   async getAvailabilitySlots(lawyerId: string, from: string, to: string): Promise<AvailabilitySlot[]> {

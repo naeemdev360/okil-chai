@@ -129,3 +129,15 @@ export const AvailabilitySlotSchema = z.object({
 });
 
 export type AvailabilitySlot = z.infer<typeof AvailabilitySlotSchema>;
+
+// ── Availability rules (lawyer-managed recurring rules) ───────────────────────
+
+export const AvailabilityRuleResponseSchema = z.object({
+  id: z.string().uuid(),
+  dayOfWeek: z.number().int().min(0).max(6),
+  startTime: z.string(),
+  endTime: z.string(),
+  isRecurring: z.boolean(),
+});
+
+export type AvailabilityRuleResponse = z.infer<typeof AvailabilityRuleResponseSchema>;
