@@ -8,6 +8,7 @@ import {
   Inject,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UploadedFiles,
   UseGuards,
@@ -85,6 +86,19 @@ export class LawyersController {
       profilePhoto: files.profilePhoto?.[0],
       documents: uploadedDocs,
     });
+  }
+
+  @Patch('me/onboarding/submit')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Submit onboarding for admin review',
+    description: 'Transitions the lawyer profile from DRAFT to PENDING. Call this on the final wizard step.',
+  })
+  @ApiResponse({ status: 200, description: 'Profile submitted — verificationStatus is now PENDING' })
+  @ApiResponse({ status: 400, description: 'Onboarding already submitted' })
+  @ApiResponse({ status: 404, description: 'Profile not found' })
+  submitOnboarding(@CurrentUser() user: RequestUser): Promise<LawyerProfileResponse> {
+    return this.lawyersService.submitOnboarding(user.userId);
   }
 
   @Delete('me/documents/:documentId')

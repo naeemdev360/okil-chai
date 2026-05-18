@@ -5,6 +5,7 @@ import type { AuthTokensResponse, LawyerSignUpRequest, UserSignUpRequest } from 
 import { Role } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { sha256 } from '../../common/utils/crypto.util';
 import { MAIL_PRODUCER, type IMailProducer } from '../mailer/interfaces/mailer.interfaces';
 import {
   AUTH_REPOSITORY,
@@ -15,10 +16,6 @@ import {
 } from './interfaces/auth.interfaces';
 
 const BCRYPT_COST = 12;
-
-function sha256(value: string): string {
-  return crypto.createHash('sha256').update(value).digest('hex');
-}
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -81,6 +78,30 @@ export class AuthService implements IAuthService {
     const userId = await this.repo.consumeVerificationToken(rawToken);
     if (!userId) throw new UnauthorizedException('Invalid or expired verification link');
     await this.repo.markUserVerified(userId);
+  }
+
+  async forgotPassword(email: string): Promise<void> {
+    const user = await this.repo.findUserForPasswordReset(email);
+    // Silently return when not found — prevents email enumeration
+    if (!user) return;
+
+    const rawToken = await this.repo.createPasswordResetToken(user.userId);
+    const portalUrl = this.getFrontendCallbackUrl(user.roles);
+    await this.mailProducer.sendPasswordResetEmail({
+      to: email,
+      firstName: user.firstName,
+      resetUrl: `${portalUrl}/auth/reset-password?token=${rawToken}`,
+    });
+  }
+
+  async resetPassword(rawToken: string, newPassword: string): Promise<void> {
+    const userId = await this.repo.consumePasswordResetToken(rawToken);
+    if (!userId) throw new UnauthorizedException('Invalid or expired password reset link');
+
+    const passwordHash = await bcrypt.hash(newPassword, BCRYPT_COST);
+    await this.repo.updatePasswordHash(userId, passwordHash);
+    // Invalidate all active sessions so old sessions can't be reused
+    await this.repo.revokeAllUserSessions(userId);
   }
 
   async resendVerificationEmail(userId: string): Promise<void> {

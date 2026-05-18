@@ -10,9 +10,11 @@ export { VerificationStatus } from './enums/verification-status.enum.js';
 export type { ApiError, ApiResponse } from './types/api-response.types.js';
 export type {
   AuthTokensResponse,
+  ForgotPasswordRequest,
   LawyerSignUpRequest,
   LoginRequest,
   RefreshTokenRequest,
+  ResetPasswordRequest,
   UserSignUpRequest,
 } from './types/auth.types.js';
 export type { PaginationMeta, PaginationQuery } from './types/pagination.types.js';

@@ -6,7 +6,7 @@ CREATE TYPE "public"."document_type" AS ENUM('BAR_CERTIFICATE', 'LAW_DEGREE', 'G
 CREATE TYPE "public"."stripe_account_status" AS ENUM('NOT_CONNECTED', 'PENDING', 'ACTIVE', 'RESTRICTED');--> statement-breakpoint
 CREATE TYPE "public"."subscription_tier" AS ENUM('FREE', 'PRO');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('CLIENT', 'LAWYER', 'PLATFORM_ADMIN', 'SUPPORT_AGENT', 'FIRM_ADMIN', 'FIRM_MANAGER');--> statement-breakpoint
-CREATE TYPE "public"."verification_status" AS ENUM('PENDING', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'REQUIRES_RESUBMISSION');--> statement-breakpoint
+CREATE TYPE "public"."verification_status" AS ENUM('DRAFT', 'PENDING', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'REQUIRES_RESUBMISSION');--> statement-breakpoint
 CREATE TABLE "appointments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"client_id" uuid NOT NULL,
@@ -91,7 +91,9 @@ CREATE TABLE "lawyer_profiles" (
 	"latitude" double precision,
 	"longitude" double precision,
 	"price_per_hour" numeric(10, 2),
-	"verification_status" "verification_status" DEFAULT 'PENDING' NOT NULL,
+	"consultation_types" jsonb DEFAULT '[]'::jsonb NOT NULL,
+	"onboarding_step" integer DEFAULT 0 NOT NULL,
+	"verification_status" "verification_status" DEFAULT 'DRAFT' NOT NULL,
 	"verification_notes" text,
 	"verified_by" uuid,
 	"verified_at" timestamp with time zone,

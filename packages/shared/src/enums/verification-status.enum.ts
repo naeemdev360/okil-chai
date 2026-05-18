@@ -1,4 +1,5 @@
 export enum VerificationStatus {
+  DRAFT = 'DRAFT',
   PENDING = 'PENDING',
   UNDER_REVIEW = 'UNDER_REVIEW',
   APPROVED = 'APPROVED',

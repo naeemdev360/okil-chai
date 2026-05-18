@@ -64,7 +64,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
       city: profile.city,
       country: profile.country,
       pricePerHour: profile.pricePerHour,
-      consultationTypes: [] as ConsultationType[],
+      consultationTypes: (profile.consultationTypes ?? []) as ConsultationType[],
       specializations: specRows.map((s) => ({
         slug: s.slug,
         name: s.name,
@@ -72,6 +72,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
       })),
       languages: langRows.map((l) => l.language),
       verificationStatus: profile.verificationStatus as VerificationStatus,
+      onboardingStep: profile.onboardingStep,
       isPublished: profile.isPublished,
       createdAt: profile.createdAt,
     };
@@ -81,6 +82,20 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
     await this.db
       .update(lawyerProfiles)
       .set(data)
+      .where(eq(lawyerProfiles.id, lawyerId));
+  }
+
+  async updateVerificationStatus(lawyerId: string, status: VerificationStatus): Promise<void> {
+    await this.db
+      .update(lawyerProfiles)
+      .set({ verificationStatus: status })
+      .where(eq(lawyerProfiles.id, lawyerId));
+  }
+
+  async upsertConsultationTypes(lawyerId: string, types: ConsultationType[]): Promise<void> {
+    await this.db
+      .update(lawyerProfiles)
+      .set({ consultationTypes: types })
       .where(eq(lawyerProfiles.id, lawyerId));
   }
 

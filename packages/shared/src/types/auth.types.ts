@@ -25,3 +25,12 @@ export interface LoginRequest {
 export interface RefreshTokenRequest {
   readonly refreshToken: string;
 }
+
+export interface ForgotPasswordRequest {
+  readonly email: string;
+}
+
+export interface ResetPasswordRequest {
+  readonly token: string;
+  readonly newPassword: string;
+}

@@ -1,4 +1,10 @@
-import type { CompleteOnboardingRequest, DocumentType, LawyerProfileResponse } from '@repo/shared';
+import type {
+  CompleteOnboardingRequest,
+  ConsultationType,
+  DocumentType,
+  LawyerProfileResponse,
+  VerificationStatus,
+} from '@repo/shared';
 
 export interface OnboardingFiles {
   profilePhoto?: Express.Multer.File[];
@@ -26,20 +32,22 @@ export interface StoredDocument {
   readonly storageKey: string;
 }
 
-export interface ILawyersRepository {
-  findProfileByUserId(userId: string): Promise<LawyerProfileResponse | null>;
-  updateProfile(lawyerId: string, data: Partial<ProfileUpdateData>): Promise<void>;
-  upsertLanguages(lawyerId: string, languages: string[]): Promise<void>;
-  upsertSpecializations(lawyerId: string, slugs: string[]): Promise<void>;
-  insertDocument(lawyerId: string, doc: DocumentRecord): Promise<void>;
-  findDocumentByIdAndLawyerId(documentId: string, lawyerId: string): Promise<StoredDocument | null>;
-  deleteDocument(documentId: string): Promise<void>;
-}
+
 
 // Derived from the shared canonical schema — add fields there, not here
 export type ProfileUpdateData = Pick<
   LawyerProfileResponse,
-  'phone' | 'yearsOfExperience' | 'bio' | 'barNumber' | 'yearAdmitted' | 'barCouncil' | 'city' | 'country' | 'pricePerHour' | 'photoUrl'
+  | 'phone'
+  | 'yearsOfExperience'
+  | 'bio'
+  | 'barNumber'
+  | 'yearAdmitted'
+  | 'barCouncil'
+  | 'city'
+  | 'country'
+  | 'pricePerHour'
+  | 'photoUrl'
+  | 'onboardingStep'
 >;
 
 export interface DocumentRecord {
@@ -52,6 +60,19 @@ export interface DocumentRecord {
 
 export interface ILawyersService {
   completeOnboarding(input: CompleteOnboardingInput): Promise<LawyerProfileResponse>;
+  submitOnboarding(userId: string): Promise<LawyerProfileResponse>;
   getProfile(userId: string): Promise<LawyerProfileResponse>;
   deleteDocument(userId: string, documentId: string): Promise<void>;
+}
+
+export interface ILawyersRepository {
+  findProfileByUserId(userId: string): Promise<LawyerProfileResponse | null>;
+  updateProfile(lawyerId: string, data: Partial<ProfileUpdateData>): Promise<void>;
+  updateVerificationStatus(lawyerId: string, status: VerificationStatus): Promise<void>;
+  upsertConsultationTypes(lawyerId: string, types: ConsultationType[]): Promise<void>;
+  upsertLanguages(lawyerId: string, languages: string[]): Promise<void>;
+  upsertSpecializations(lawyerId: string, slugs: string[]): Promise<void>;
+  insertDocument(lawyerId: string, doc: DocumentRecord): Promise<void>;
+  findDocumentByIdAndLawyerId(documentId: string, lawyerId: string): Promise<StoredDocument | null>;
+  deleteDocument(documentId: string): Promise<void>;
 }

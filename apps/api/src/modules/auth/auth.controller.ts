@@ -23,9 +23,11 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { USERS_SERVICE, type IUsersService } from '../users/interfaces/users.interfaces';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LawyerSignUpDto } from './dto/lawyer-signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserSignUpDto } from './dto/signup.dto';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -130,6 +132,28 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Session expired or revoked' })
   refresh(@Body() dto: RefreshTokenDto): Promise<AuthTokensDto> {
     return this.authService.refreshTokens(dto.refreshToken);
+  }
+
+  @Post('forgot-password')
+  @Public()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Request a password reset email',
+    description: 'Always returns 204 regardless of whether the email exists — prevents email enumeration. Only works for local (email/password) accounts.',
+  })
+  @ApiResponse({ status: 204, description: 'Reset email queued if the address has a local account' })
+  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<void> {
+    await this.authService.forgotPassword(dto.email);
+  }
+
+  @Post('reset-password')
+  @Public()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Reset password using the one-time token from the reset email' })
+  @ApiResponse({ status: 204, description: 'Password updated and all sessions revoked' })
+  @ApiResponse({ status: 401, description: 'Invalid or expired reset token' })
+  async resetPassword(@Body() dto: ResetPasswordDto): Promise<void> {
+    await this.authService.resetPassword(dto.token, dto.newPassword);
   }
 
   @Post('logout')

@@ -6,8 +6,10 @@ import { MAIL_JOB, MAIL_QUEUE, MAIL_SUBJECT } from './mail.constants';
 import {
   MAILER_SERVICE,
   type IMailerService,
+  type PasswordResetEmailJob,
   type VerificationEmailJob,
 } from './interfaces/mailer.interfaces';
+import { renderPasswordResetEmail } from './templates/PasswordResetEmail';
 import { renderResendVerificationEmail } from './templates/ResendVerificationEmail';
 import { renderVerificationEmail } from './templates/VerificationEmail';
 
@@ -32,6 +34,9 @@ export class MailConsumer extends WorkerHost {
       case MAIL_JOB.RESEND_VERIFICATION_EMAIL:
         await this.processResendVerificationEmail(job.data as VerificationEmailJob);
         break;
+      case MAIL_JOB.PASSWORD_RESET_EMAIL:
+        await this.processPasswordResetEmail(job.data as PasswordResetEmailJob);
+        break;
       default:
         this.logger.warn(`Unhandled mail job type: ${job.name}`);
     }
@@ -55,5 +60,15 @@ export class MailConsumer extends WorkerHost {
       html,
     });
     this.logger.log(`Resend verification email sent → ${data.to}`);
+  }
+
+  private async processPasswordResetEmail(data: PasswordResetEmailJob): Promise<void> {
+    const html = await renderPasswordResetEmail(data.firstName, data.resetUrl, this.appName);
+    await this.mailerService.sendEmail({
+      to: data.to,
+      subject: MAIL_SUBJECT.PASSWORD_RESET_EMAIL(this.appName),
+      html,
+    });
+    this.logger.log(`Password reset email sent → ${data.to}`);
   }
 }

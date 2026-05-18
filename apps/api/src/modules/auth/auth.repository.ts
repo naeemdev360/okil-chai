@@ -12,12 +12,15 @@ import {
   users,
 } from '../../database/schema';
 import { BaseRepository, type Tx } from '../../common/utils/base.repository';
+import { sha256 } from '../../common/utils/crypto.util';
+import { PASSWORD_RESET_EXPIRES_MINUTES } from '../mailer/mail.constants';
 import type {
   CreateLocalLawyerInput,
   CreateLocalUserInput,
   GoogleUserPayload,
   IAuthRepository,
   LocalIdentity,
+  PasswordResetUserInfo,
   SessionRecord,
   UserEmailInfo,
   ValidatedUser,
@@ -31,10 +34,6 @@ const EMAIL_CONFLICT = {
   errorCode: 'EMAIL_ALREADY_REGISTERED',
 } as const;
 
-// Raw tokens are never stored — only their hash, so a DB breach can't replay them.
-function sha256(value: string): string {
-  return crypto.createHash('sha256').update(value).digest('hex');
-}
 
 @Injectable()
 export class AuthRepository extends BaseRepository implements IAuthRepository {
@@ -221,6 +220,88 @@ export class AuthRepository extends BaseRepository implements IAuthRepository {
       isVerified: user.isVerified,
       roles: roleRows.map((r) => r.role as Role),
     };
+  }
+
+  async findUserForPasswordReset(email: string): Promise<PasswordResetUserInfo | null> {
+    const [row] = await this.db
+      .select({ userId: users.id, firstName: users.firstName })
+      .from(users)
+      .innerJoin(
+        userIdentities,
+        and(
+          eq(userIdentities.userId, users.id),
+          eq(userIdentities.provider, AuthProvider.LOCAL),
+        ),
+      )
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (!row) return null;
+
+    const roleRows = await this.db
+      .select({ role: userRoles.role })
+      .from(userRoles)
+      .where(eq(userRoles.userId, row.userId));
+
+    return {
+      userId: row.userId,
+      firstName: row.firstName,
+      roles: roleRows.map((r) => r.role as Role),
+    };
+  }
+
+  async createPasswordResetToken(userId: string): Promise<string> {
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const tokenHash = sha256(rawToken);
+    const expiresAt = new Date(Date.now() + PASSWORD_RESET_EXPIRES_MINUTES * 60 * 1_000);
+
+    await this.db.insert(authTokens).values({
+      userId,
+      type: AuthTokenType.PASSWORD_RESET,
+      tokenHash,
+      expiresAt,
+    });
+
+    return rawToken;
+  }
+
+  async consumePasswordResetToken(rawToken: string): Promise<string | null> {
+    const tokenHash = sha256(rawToken);
+    const now = new Date();
+
+    const [token] = await this.db
+      .select({ id: authTokens.id, userId: authTokens.userId })
+      .from(authTokens)
+      .where(
+        and(
+          eq(authTokens.tokenHash, tokenHash),
+          eq(authTokens.type, AuthTokenType.PASSWORD_RESET),
+          isNull(authTokens.usedAt),
+          gt(authTokens.expiresAt, now),
+        ),
+      )
+      .limit(1);
+
+    if (!token) return null;
+
+    await this.db
+      .update(authTokens)
+      .set({ usedAt: now })
+      .where(eq(authTokens.id, token.id));
+
+    return token.userId;
+  }
+
+  async updatePasswordHash(userId: string, passwordHash: string): Promise<void> {
+    await this.db
+      .update(userIdentities)
+      .set({ passwordHash })
+      .where(
+        and(
+          eq(userIdentities.userId, userId),
+          eq(userIdentities.provider, AuthProvider.LOCAL),
+        ),
+      );
   }
 
   async invalidateVerificationTokens(userId: string): Promise<void> {

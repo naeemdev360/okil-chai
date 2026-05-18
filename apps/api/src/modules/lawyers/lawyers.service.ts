@@ -1,5 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { LawyerProfileResponse } from '@repo/shared';
+import { VerificationStatus } from '@repo/shared';
 import { STORAGE_SERVICE, type IStorageService } from '../storage/interfaces/storage.interfaces';
 import {
   LAWYERS_REPOSITORY,
@@ -46,6 +47,10 @@ export class LawyersService implements ILawyersService {
       await this.lawyersRepository.updateProfile(profile.id, profileUpdate);
     }
 
+    if (dto.consultationTypes?.length) {
+      await this.lawyersRepository.upsertConsultationTypes(profile.id, dto.consultationTypes);
+    }
+
     if (dto.languages?.length) {
       await this.lawyersRepository.upsertLanguages(profile.id, dto.languages);
     }
@@ -65,6 +70,18 @@ export class LawyersService implements ILawyersService {
       });
     }
 
+    return this.lawyersRepository.findProfileByUserId(userId) as Promise<LawyerProfileResponse>;
+  }
+
+  async submitOnboarding(userId: string): Promise<LawyerProfileResponse> {
+    const profile = await this.lawyersRepository.findProfileByUserId(userId);
+    if (!profile) throw new NotFoundException('Lawyer profile not found');
+
+    if (profile.verificationStatus !== VerificationStatus.DRAFT) {
+      throw new BadRequestException('Onboarding has already been submitted');
+    }
+
+    await this.lawyersRepository.updateVerificationStatus(profile.id, VerificationStatus.PENDING);
     return this.lawyersRepository.findProfileByUserId(userId) as Promise<LawyerProfileResponse>;
   }
 

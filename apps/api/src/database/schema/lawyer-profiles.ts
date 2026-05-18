@@ -1,4 +1,4 @@
-import { StripeAccountStatus, SubscriptionTier, VerificationStatus } from '@repo/shared';
+import { ConsultationType, StripeAccountStatus, SubscriptionTier, VerificationStatus } from '@repo/shared';
 import {
   boolean,
   doublePrecision,
@@ -58,10 +58,19 @@ export const lawyerProfiles = pgTable('lawyer_profiles', {
   // Pricing — base hourly rate; per-type overrides live in consultation_fees table
   pricePerHour: numeric('price_per_hour', { precision: 10, scale: 2 }),
 
+  // Consultation types the lawyer offers (VIDEO, PHONE, IN_PERSON)
+  consultationTypes: jsonb('consultation_types')
+    .$type<ConsultationType[]>()
+    .notNull()
+    .default([]),
+
+  // Tracks which wizard step the lawyer last completed (0 = not started)
+  onboardingStep: integer('onboarding_step').notNull().default(0),
+
   // Verification workflow (SRS §3.3 Admin Verification)
   verificationStatus: verificationStatusEnum('verification_status')
     .notNull()
-    .default(VerificationStatus.PENDING),
+    .default(VerificationStatus.DRAFT),
   verificationNotes: text('verification_notes'), // admin rejection reason or approval comments
   verifiedBy: uuid('verified_by').references(() => users.id, { onDelete: 'set null' }),
   verifiedAt: timestamp('verified_at', { withTimezone: true }),

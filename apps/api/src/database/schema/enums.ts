@@ -42,6 +42,7 @@ const consultationTypeValues = [
   ConsultationType.IN_PERSON,
 ] as const;
 const verificationStatusValues = [
+  VerificationStatus.DRAFT,
   VerificationStatus.PENDING,
   VerificationStatus.UNDER_REVIEW,
   VerificationStatus.APPROVED,

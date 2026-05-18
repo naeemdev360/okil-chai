@@ -1,5 +1,5 @@
 {
-  "id": "9105b009-6106-439b-b728-5d9b69cc9b7a",
+  "id": "bb3e2982-bb82-4319-aa82-e08eab5e89b7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -613,13 +613,27 @@
           "primaryKey": false,
           "notNull": false
         },
+        "consultation_types": {
+          "name": "consultation_types",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "onboarding_step": {
+          "name": "onboarding_step",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
         "verification_status": {
           "name": "verification_status",
           "type": "verification_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'PENDING'"
+          "default": "'DRAFT'"
         },
         "verification_notes": {
           "name": "verification_notes",
@@ -1768,6 +1782,7 @@
       "name": "verification_status",
       "schema": "public",
       "values": [
+        "DRAFT",
         "PENDING",
         "UNDER_REVIEW",
         "APPROVED",

@@ -70,6 +70,12 @@ export interface UserEmailInfo {
   readonly roles: readonly Role[];
 }
 
+export interface PasswordResetUserInfo {
+  readonly userId: string;
+  readonly firstName: string;
+  readonly roles: readonly Role[];
+}
+
 // ── Auth repository contract ──────────────────────────────────────────────────
 export interface IAuthRepository {
   findLocalIdentity(email: string): Promise<LocalIdentity | null>;
@@ -86,6 +92,10 @@ export interface IAuthRepository {
   markUserVerified(userId: string): Promise<void>;
   getUserEmailInfo(userId: string): Promise<UserEmailInfo | null>;
   invalidateVerificationTokens(userId: string): Promise<void>;
+  findUserForPasswordReset(email: string): Promise<PasswordResetUserInfo | null>;
+  createPasswordResetToken(userId: string): Promise<string>;
+  consumePasswordResetToken(rawToken: string): Promise<string | null>;
+  updatePasswordHash(userId: string, passwordHash: string): Promise<void>;
 }
 
 // ── Service contract ────────────────────────────────────────────────────────
@@ -99,5 +109,7 @@ export interface IAuthService {
   logout(rawRefreshToken: string): Promise<void>;
   verifyEmail(rawToken: string): Promise<void>;
   resendVerificationEmail(userId: string): Promise<void>;
+  forgotPassword(email: string): Promise<void>;
+  resetPassword(rawToken: string, newPassword: string): Promise<void>;
   getFrontendCallbackUrl(roles: readonly Role[]): string;
 }

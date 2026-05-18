@@ -18,7 +18,14 @@ export interface VerificationEmailJob {
   readonly verifyUrl: string;
 }
 
+export interface PasswordResetEmailJob {
+  readonly to: string;
+  readonly firstName: string;
+  readonly resetUrl: string;
+}
+
 export interface IMailProducer {
   sendVerificationEmail(data: VerificationEmailJob): Promise<void>;
   sendResendVerificationEmail(data: VerificationEmailJob): Promise<void>;
+  sendPasswordResetEmail(data: PasswordResetEmailJob): Promise<void>;
 }

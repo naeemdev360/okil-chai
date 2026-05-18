@@ -76,6 +76,7 @@ export const LawyerProfileSchema = z.object({
   specializations: z.array(z.object({ slug: z.string(), name: z.string(), isPrimary: z.boolean() })),
   languages: z.array(z.string()),
   verificationStatus: z.nativeEnum(VerificationStatus),
+  onboardingStep: z.number().int(),
   isPublished: z.boolean(),
   createdAt: z.coerce.date(),
 });

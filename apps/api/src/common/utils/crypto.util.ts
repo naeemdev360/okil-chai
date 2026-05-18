@@ -1,4 +1,9 @@
+import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+
+export function sha256(value: string): string {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
 
 const SALT_ROUNDS = 12;
 
