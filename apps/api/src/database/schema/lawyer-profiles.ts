@@ -1,7 +1,10 @@
 import { ConsultationType, StripeAccountStatus, SubscriptionTier, VerificationStatus } from '@repo/shared';
+import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   doublePrecision,
+  index,
   integer,
   jsonb,
   numeric,
@@ -95,4 +98,12 @@ export const lawyerProfiles = pgTable('lawyer_profiles', {
   avgRating: numeric('avg_rating', { precision: 3, scale: 2 }),
   totalReviews: integer('total_reviews').notNull().default(0),
   totalConsultations: integer('total_consultations').notNull().default(0),
-});
+},
+(table) => ([
+  index('idx_lawyer_profiles_is_published').on(table.isPublished),
+  index('idx_lawyer_profiles_verification_status').on(table.verificationStatus),
+  check(
+    'chk_avg_rating_range',
+    sql`${table.avgRating} IS NULL OR (${table.avgRating} >= 0 AND ${table.avgRating} <= 5)`,
+  ),
+]));

@@ -4,7 +4,9 @@ import {
   AuthProvider,
   AuthTokenType,
   ConsultationType,
+  DocumentStatus,
   DocumentType,
+  PaymentStatus,
   Role,
   StripeAccountStatus,
   SubscriptionTier,
@@ -67,6 +69,17 @@ const stripeAccountStatusValues = [
   StripeAccountStatus.ACTIVE,
   StripeAccountStatus.RESTRICTED,
 ] as const;
+const paymentStatusValues = [
+  PaymentStatus.PENDING,
+  PaymentStatus.COMPLETED,
+  PaymentStatus.REFUNDED,
+  PaymentStatus.FAILED,
+] as const;
+const documentStatusValues = [
+  DocumentStatus.PENDING,
+  DocumentStatus.APPROVED,
+  DocumentStatus.REJECTED,
+] as const;
 
 export const userRoleEnum = pgEnum('user_role', userRoleValues);
 export const authProviderEnum = pgEnum('auth_provider', authProviderValues);
@@ -75,5 +88,7 @@ export const appointmentStatusEnum = pgEnum('appointment_status', appointmentSta
 export const consultationTypeEnum = pgEnum('consultation_type', consultationTypeValues);
 export const verificationStatusEnum = pgEnum('verification_status', verificationStatusValues);
 export const documentTypeEnum = pgEnum('document_type', documentTypeValues);
+export const documentStatusEnum = pgEnum('document_status', documentStatusValues);
 export const subscriptionTierEnum = pgEnum('subscription_tier', subscriptionTierValues);
 export const stripeAccountStatusEnum = pgEnum('stripe_account_status', stripeAccountStatusValues);
+export const paymentStatusEnum = pgEnum('payment_status', paymentStatusValues);

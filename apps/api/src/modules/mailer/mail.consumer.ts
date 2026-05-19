@@ -5,10 +5,12 @@ import { Job } from 'bullmq';
 import { MAIL_JOB, MAIL_QUEUE, MAIL_SUBJECT } from './mail.constants';
 import {
   MAILER_SERVICE,
+  type BookingConfirmationEmailJob,
   type IMailerService,
   type PasswordResetEmailJob,
   type VerificationEmailJob,
 } from './interfaces/mailer.interfaces';
+import { renderBookingConfirmationEmail } from './templates/BookingConfirmationEmail';
 import { renderPasswordResetEmail } from './templates/PasswordResetEmail';
 import { renderResendVerificationEmail } from './templates/ResendVerificationEmail';
 import { renderVerificationEmail } from './templates/VerificationEmail';
@@ -36,6 +38,9 @@ export class MailConsumer extends WorkerHost {
         break;
       case MAIL_JOB.PASSWORD_RESET_EMAIL:
         await this.processPasswordResetEmail(job.data as PasswordResetEmailJob);
+        break;
+      case MAIL_JOB.BOOKING_CONFIRMATION_EMAIL:
+        await this.processBookingConfirmationEmail(job.data as BookingConfirmationEmailJob);
         break;
       default:
         this.logger.warn(`Unhandled mail job type: ${job.name}`);
@@ -70,5 +75,20 @@ export class MailConsumer extends WorkerHost {
       html,
     });
     this.logger.log(`Password reset email sent → ${data.to}`);
+  }
+
+  private async processBookingConfirmationEmail(data: BookingConfirmationEmailJob): Promise<void> {
+    const html = await renderBookingConfirmationEmail(
+      data.firstName,
+      data.appointmentDate,
+      data.consultationType,
+      data.isLawyer,
+    );
+    await this.mailerService.sendEmail({
+      to: data.to,
+      subject: MAIL_SUBJECT.BOOKING_CONFIRMATION_EMAIL(this.appName),
+      html,
+    });
+    this.logger.log(`Booking confirmation email sent → ${data.to}`);
   }
 }

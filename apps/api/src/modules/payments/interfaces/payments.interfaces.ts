@@ -1,0 +1,61 @@
+import { PaymentStatus } from '@repo/shared';
+
+export const PAYMENT_GATEWAY = Symbol('PAYMENT_GATEWAY');
+export const PAYMENTS_REPOSITORY = Symbol('PAYMENTS_REPOSITORY');
+
+// ── Generic payment gateway contract ─────────────────────────────────────────
+// Any provider (bKash, Nagad, SSLCommerz, Stripe …) implements this interface.
+// The concrete class is swapped via DI in PaymentsModule — the rest of the app
+// never knows which gateway is active.
+
+export interface CreatePaymentInput {
+  readonly amount: string;
+  readonly invoiceRef: string;
+  readonly callbackURL: string;
+  readonly payerRef: string;
+}
+
+export interface PaymentSession {
+  readonly externalPaymentId: string;
+  readonly redirectUrl: string;
+}
+
+export interface PaymentExecuteResult {
+  readonly externalPaymentId: string;
+  readonly externalTrxId: string;
+  readonly isCompleted: boolean;
+  readonly amount: string;
+  readonly currency: string;
+  readonly invoiceRef: string;
+}
+
+export interface IPaymentGateway {
+  createPayment(input: CreatePaymentInput): Promise<PaymentSession>;
+  executePayment(externalPaymentId: string): Promise<PaymentExecuteResult>;
+  queryPayment(externalPaymentId: string): Promise<PaymentExecuteResult>;
+}
+
+// ── Payments repository ───────────────────────────────────────────────────────
+
+export interface InsertPaymentData {
+  readonly appointmentId: string;
+  readonly amount: string;
+  readonly currency: string;
+  readonly trxId: string | null;
+}
+
+export interface PaymentRecord {
+  readonly id: string;
+  readonly appointmentId: string;
+  readonly amount: string;
+  readonly currency: string;
+  readonly trxId: string | null;
+  readonly status: PaymentStatus;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+export interface IPaymentsRepository {
+  insert(data: InsertPaymentData): Promise<PaymentRecord>;
+  findByAppointmentId(appointmentId: string): Promise<PaymentRecord | null>;
+}

@@ -24,8 +24,17 @@ export interface PasswordResetEmailJob {
   readonly resetUrl: string;
 }
 
+export interface BookingConfirmationEmailJob {
+  readonly to: string;
+  readonly firstName: string;
+  readonly appointmentDate: string;
+  readonly consultationType: string;
+  readonly isLawyer: boolean;
+}
+
 export interface IMailProducer {
   sendVerificationEmail(data: VerificationEmailJob): Promise<void>;
   sendResendVerificationEmail(data: VerificationEmailJob): Promise<void>;
   sendPasswordResetEmail(data: PasswordResetEmailJob): Promise<void>;
+  sendBookingConfirmationEmail(data: BookingConfirmationEmailJob): Promise<void>;
 }

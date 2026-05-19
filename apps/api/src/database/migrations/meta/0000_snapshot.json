@@ -1,5 +1,5 @@
 {
-  "id": "bb3e2982-bb82-4319-aa82-e08eab5e89b7",
+  "id": "58b60d59-0498-448c-86a5-2df654f7abd4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,6 +14,33 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "client_id": {
           "name": "client_id",
@@ -36,13 +63,13 @@
         },
         "start_at": {
           "name": "start_at",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true
         },
         "end_at": {
           "name": "end_at",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true
         },
@@ -54,8 +81,8 @@
           "notNull": true,
           "default": "'DRAFT'"
         },
-        "stripe_payment_intent_id": {
-          "name": "stripe_payment_intent_id",
+        "external_payment_id": {
+          "name": "external_payment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -65,23 +92,70 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_appointments_client_id": {
+          "name": "idx_appointments_client_id",
+          "columns": [
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_appointments_lawyer_id": {
+          "name": "idx_appointments_lawyer_id",
+          "columns": [
+            {
+              "expression": "lawyer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_appointments_status": {
+          "name": "idx_appointments_status",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_appointments_start_at": {
+          "name": "idx_appointments_start_at",
+          "columns": [
+            {
+              "expression": "start_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "appointments_client_id_users_id_fk": {
           "name": "appointments_client_id_users_id_fk",
@@ -186,7 +260,44 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_auth_tokens_token_hash": {
+          "name": "idx_auth_tokens_token_hash",
+          "columns": [
+            {
+              "expression": "token_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_auth_tokens_user_id_type": {
+          "name": "idx_auth_tokens_user_id_type",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "auth_tokens_user_id_users_id_fk": {
           "name": "auth_tokens_user_id_users_id_fk",
@@ -219,6 +330,33 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
         "lawyer_id": {
           "name": "lawyer_id",
           "type": "uuid",
@@ -249,9 +387,32 @@
           "primaryKey": false,
           "notNull": true,
           "default": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_availability_lawyer_id": {
+          "name": "idx_availability_lawyer_id",
+          "columns": [
+            {
+              "expression": "lawyer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "availability_lawyer_id_lawyer_profiles_id_fk": {
           "name": "availability_lawyer_id_lawyer_profiles_id_fk",
@@ -270,7 +431,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "chk_day_of_week_range": {
+          "name": "chk_day_of_week_range",
+          "value": "\"availability\".\"day_of_week\" >= 0 AND \"availability\".\"day_of_week\" <= 6"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.lawyer_documents": {
@@ -346,10 +512,73 @@
           "name": "size_bytes",
           "type": "integer",
           "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "document_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "rejection_reason": {
+          "name": "rejection_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_notes": {
+          "name": "admin_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_by": {
+          "name": "reviewed_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_lawyer_documents_lawyer_id": {
+          "name": "idx_lawyer_documents_lawyer_id",
+          "columns": [
+            {
+              "expression": "lawyer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_lawyer_documents_status": {
+          "name": "idx_lawyer_documents_status",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "lawyer_documents_lawyer_id_lawyer_profiles_id_fk": {
           "name": "lawyer_documents_lawyer_id_lawyer_profiles_id_fk",
@@ -362,6 +591,19 @@
             "id"
           ],
           "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "lawyer_documents_reviewed_by_users_id_fk": {
+          "name": "lawyer_documents_reviewed_by_users_id_fk",
+          "tableFrom": "lawyer_documents",
+          "tableTo": "users",
+          "columnsFrom": [
+            "reviewed_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -710,7 +952,38 @@
           "default": 0
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_lawyer_profiles_is_published": {
+          "name": "idx_lawyer_profiles_is_published",
+          "columns": [
+            {
+              "expression": "is_published",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_lawyer_profiles_verification_status": {
+          "name": "idx_lawyer_profiles_verification_status",
+          "columns": [
+            {
+              "expression": "verification_status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "lawyer_profiles_user_id_users_id_fk": {
           "name": "lawyer_profiles_user_id_users_id_fk",
@@ -750,7 +1023,12 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "chk_avg_rating_range": {
+          "name": "chk_avg_rating_range",
+          "value": "\"lawyer_profiles\".\"avg_rating\" IS NULL OR (\"lawyer_profiles\".\"avg_rating\" >= 0 AND \"lawyer_profiles\".\"avg_rating\" <= 5)"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.lawyer_specializations": {
@@ -832,6 +1110,22 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "uq_lawyer_single_primary": {
+          "name": "uq_lawyer_single_primary",
+          "columns": [
+            {
+              "expression": "lawyer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"lawyer_specializations\".\"is_primary\" = true",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -879,6 +1173,33 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
         "sender_id": {
           "name": "sender_id",
           "type": "uuid",
@@ -910,15 +1231,57 @@
           "notNull": true,
           "default": false
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
+        "read_at": {
+          "name": "read_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_messages_receiver_is_read": {
+          "name": "idx_messages_receiver_is_read",
+          "columns": [
+            {
+              "expression": "receiver_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "is_read",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_messages_sender_receiver": {
+          "name": "idx_messages_sender_receiver",
+          "columns": [
+            {
+              "expression": "sender_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "receiver_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "messages_sender_id_users_id_fk": {
           "name": "messages_sender_id_users_id_fk",
@@ -977,6 +1340,33 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
         "appointment_id": {
           "name": "appointment_id",
           "type": "uuid",
@@ -994,20 +1384,21 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "'usd'"
+          "default": "'BDT'"
         },
-        "stripe_charge_id": {
-          "name": "stripe_charge_id",
+        "external_trx_id": {
+          "name": "external_trx_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "status": {
           "name": "status",
-          "type": "text",
+          "type": "payment_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'pending'"
+          "default": "'PENDING'"
         },
         "platform_fee": {
           "name": "platform_fee",
@@ -1020,16 +1411,25 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_payments_appointment_id": {
+          "name": "idx_payments_appointment_id",
+          "columns": [
+            {
+              "expression": "appointment_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "payments_appointment_id_appointments_id_fk": {
           "name": "payments_appointment_id_appointments_id_fk",
@@ -1061,6 +1461,33 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "appointment_id": {
           "name": "appointment_id",
@@ -1098,16 +1525,31 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "uq_review_appointment_client": {
+          "name": "uq_review_appointment_client",
+          "columns": [
+            {
+              "expression": "appointment_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "reviews_appointment_id_appointments_id_fk": {
           "name": "reviews_appointment_id_appointments_id_fk",
@@ -1152,7 +1594,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "chk_rating_range": {
+          "name": "chk_rating_range",
+          "value": "\"reviews\".\"rating\" >= 1 AND \"reviews\".\"rating\" <= 5"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.sessions": {
@@ -1230,7 +1677,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_sessions_user_id": {
+          "name": "idx_sessions_user_id",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
@@ -1737,6 +2200,15 @@
         "IN_PERSON"
       ]
     },
+    "public.document_status": {
+      "name": "document_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
     "public.document_type": {
       "name": "document_type",
       "schema": "public",
@@ -1746,6 +2218,16 @@
         "GOVERNMENT_ID",
         "CERTIFICATION",
         "OTHER"
+      ]
+    },
+    "public.payment_status": {
+      "name": "payment_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "COMPLETED",
+        "REFUNDED",
+        "FAILED"
       ]
     },
     "public.stripe_account_status": {

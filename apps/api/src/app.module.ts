@@ -5,6 +5,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import appConfig from './config/app.config';
 import authConfig from './config/auth.config';
+import bkashConfig from './config/bkash.config';
 import brandConfig from './config/brand.config';
 import databaseConfig from './config/database.config';
 import mailerConfig from './config/mailer.config';
@@ -21,6 +22,8 @@ import { UsersModule } from './modules/users/users.module';
 import { StorageModule } from './modules/storage/storage.module';
 import { LawyersModule } from './modules/lawyers/lawyers.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 const envFilePath =
   process.env.NODE_ENV === 'production' ? '.env' : '.env.dev';
@@ -29,7 +32,7 @@ const envFilePath =
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, authConfig, brandConfig, mailerConfig, redisConfig, storageConfig],
+      load: [appConfig, databaseConfig, authConfig, brandConfig, mailerConfig, redisConfig, storageConfig, bkashConfig],
       envFilePath,
     }),
     BullModule.forRootAsync({
@@ -52,6 +55,8 @@ const envFilePath =
     StorageModule,
     LawyersModule,
     AdminModule,
+    AppointmentsModule,
+    PaymentsModule,
   ],
   providers: [
     // Guard execution order: authenticate → enforce admin paths → authorize roles → verify email

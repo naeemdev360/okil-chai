@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { boolean, pgTable, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseColumns } from './base-columns';
@@ -22,5 +23,9 @@ export const lawyerSpecializations = pgTable(
       table.lawyerId,
       table.specializationId,
     ),
+    // Ensures each lawyer has at most one primary specialization
+    uniqueIndex('uq_lawyer_single_primary')
+      .on(table.lawyerId)
+      .where(sql`${table.isPrimary} = true`),
   ]),
 );

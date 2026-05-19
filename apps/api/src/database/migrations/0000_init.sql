@@ -2,23 +2,27 @@ CREATE TYPE "public"."appointment_status" AS ENUM('DRAFT', 'PENDING_PAYMENT', 'C
 CREATE TYPE "public"."auth_provider" AS ENUM('LOCAL', 'GOOGLE', 'FACEBOOK');--> statement-breakpoint
 CREATE TYPE "public"."auth_token_type" AS ENUM('EMAIL_VERIFICATION', 'PASSWORD_RESET');--> statement-breakpoint
 CREATE TYPE "public"."consultation_type" AS ENUM('VIDEO', 'PHONE', 'IN_PERSON');--> statement-breakpoint
+CREATE TYPE "public"."document_status" AS ENUM('PENDING', 'APPROVED', 'REJECTED');--> statement-breakpoint
 CREATE TYPE "public"."document_type" AS ENUM('BAR_CERTIFICATE', 'LAW_DEGREE', 'GOVERNMENT_ID', 'CERTIFICATION', 'OTHER');--> statement-breakpoint
+CREATE TYPE "public"."payment_status" AS ENUM('PENDING', 'COMPLETED', 'REFUNDED', 'FAILED');--> statement-breakpoint
 CREATE TYPE "public"."stripe_account_status" AS ENUM('NOT_CONNECTED', 'PENDING', 'ACTIVE', 'RESTRICTED');--> statement-breakpoint
 CREATE TYPE "public"."subscription_tier" AS ENUM('FREE', 'PRO');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('CLIENT', 'LAWYER', 'PLATFORM_ADMIN', 'SUPPORT_AGENT', 'FIRM_ADMIN', 'FIRM_MANAGER');--> statement-breakpoint
 CREATE TYPE "public"."verification_status" AS ENUM('DRAFT', 'PENDING', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'REQUIRES_RESUBMISSION');--> statement-breakpoint
 CREATE TABLE "appointments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL,
 	"client_id" uuid NOT NULL,
 	"lawyer_id" uuid NOT NULL,
 	"consultation_type" "consultation_type" NOT NULL,
-	"start_at" timestamp NOT NULL,
-	"end_at" timestamp NOT NULL,
+	"start_at" timestamp with time zone NOT NULL,
+	"end_at" timestamp with time zone NOT NULL,
 	"status" "appointment_status" DEFAULT 'DRAFT' NOT NULL,
-	"stripe_payment_intent_id" text,
-	"client_notes" text,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"external_payment_id" text,
+	"client_notes" text
 );
 --> statement-breakpoint
 CREATE TABLE "auth_tokens" (
@@ -36,11 +40,17 @@ CREATE TABLE "auth_tokens" (
 --> statement-breakpoint
 CREATE TABLE "availability" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL,
 	"lawyer_id" uuid NOT NULL,
 	"day_of_week" integer NOT NULL,
 	"start_time" text NOT NULL,
 	"end_time" text NOT NULL,
-	"is_recurring" boolean DEFAULT true NOT NULL
+	"is_recurring" boolean DEFAULT true NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL,
+	CONSTRAINT "chk_day_of_week_range" CHECK ("availability"."day_of_week" >= 0 AND "availability"."day_of_week" <= 6)
 );
 --> statement-breakpoint
 CREATE TABLE "lawyer_documents" (
@@ -54,7 +64,12 @@ CREATE TABLE "lawyer_documents" (
 	"name" text NOT NULL,
 	"storage_key" text NOT NULL,
 	"mime_type" text NOT NULL,
-	"size_bytes" integer
+	"size_bytes" integer NOT NULL,
+	"status" "document_status" DEFAULT 'PENDING' NOT NULL,
+	"rejection_reason" text,
+	"admin_notes" text,
+	"reviewed_by" uuid,
+	"reviewed_at" timestamp with time zone
 );
 --> statement-breakpoint
 CREATE TABLE "lawyer_languages" (
@@ -105,7 +120,8 @@ CREATE TABLE "lawyer_profiles" (
 	"avg_rating" numeric(3, 2),
 	"total_reviews" integer DEFAULT 0 NOT NULL,
 	"total_consultations" integer DEFAULT 0 NOT NULL,
-	CONSTRAINT "lawyer_profiles_user_id_unique" UNIQUE("user_id")
+	CONSTRAINT "lawyer_profiles_user_id_unique" UNIQUE("user_id"),
+	CONSTRAINT "chk_avg_rating_range" CHECK ("lawyer_profiles"."avg_rating" IS NULL OR ("lawyer_profiles"."avg_rating" >= 0 AND "lawyer_profiles"."avg_rating" <= 5))
 );
 --> statement-breakpoint
 CREATE TABLE "lawyer_specializations" (
@@ -121,35 +137,46 @@ CREATE TABLE "lawyer_specializations" (
 --> statement-breakpoint
 CREATE TABLE "messages" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL,
 	"sender_id" uuid NOT NULL,
 	"receiver_id" uuid NOT NULL,
 	"appointment_id" uuid,
 	"content" text NOT NULL,
 	"is_read" boolean DEFAULT false NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"read_at" timestamp with time zone
 );
 --> statement-breakpoint
 CREATE TABLE "payments" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL,
 	"appointment_id" uuid NOT NULL,
 	"amount" numeric(10, 2) NOT NULL,
-	"currency" text DEFAULT 'usd' NOT NULL,
-	"stripe_charge_id" text,
-	"status" text DEFAULT 'pending' NOT NULL,
+	"currency" text DEFAULT 'BDT' NOT NULL,
+	"external_trx_id" text,
+	"status" "payment_status" DEFAULT 'PENDING' NOT NULL,
 	"platform_fee" numeric(10, 2),
-	"lawyer_payout" numeric(10, 2),
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"lawyer_payout" numeric(10, 2)
 );
 --> statement-breakpoint
 CREATE TABLE "reviews" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"deleted_at" timestamp with time zone,
+	"version" integer DEFAULT 1 NOT NULL,
 	"appointment_id" uuid NOT NULL,
 	"client_id" uuid NOT NULL,
 	"lawyer_id" uuid NOT NULL,
 	"rating" integer NOT NULL,
 	"text" text,
 	"is_moderated" boolean DEFAULT false NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	CONSTRAINT "chk_rating_range" CHECK ("reviews"."rating" >= 1 AND "reviews"."rating" <= 5)
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
@@ -225,6 +252,7 @@ ALTER TABLE "appointments" ADD CONSTRAINT "appointments_lawyer_id_lawyer_profile
 ALTER TABLE "auth_tokens" ADD CONSTRAINT "auth_tokens_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "availability" ADD CONSTRAINT "availability_lawyer_id_lawyer_profiles_id_fk" FOREIGN KEY ("lawyer_id") REFERENCES "public"."lawyer_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "lawyer_documents" ADD CONSTRAINT "lawyer_documents_lawyer_id_lawyer_profiles_id_fk" FOREIGN KEY ("lawyer_id") REFERENCES "public"."lawyer_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "lawyer_documents" ADD CONSTRAINT "lawyer_documents_reviewed_by_users_id_fk" FOREIGN KEY ("reviewed_by") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "lawyer_languages" ADD CONSTRAINT "lawyer_languages_lawyer_id_lawyer_profiles_id_fk" FOREIGN KEY ("lawyer_id") REFERENCES "public"."lawyer_profiles"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "lawyer_profiles" ADD CONSTRAINT "lawyer_profiles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "lawyer_profiles" ADD CONSTRAINT "lawyer_profiles_verified_by_users_id_fk" FOREIGN KEY ("verified_by") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -241,8 +269,25 @@ ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY
 ALTER TABLE "user_identities" ADD CONSTRAINT "user_identities_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_granted_by_users_id_fk" FOREIGN KEY ("granted_by") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "idx_appointments_client_id" ON "appointments" USING btree ("client_id");--> statement-breakpoint
+CREATE INDEX "idx_appointments_lawyer_id" ON "appointments" USING btree ("lawyer_id");--> statement-breakpoint
+CREATE INDEX "idx_appointments_status" ON "appointments" USING btree ("status");--> statement-breakpoint
+CREATE INDEX "idx_appointments_start_at" ON "appointments" USING btree ("start_at");--> statement-breakpoint
+CREATE UNIQUE INDEX "idx_auth_tokens_token_hash" ON "auth_tokens" USING btree ("token_hash");--> statement-breakpoint
+CREATE INDEX "idx_auth_tokens_user_id_type" ON "auth_tokens" USING btree ("user_id","type");--> statement-breakpoint
+CREATE INDEX "idx_availability_lawyer_id" ON "availability" USING btree ("lawyer_id");--> statement-breakpoint
+CREATE INDEX "idx_lawyer_documents_lawyer_id" ON "lawyer_documents" USING btree ("lawyer_id");--> statement-breakpoint
+CREATE INDEX "idx_lawyer_documents_status" ON "lawyer_documents" USING btree ("status");--> statement-breakpoint
 CREATE UNIQUE INDEX "uq_lawyer_language" ON "lawyer_languages" USING btree ("lawyer_id","language");--> statement-breakpoint
+CREATE INDEX "idx_lawyer_profiles_is_published" ON "lawyer_profiles" USING btree ("is_published");--> statement-breakpoint
+CREATE INDEX "idx_lawyer_profiles_verification_status" ON "lawyer_profiles" USING btree ("verification_status");--> statement-breakpoint
 CREATE UNIQUE INDEX "uq_lawyer_specialization" ON "lawyer_specializations" USING btree ("lawyer_id","specialization_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "uq_lawyer_single_primary" ON "lawyer_specializations" USING btree ("lawyer_id") WHERE "lawyer_specializations"."is_primary" = true;--> statement-breakpoint
+CREATE INDEX "idx_messages_receiver_is_read" ON "messages" USING btree ("receiver_id","is_read");--> statement-breakpoint
+CREATE INDEX "idx_messages_sender_receiver" ON "messages" USING btree ("sender_id","receiver_id");--> statement-breakpoint
+CREATE INDEX "idx_payments_appointment_id" ON "payments" USING btree ("appointment_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "uq_review_appointment_client" ON "reviews" USING btree ("appointment_id","client_id");--> statement-breakpoint
+CREATE INDEX "idx_sessions_user_id" ON "sessions" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "uq_provider_provider_user_id" ON "user_identities" USING btree ("provider","provider_user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "uq_user_provider" ON "user_identities" USING btree ("user_id","provider");--> statement-breakpoint
 CREATE UNIQUE INDEX "uq_user_role" ON "user_roles" USING btree ("user_id","role");
