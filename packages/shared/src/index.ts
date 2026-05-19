@@ -1,7 +1,9 @@
 export { AppointmentStatus } from './enums/appointment-status.enum.js';
+export { PaymentStatus } from './enums/payment-status.enum.js';
 export { AuthProvider } from './enums/auth-provider.enum.js';
 export { AuthTokenType } from './enums/auth-token-type.enum.js';
 export { ConsultationType } from './enums/consultation-type.enum.js';
+export { DocumentStatus } from './enums/document-status.enum.js';
 export { DocumentType } from './enums/document-type.enum.js';
 export { Role } from './enums/role.enum.js';
 export { StripeAccountStatus } from './enums/stripe-account-status.enum.js';

@@ -14,6 +14,20 @@ export type {
 } from './user.schemas.js';
 
 export {
+  CreateAppointmentRequestSchema,
+  AppointmentResponseSchema,
+  AppointmentWithPaymentSchema,
+  PaginatedAppointmentsSchema,
+} from './appointment.schemas.js';
+export type {
+  CreateAppointmentRequest,
+  AppointmentParticipant,
+  AppointmentResponse,
+  AppointmentWithPayment,
+  PaginatedAppointmentsResponse,
+} from './appointment.schemas.js';
+
+export {
   CompleteOnboardingSchema,
   LawyerProfileSchema,
   LawyerPublicProfileSchema,
