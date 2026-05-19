@@ -3,7 +3,7 @@ import type {
   AppointmentWithPayment,
   PaginatedAppointmentsResponse,
 } from '@repo/shared';
-import { AppointmentStatus, ConsultationType, Role } from '@repo/shared';
+import { AppointmentStatus, CaseCategory, ConsultationType, Role } from '@repo/shared';
 
 export const APPOINTMENTS_REPOSITORY = Symbol('APPOINTMENTS_REPOSITORY');
 export const APPOINTMENTS_SERVICE = Symbol('APPOINTMENTS_SERVICE');
@@ -15,6 +15,7 @@ export interface AppointmentRow {
   readonly clientId: string;
   readonly lawyerId: string;
   readonly consultationType: ConsultationType;
+  readonly caseCategory: CaseCategory;
   readonly startAt: Date;
   readonly endAt: Date;
   readonly status: AppointmentStatus;
@@ -48,6 +49,7 @@ export interface AppointmentContactInfo {
 export interface CreateAppointmentInput {
   readonly lawyerId: string;
   readonly consultationType: ConsultationType;
+  readonly caseCategory: CaseCategory;
   readonly startAt: Date;
   readonly endAt: Date;
   readonly clientNotes?: string;
@@ -65,6 +67,7 @@ export interface InsertAppointmentData {
   readonly clientId: string;
   readonly lawyerId: string;
   readonly consultationType: ConsultationType;
+  readonly caseCategory: CaseCategory;
   readonly startAt: Date;
   readonly endAt: Date;
   readonly clientNotes: string | null;

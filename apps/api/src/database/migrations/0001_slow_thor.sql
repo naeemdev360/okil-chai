@@ -1,0 +1,2 @@
+CREATE TYPE "public"."case_category" AS ENUM('CRIMINAL', 'FAMILY', 'LAND_PROPERTY', 'COMMERCIAL', 'CIVIL', 'LABOR', 'CONSTITUTIONAL', 'INTELLECTUAL_PROPERTY', 'IMMIGRATION', 'TAX', 'CONSUMER_RIGHTS', 'OTHER');--> statement-breakpoint
+ALTER TABLE "appointments" ADD COLUMN "case_category" "case_category" NOT NULL;

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsISO8601, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { ConsultationType } from '@repo/shared';
+import { CaseCategory, ConsultationType } from '@repo/shared';
 
 export class CreateAppointmentDto {
   @ApiProperty({ description: 'Lawyer profile UUID', format: 'uuid' })
@@ -10,6 +10,10 @@ export class CreateAppointmentDto {
   @ApiProperty({ enum: ConsultationType })
   @IsEnum(ConsultationType)
   consultationType!: ConsultationType;
+
+  @ApiProperty({ enum: CaseCategory, description: 'Nature of the legal matter' })
+  @IsEnum(CaseCategory)
+  caseCategory!: CaseCategory;
 
   @ApiProperty({
     description: 'Start time — ISO 8601 with timezone offset',

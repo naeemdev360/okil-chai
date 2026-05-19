@@ -1,7 +1,7 @@
 import { index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { AppointmentStatus } from '@repo/shared';
 
-import { appointmentStatusEnum, consultationTypeEnum } from './enums';
+import { appointmentStatusEnum, caseCategoryEnum, consultationTypeEnum } from './enums';
 import { baseColumns } from './base-columns';
 import { lawyerProfiles } from './lawyer-profiles';
 import { users } from './users';
@@ -17,6 +17,7 @@ export const appointments = pgTable(
       .notNull()
       .references(() => lawyerProfiles.id),
     consultationType: consultationTypeEnum('consultation_type').notNull(),
+    caseCategory: caseCategoryEnum('case_category').notNull(),
     startAt: timestamp('start_at', { withTimezone: true }).notNull(),
     endAt: timestamp('end_at', { withTimezone: true }).notNull(),
     status: appointmentStatusEnum('status').notNull().default(AppointmentStatus.DRAFT),

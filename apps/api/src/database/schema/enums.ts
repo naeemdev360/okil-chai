@@ -3,6 +3,7 @@ import {
   AppointmentStatus,
   AuthProvider,
   AuthTokenType,
+  CaseCategory,
   ConsultationType,
   DocumentStatus,
   DocumentType,
@@ -42,6 +43,20 @@ const consultationTypeValues = [
   ConsultationType.VIDEO,
   ConsultationType.PHONE,
   ConsultationType.IN_PERSON,
+] as const;
+const caseCategoryValues = [
+  CaseCategory.CRIMINAL,
+  CaseCategory.FAMILY,
+  CaseCategory.LAND_PROPERTY,
+  CaseCategory.COMMERCIAL,
+  CaseCategory.CIVIL,
+  CaseCategory.LABOR,
+  CaseCategory.CONSTITUTIONAL,
+  CaseCategory.INTELLECTUAL_PROPERTY,
+  CaseCategory.IMMIGRATION,
+  CaseCategory.TAX,
+  CaseCategory.CONSUMER_RIGHTS,
+  CaseCategory.OTHER,
 ] as const;
 const verificationStatusValues = [
   VerificationStatus.DRAFT,
@@ -86,6 +101,7 @@ export const authProviderEnum = pgEnum('auth_provider', authProviderValues);
 export const authTokenTypeEnum = pgEnum('auth_token_type', authTokenTypeValues);
 export const appointmentStatusEnum = pgEnum('appointment_status', appointmentStatusValues);
 export const consultationTypeEnum = pgEnum('consultation_type', consultationTypeValues);
+export const caseCategoryEnum = pgEnum('case_category', caseCategoryValues);
 export const verificationStatusEnum = pgEnum('verification_status', verificationStatusValues);
 export const documentTypeEnum = pgEnum('document_type', documentTypeValues);
 export const documentStatusEnum = pgEnum('document_status', documentStatusValues);

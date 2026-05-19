@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import { AppointmentStatus } from '../enums/appointment-status.enum.js';
+import { CaseCategory } from '../enums/case-category.enum.js';
 import { ConsultationType } from '../enums/consultation-type.enum.js';
 
 export const CreateAppointmentRequestSchema = z.object({
   lawyerId: z.string().uuid(),
   consultationType: z.nativeEnum(ConsultationType),
+  caseCategory: z.nativeEnum(CaseCategory),
   startAt: z.string().datetime({ offset: true }),
   endAt: z.string().datetime({ offset: true }),
   clientNotes: z.string().max(1000).optional(),
@@ -26,6 +28,7 @@ export const AppointmentResponseSchema = z.object({
   clientId: z.string().uuid(),
   lawyerId: z.string().uuid(),
   consultationType: z.nativeEnum(ConsultationType),
+  caseCategory: z.nativeEnum(CaseCategory),
   startAt: z.coerce.date(),
   endAt: z.coerce.date(),
   status: z.nativeEnum(AppointmentStatus),

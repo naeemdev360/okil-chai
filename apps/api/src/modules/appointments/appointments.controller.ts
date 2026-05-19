@@ -55,6 +55,7 @@ export class AppointmentsController {
     return this.appointmentsService.createAppointment(user.userId, {
       lawyerId: dto.lawyerId,
       consultationType: dto.consultationType,
+      caseCategory: dto.caseCategory,
       startAt: new Date(dto.startAt),
       endAt: new Date(dto.endAt),
       clientNotes: dto.clientNotes,

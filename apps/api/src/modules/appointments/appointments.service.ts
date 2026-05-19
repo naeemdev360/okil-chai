@@ -73,6 +73,7 @@ export class AppointmentsService implements IAppointmentsService {
       startAt: row.startAt,
       endAt: row.endAt,
       status: row.status,
+      caseCategory: row.caseCategory,
       clientNotes: row.clientNotes,
       client: {
         id: row.clientId,
@@ -131,6 +132,7 @@ export class AppointmentsService implements IAppointmentsService {
       clientId: clientUserId,
       lawyerId: input.lawyerId,
       consultationType: input.consultationType,
+      caseCategory: input.caseCategory,
       startAt,
       endAt,
       clientNotes: input.clientNotes ?? null,

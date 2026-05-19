@@ -218,7 +218,8 @@ language → AI suggests top 3
 
 Appointment Select date/time slot, choose **P0** Booking
 Booking consultation type  
- (in-person/video/phone), confirm
+ (in-person/video/phone), select case  
+ category, confirm
 
 Instant Booking Book verified lawyers who allow **P1** Booking
 instant confirmation (no manual  
@@ -608,8 +609,9 @@ languages\[\], city, pricePerHour, isApproved
 isRecurring, blockedDates\[\]
 
 **Appointment** id, clientId, lawyerId, type
-(VIDEO\|PHONE\|IN_PERSON), startAt, status,
-stripePaymentId
+(VIDEO\|PHONE\|IN_PERSON), caseCategory
+(CRIMINAL\|FAMILY\|LAND\_PROPERTY\|COMMERCIAL\|CIVIL\|LABOR\|CONSTITUTIONAL\|INTELLECTUAL\_PROPERTY\|IMMIGRATION\|TAX\|CONSUMER\_RIGHTS\|OTHER),
+startAt, status, stripePaymentId
 
 **Review** appointmentId, clientId, lawyerId, rating, text,
 isModerated, createdAt
@@ -646,7 +648,7 @@ Clicks lawyer card → Lawyer Profile Page: full bio, reviews, calendar
 availability
 
 Selects date/time slot → selects consultation type (Video / In-Person /
-Phone)
+Phone) → selects case category (e.g. Criminal, Family, Land & Property)
 
 Prompted to sign up / log in if not authenticated (custom auth modal/page with local + social options)
 
