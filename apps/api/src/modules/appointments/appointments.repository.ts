@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AppointmentStatus, ConsultationType } from '@repo/shared';
-import { and, count, desc, eq, gt, inArray, lt } from 'drizzle-orm';
+import { and, count, desc, eq, gt, gte, inArray, lt, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import { appointments, lawyerProfiles, users } from '../../database/schema';
@@ -182,5 +182,59 @@ export class AppointmentsRepository extends BaseRepository implements IAppointme
       .limit(1);
 
     return (row as AppointmentContactInfo | undefined) ?? null;
+  }
+
+  async findUpcomingByLawyerProfileId(
+    lawyerProfileId: string,
+    limit: number,
+  ): Promise<AppointmentRow[]> {
+    const rows = await this.db
+      .select(APPOINTMENT_SELECT)
+      .from(appointments)
+      .innerJoin(users, eq(appointments.clientId, users.id))
+      .innerJoin(lawyerProfiles, eq(appointments.lawyerId, lawyerProfiles.id))
+      .where(
+        and(
+          eq(appointments.lawyerId, lawyerProfileId),
+          inArray(appointments.status, [AppointmentStatus.CONFIRMED, AppointmentStatus.IN_PROGRESS]),
+          gte(appointments.startAt, new Date()),
+        ),
+      )
+      .orderBy(appointments.startAt)
+      .limit(limit);
+
+    return rows as AppointmentRow[];
+  }
+
+  async getMonthlyStatsByLawyerProfileId(
+    lawyerProfileId: string,
+  ): Promise<{ completedThisMonth: number; cancelledThisMonth: number }> {
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+
+    const CANCELLED_STATUSES = [
+      AppointmentStatus.CANCELLED_BY_CLIENT,
+      AppointmentStatus.CANCELLED_BY_LAWYER,
+      AppointmentStatus.CANCELLED_BY_ADMIN,
+    ];
+
+    const [row] = await this.db
+      .select({
+        completedThisMonth: sql<number>`COUNT(*) FILTER (WHERE ${appointments.status} = ${AppointmentStatus.COMPLETED})`,
+        cancelledThisMonth: sql<number>`COUNT(*) FILTER (WHERE ${appointments.status} = ANY(ARRAY[${sql.join(CANCELLED_STATUSES.map((s) => sql`${s}`), sql`, `)}]))`,
+      })
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.lawyerId, lawyerProfileId),
+          gte(appointments.updatedAt, monthStart),
+        ),
+      );
+
+    return {
+      completedThisMonth: Number(row?.completedThisMonth ?? 0),
+      cancelledThisMonth: Number(row?.cancelledThisMonth ?? 0),
+    };
   }
 }

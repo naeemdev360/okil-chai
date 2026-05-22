@@ -144,6 +144,16 @@ export class BkashGateway implements IPaymentGateway {
     return this.toExecuteResult(data);
   }
 
+  async refundPayment(paymentId: string, trxId: string, amount: string): Promise<void> {
+    await this.post<Record<string, unknown>>('/tokenized/checkout/payment/refund', {
+      paymentID: paymentId,
+      trxID: trxId,
+      amount,
+      sku: 'consultation-refund',
+      reason: 'Appointment cancelled',
+    });
+  }
+
   private toExecuteResult(data: BkashExecuteResult): PaymentExecuteResult {
     return {
       externalPaymentId: data.paymentID,

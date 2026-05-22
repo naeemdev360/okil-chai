@@ -77,6 +77,11 @@ export interface InsertAppointmentData {
 
 // ── Repository contract ───────────────────────────────────────────────────────
 
+export interface LawyerMonthlyStats {
+  readonly completedThisMonth: number;
+  readonly cancelledThisMonth: number;
+}
+
 export interface IAppointmentsRepository {
   insert(data: InsertAppointmentData): Promise<AppointmentRow>;
   findById(id: string): Promise<AppointmentRow | null>;
@@ -90,6 +95,8 @@ export interface IAppointmentsRepository {
   findByExternalPaymentId(externalPaymentId: string): Promise<AppointmentRow | null>;
   hasConflict(lawyerId: string, startAt: Date, endAt: Date): Promise<boolean>;
   findContactInfo(appointmentId: string): Promise<AppointmentContactInfo | null>;
+  findUpcomingByLawyerProfileId(lawyerProfileId: string, limit: number): Promise<AppointmentRow[]>;
+  getMonthlyStatsByLawyerProfileId(lawyerProfileId: string): Promise<LawyerMonthlyStats>;
 }
 
 // ── Service contract ──────────────────────────────────────────────────────────

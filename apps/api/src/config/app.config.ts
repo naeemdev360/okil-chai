@@ -6,4 +6,5 @@ export default registerAs('app', () => ({
   corsOrigin: process.env['CORS_ORIGIN'] ?? 'http://localhost:3000',
   apiBaseUrl: process.env['API_BASE_URL'] ?? 'http://localhost:4000',
   name: process.env['APP_NAME'] ?? 'OkilChai',
+  platformFeePercent: parseFloat(process.env['PLATFORM_FEE_PERCENT'] ?? '10'),
 }));

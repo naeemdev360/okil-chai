@@ -14,6 +14,6 @@ import { BkashCallbackController } from './bkash-callback.controller';
     { provide: APPOINTMENTS_REPOSITORY, useClass: AppointmentsRepository },
     { provide: APPOINTMENTS_SERVICE, useClass: AppointmentsService },
   ],
-  exports: [APPOINTMENTS_SERVICE],
+  exports: [APPOINTMENTS_SERVICE, APPOINTMENTS_REPOSITORY],
 })
 export class AppointmentsModule {}

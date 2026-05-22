@@ -6,6 +6,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type {
   AppointmentResponse,
   AppointmentWithPayment,
@@ -44,6 +45,8 @@ const COMPLETABLE_STATUSES: AppointmentStatus[] = [
 
 @Injectable()
 export class AppointmentsService implements IAppointmentsService {
+  private readonly platformFeePercent: number;
+
   constructor(
     @Inject(APPOINTMENTS_REPOSITORY)
     private readonly appointmentsRepository: IAppointmentsRepository,
@@ -55,7 +58,10 @@ export class AppointmentsService implements IAppointmentsService {
     private readonly paymentsRepository: IPaymentsRepository,
     @Inject(MAIL_PRODUCER)
     private readonly mailProducer: IMailProducer,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.platformFeePercent = this.configService.get<number>('app.platformFeePercent') ?? 10;
+  }
 
   private toResponse(row: AppointmentRow): AppointmentResponse {
     return {
@@ -231,7 +237,22 @@ export class AppointmentsService implements IAppointmentsService {
     }
 
     await this.appointmentsRepository.updateStatus(appointmentId, newStatus);
-    // TODO: For CONFIRMED appointments with a bKash payment, trigger a refund via admin action or a background job.
+
+    if (row.status === AppointmentStatus.CONFIRMED && row.externalPaymentId) {
+      await this.processRefundForCancelledAppointment(row.id, row.externalPaymentId);
+    }
+  }
+
+  private async processRefundForCancelledAppointment(
+    appointmentId: string,
+    externalPaymentId: string,
+  ): Promise<void> {
+    const payment = await this.paymentsRepository.findByAppointmentId(appointmentId);
+    if (!payment || !payment.trxId) return;
+
+    await this.paymentGateway.refundPayment(externalPaymentId, payment.trxId, payment.amount);
+    await this.paymentsRepository.updateStatusToRefunded(appointmentId);
+    await this.appointmentsRepository.updateStatus(appointmentId, AppointmentStatus.REFUNDED);
   }
 
   async completeAppointment(lawyerUserId: string, appointmentId: string): Promise<void> {
@@ -260,11 +281,17 @@ export class AppointmentsService implements IAppointmentsService {
 
     await this.appointmentsRepository.updateStatus(appointmentId, AppointmentStatus.CONFIRMED);
 
+    const amount = parseFloat(executeResult.amount);
+    const platformFee = (amount * (this.platformFeePercent / 100)).toFixed(2);
+    const lawyerPayout = (amount - parseFloat(platformFee)).toFixed(2);
+
     await this.paymentsRepository.insert({
       appointmentId,
       amount: executeResult.amount,
       currency: executeResult.currency,
       trxId: executeResult.externalTrxId,
+      platformFee,
+      lawyerPayout,
     });
 
     await this.sendConfirmationEmails(appointmentId);

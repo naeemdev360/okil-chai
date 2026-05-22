@@ -48,6 +48,21 @@ export type {
 } from './review.schemas.js';
 
 export {
+  PaymentHistoryItemSchema,
+  PaginatedPaymentHistorySchema,
+  EarningsSummarySchema,
+  LawyerDashboardSchema,
+  PendingPayoutItemSchema,
+} from './payment.schemas.js';
+export type {
+  PaymentHistoryItem,
+  PaginatedPaymentHistoryResponse,
+  EarningsSummaryResponse,
+  LawyerDashboardResponse,
+  PendingPayoutItem,
+} from './payment.schemas.js';
+
+export {
   CompleteOnboardingSchema,
   LawyerProfileSchema,
   LawyerPublicProfileSchema,
