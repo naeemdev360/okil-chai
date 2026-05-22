@@ -24,6 +24,8 @@ import { LawyersModule } from './modules/lawyers/lawyers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AppointmentsModule } from './modules/appointments/appointments.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 const envFilePath =
   process.env.NODE_ENV === 'production' ? '.env' : '.env.dev';
@@ -57,6 +59,8 @@ const envFilePath =
     AdminModule,
     AppointmentsModule,
     PaymentsModule,
+    NotificationsModule,
+    ReviewsModule,
   ],
   providers: [
     // Guard execution order: authenticate → enforce admin paths → authorize roles → verify email

@@ -11,13 +11,13 @@ export const PAYMENTS_REPOSITORY = Symbol('PAYMENTS_REPOSITORY');
 export interface CreatePaymentInput {
   readonly amount: string;
   readonly invoiceRef: string;
-  readonly callbackURL: string;
   readonly payerRef: string;
 }
 
 export interface PaymentSession {
   readonly externalPaymentId: string;
   readonly redirectUrl: string;
+  readonly currency: string;
 }
 
 export interface PaymentExecuteResult {

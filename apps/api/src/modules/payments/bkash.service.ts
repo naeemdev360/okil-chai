@@ -32,11 +32,15 @@ interface BkashExecuteResult {
 @Injectable()
 export class BkashGateway implements IPaymentGateway {
   private readonly logger = new Logger(BkashGateway.name);
+  private static readonly CURRENCY = 'BDT';
+  private static readonly CALLBACK_PATH = '/api/v1/payments/bkash/callback';
+
   private readonly baseUrl: string;
   private readonly appKey: string;
   private readonly appSecret: string;
   private readonly username: string;
   private readonly password: string;
+  private readonly callbackURL: string;
   private tokenCache: TokenCache | null = null;
 
   constructor(config: ConfigService) {
@@ -45,6 +49,7 @@ export class BkashGateway implements IPaymentGateway {
     this.appSecret = config.getOrThrow<string>('bkash.appSecret');
     this.username = config.getOrThrow<string>('bkash.username');
     this.password = config.getOrThrow<string>('bkash.password');
+    this.callbackURL = `${config.getOrThrow<string>('app.apiBaseUrl')}${BkashGateway.CALLBACK_PATH}`;
   }
 
   private async getToken(): Promise<string> {
@@ -109,8 +114,8 @@ export class BkashGateway implements IPaymentGateway {
     const data = await this.post<BkashPaymentSession>('/tokenized/checkout/create', {
       mode: '0011',
       payerReference: input.payerRef,
-      callbackURL: input.callbackURL,
-      currency: 'BDT',
+      callbackURL: this.callbackURL,
+      currency: BkashGateway.CURRENCY,
       amount: input.amount,
       merchantInvoiceNumber: input.invoiceRef,
       intent: 'sale',
@@ -119,6 +124,7 @@ export class BkashGateway implements IPaymentGateway {
     return {
       externalPaymentId: data.paymentID,
       redirectUrl: data.bkashURL,
+      currency: BkashGateway.CURRENCY,
     };
   }
 

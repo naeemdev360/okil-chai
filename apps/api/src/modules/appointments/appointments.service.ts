@@ -6,13 +6,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import type {
   AppointmentResponse,
   AppointmentWithPayment,
   PaginatedAppointmentsResponse,
 } from '@repo/shared';
-import { AppointmentStatus, Role } from '@repo/shared';
+import { AppointmentStatus, MIN_APPOINTMENT_DURATION_MS, Role } from '@repo/shared';
 import {
   MAIL_PRODUCER,
   type IMailProducer,
@@ -34,7 +33,6 @@ import {
 import { LAWYERS_SERVICE, type ILawyersService } from '../lawyers/interfaces/lawyers.interfaces';
 import { buildPaginationMeta } from '../../common/utils/pagination.util';
 
-const MIN_APPOINTMENT_DURATION_MS = 15 * 60 * 1000;
 const CANCELLABLE_STATUSES: AppointmentStatus[] = [
   AppointmentStatus.PENDING_PAYMENT,
   AppointmentStatus.CONFIRMED,
@@ -46,8 +44,6 @@ const COMPLETABLE_STATUSES: AppointmentStatus[] = [
 
 @Injectable()
 export class AppointmentsService implements IAppointmentsService {
-  private readonly apiBaseUrl: string;
-
   constructor(
     @Inject(APPOINTMENTS_REPOSITORY)
     private readonly appointmentsRepository: IAppointmentsRepository,
@@ -59,10 +55,7 @@ export class AppointmentsService implements IAppointmentsService {
     private readonly paymentsRepository: IPaymentsRepository,
     @Inject(MAIL_PRODUCER)
     private readonly mailProducer: IMailProducer,
-    private readonly configService: ConfigService,
-  ) {
-    this.apiBaseUrl = this.configService.getOrThrow<string>('app.apiBaseUrl');
-  }
+  ) {}
 
   private toResponse(row: AppointmentRow): AppointmentResponse {
     return {
@@ -152,11 +145,9 @@ export class AppointmentsService implements IAppointmentsService {
       };
     }
 
-    const callbackURL = `${this.apiBaseUrl}/api/v1/payments/bkash/callback`;
     const paymentSession = await this.paymentGateway.createPayment({
       amount: feeAmount,
       invoiceRef: row.id,
-      callbackURL,
       payerRef: clientUserId,
     });
 
@@ -167,7 +158,7 @@ export class AppointmentsService implements IAppointmentsService {
       redirectUrl: paymentSession.redirectUrl,
       externalPaymentId: paymentSession.externalPaymentId,
       feeAmount,
-      currency: 'BDT',
+      currency: paymentSession.currency,
     };
   }
 

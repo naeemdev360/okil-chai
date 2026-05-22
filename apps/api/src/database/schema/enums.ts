@@ -7,6 +7,7 @@ import {
   ConsultationType,
   DocumentStatus,
   DocumentType,
+  NotificationType,
   PaymentStatus,
   Role,
   StripeAccountStatus,
@@ -95,6 +96,16 @@ const documentStatusValues = [
   DocumentStatus.APPROVED,
   DocumentStatus.REJECTED,
 ] as const;
+const notificationTypeValues = [
+  NotificationType.BOOKING_CONFIRMED,
+  NotificationType.BOOKING_CANCELLED,
+  NotificationType.APPOINTMENT_REMINDER,
+  NotificationType.APPOINTMENT_COMPLETED,
+  NotificationType.REVIEW_RECEIVED,
+  NotificationType.LAWYER_APPROVED,
+  NotificationType.LAWYER_REJECTED,
+  NotificationType.PAYMENT_FAILED,
+] as const;
 
 export const userRoleEnum = pgEnum('user_role', userRoleValues);
 export const authProviderEnum = pgEnum('auth_provider', authProviderValues);
@@ -108,3 +119,4 @@ export const documentStatusEnum = pgEnum('document_status', documentStatusValues
 export const subscriptionTierEnum = pgEnum('subscription_tier', subscriptionTierValues);
 export const stripeAccountStatusEnum = pgEnum('stripe_account_status', stripeAccountStatusValues);
 export const paymentStatusEnum = pgEnum('payment_status', paymentStatusValues);
+export const notificationTypeEnum = pgEnum('notification_type', notificationTypeValues);

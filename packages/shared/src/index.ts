@@ -1,6 +1,8 @@
+export { MIN_APPOINTMENT_DURATION_MINUTES, MIN_APPOINTMENT_DURATION_MS } from './constants/appointment.constants.js';
 export { AppointmentStatus } from './enums/appointment-status.enum.js';
 export { CaseCategory } from './enums/case-category.enum.js';
 export { PaymentStatus } from './enums/payment-status.enum.js';
+export { NotificationType } from './enums/notification-type.enum.js';
 export { AuthProvider } from './enums/auth-provider.enum.js';
 export { AuthTokenType } from './enums/auth-token-type.enum.js';
 export { ConsultationType } from './enums/consultation-type.enum.js';

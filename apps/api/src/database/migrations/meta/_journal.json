@@ -15,6 +15,13 @@
       "when": 1779204075722,
       "tag": "0001_slow_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779215447305,
+      "tag": "0002_careless_black_knight",
+      "breakpoints": true
     }
   ]
 }

@@ -28,6 +28,26 @@ export type {
 } from './appointment.schemas.js';
 
 export {
+  NotificationResponseSchema,
+  PaginatedNotificationsSchema,
+} from './notification.schemas.js';
+export type {
+  NotificationResponse,
+  PaginatedNotificationsResponse,
+} from './notification.schemas.js';
+
+export {
+  CreateReviewRequestSchema,
+  ReviewResponseSchema,
+  PaginatedReviewsSchema,
+} from './review.schemas.js';
+export type {
+  CreateReviewRequest,
+  ReviewResponse,
+  PaginatedReviewsResponse,
+} from './review.schemas.js';
+
+export {
   CompleteOnboardingSchema,
   LawyerProfileSchema,
   LawyerPublicProfileSchema,
