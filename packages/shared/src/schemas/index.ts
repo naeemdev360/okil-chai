@@ -38,11 +38,13 @@ export type {
 
 export {
   CreateReviewRequestSchema,
+  RespondToReviewRequestSchema,
   ReviewResponseSchema,
   PaginatedReviewsSchema,
 } from './review.schemas.js';
 export type {
   CreateReviewRequest,
+  RespondToReviewRequest,
   ReviewResponse,
   PaginatedReviewsResponse,
 } from './review.schemas.js';

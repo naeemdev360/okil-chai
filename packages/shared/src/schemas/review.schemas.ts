@@ -8,6 +8,12 @@ export const CreateReviewRequestSchema = z.object({
 
 export type CreateReviewRequest = z.infer<typeof CreateReviewRequestSchema>;
 
+export const RespondToReviewRequestSchema = z.object({
+  text: z.string().min(1).max(2000),
+});
+
+export type RespondToReviewRequest = z.infer<typeof RespondToReviewRequestSchema>;
+
 const ReviewAuthorSchema = z.object({
   id: z.string().uuid(),
   firstName: z.string(),
@@ -21,6 +27,8 @@ export const ReviewResponseSchema = z.object({
   lawyerId: z.string().uuid(),
   rating: z.number().int().min(1).max(5),
   text: z.string().nullable(),
+  lawyerResponse: z.string().nullable(),
+  lawyerRespondedAt: z.coerce.date().nullable(),
   client: ReviewAuthorSchema,
   createdAt: z.coerce.date(),
 });
