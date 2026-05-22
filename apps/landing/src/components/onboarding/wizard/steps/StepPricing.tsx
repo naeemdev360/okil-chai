@@ -5,7 +5,7 @@ import { Field } from '../ui';
 import { CONSULTATION_TYPES } from '../constants';
 import type { ConsultationType, StepProps } from '../types';
 
-export function StepPricing({ data, update }: StepProps) {
+export function StepPricing({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
   const payout = Math.round(data.pricePerHour * 0.9);
   const fee    = Math.round(data.pricePerHour * 0.1);
@@ -17,12 +17,13 @@ export function StepPricing({ data, update }: StepProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Field label={t('hourlyRate')}>
+      <Field label={t('hourlyRate')} error={errors?.['pricePerHour']}>
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-base">$</span>
             <Input
               type="number"
+              min={1}
               className="pl-7 text-base font-semibold text-navy"
               value={data.pricePerHour}
               onChange={(e) => update('pricePerHour', Number(e.target.value))}
@@ -48,7 +49,7 @@ export function StepPricing({ data, update }: StepProps) {
         </div>
       </div>
 
-      <Field label={t('consultTypes')}>
+      <Field label={t('consultTypes')} error={errors?.['consultationTypes']}>
         <div className="grid grid-cols-3 gap-3 mt-1">
           {CONSULTATION_TYPES.map(({ key, labelKey, descKey }) => (
             <button

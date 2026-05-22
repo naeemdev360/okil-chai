@@ -86,11 +86,11 @@ export class AuthService implements IAuthService {
     if (!user) return;
 
     const rawToken = await this.repo.createPasswordResetToken(user.userId);
-    const portalUrl = this.getFrontendCallbackUrl(user.roles);
+    const landingUrl = this.resolveLandingUrl();
     await this.mailProducer.sendPasswordResetEmail({
       to: email,
       firstName: user.firstName,
-      resetUrl: `${portalUrl}/auth/reset-password?token=${rawToken}`,
+      resetUrl: `${landingUrl}/en/auth/reset-password?token=${rawToken}`,
     });
   }
 
@@ -123,14 +123,14 @@ export class AuthService implements IAuthService {
     userId: string,
     email: string,
     firstName: string,
-    role: Role,
+    _role: Role,
   ): Promise<void> {
-    const rawToken = await this.repo.createVerificationToken(userId);
-    const portalUrl = this.resolvePortalUrl(role);
+    const rawToken    = await this.repo.createVerificationToken(userId);
+    const landingUrl  = this.resolveLandingUrl();
     await this.mailProducer.sendVerificationEmail({
       to: email,
       firstName,
-      verifyUrl: `${portalUrl}/auth/verify-email?token=${rawToken}`,
+      verifyUrl: `${landingUrl}/en/auth/verify-email?token=${rawToken}`,
     });
   }
 
@@ -138,15 +138,19 @@ export class AuthService implements IAuthService {
     userId: string,
     email: string,
     firstName: string,
-    roles: readonly Role[],
+    _roles: readonly Role[],
   ): Promise<void> {
-    const rawToken = await this.repo.createVerificationToken(userId);
-    const portalUrl = this.resolvePortalUrl(roles.includes(Role.LAWYER) ? Role.LAWYER : Role.CLIENT);
+    const rawToken   = await this.repo.createVerificationToken(userId);
+    const landingUrl = this.resolveLandingUrl();
     await this.mailProducer.sendResendVerificationEmail({
       to: email,
       firstName,
-      verifyUrl: `${portalUrl}/auth/verify-email?token=${rawToken}`,
+      verifyUrl: `${landingUrl}/en/auth/verify-email?token=${rawToken}`,
     });
+  }
+
+  private resolveLandingUrl(): string {
+    return this.configService.get<string>('auth.landingUrl', 'http://localhost:3000');
   }
 
   private resolvePortalUrl(role: Role): string {

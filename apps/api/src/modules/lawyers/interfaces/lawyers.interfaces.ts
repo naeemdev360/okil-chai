@@ -96,6 +96,7 @@ export interface ILawyersService {
   listAvailabilityRules(userId: string): Promise<AvailabilityRuleResponse[]>;
   createAvailabilityRule(userId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse>;
   deleteAvailabilityRule(userId: string, ruleId: string): Promise<void>;
+  replaceAvailabilityRules(userId: string, rules: CreateAvailabilityRuleInput[]): Promise<AvailabilityRuleResponse[]>;
 }
 
 export interface ILawyersRepository {
@@ -115,4 +116,5 @@ export interface ILawyersRepository {
   insertAvailabilityRule(lawyerId: string, input: CreateAvailabilityRuleInput): Promise<AvailabilityRuleResponse>;
   findAvailabilityRuleByIdAndLawyerId(ruleId: string, lawyerId: string): Promise<AvailabilityRuleResponse | null>;
   deleteAvailabilityRuleById(ruleId: string): Promise<void>;
+  replaceAvailabilityRules(lawyerId: string, rules: CreateAvailabilityRuleInput[]): Promise<AvailabilityRuleResponse[]>;
 }

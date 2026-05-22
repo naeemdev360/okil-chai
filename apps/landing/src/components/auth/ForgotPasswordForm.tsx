@@ -1,19 +1,18 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { isApiError } from '@repo/api-client';
+import { ForgotPasswordSchema } from '@repo/shared';
+import { Button, cn, Input, Label, toast } from '@repo/ui';
+import { ArrowLeft, CheckCircle, Mail } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
-import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
-import { Button, Input, Label, cn } from '@repo/ui';
+import { api } from '../../lib/api/client';
 
-const forgotSchema = z.object({
-  email: z.string().email(),
-});
-
-type ForgotFields = z.infer<typeof forgotSchema>;
+type ForgotPasswordFields = z.infer<typeof ForgotPasswordSchema>;
 
 export function ForgotPasswordForm() {
   const [sent, setSent] = useState(false);
@@ -24,11 +23,21 @@ export function ForgotPasswordForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ForgotFields>({ resolver: zodResolver(forgotSchema) });
+  } = useForm<ForgotPasswordFields>({ resolver: zodResolver(ForgotPasswordSchema) });
 
-  const onSubmit = async (_data: ForgotFields) => {
-    // TODO: wire to auth API
-    setSent(true);
+  const onSubmit = async (data: ForgotPasswordFields): Promise<void> => {
+    try {
+      await api.auth.forgotPassword({ email: data.email });
+      toast.success(t('success'));
+      setSent(true);
+    } catch (error) {
+      // 404 is silent to prevent email enumeration; show success regardless
+      if (isApiError(error) && error.statusCode !== 404) {
+        toast.error(t('genericError'));
+      } else {
+        setSent(true);
+      }
+    }
   };
 
   return (
@@ -77,6 +86,9 @@ export function ForgotPasswordForm() {
                     {...register('email')}
                   />
                 </div>
+                {errors.email && (
+                  <p className="font-sans text-xs text-error">{errors.email.message}</p>
+                )}
               </div>
 
               <Button
@@ -84,9 +96,10 @@ export function ForgotPasswordForm() {
                 variant="gold"
                 size="lg"
                 className="w-full justify-center mt-2"
-                disabled={isSubmitting}
+                isLoading={isSubmitting}
+                loadingText={t('submitting')}
               >
-                {isSubmitting ? '…' : t('submit')}
+                {t('submit')}
               </Button>
             </form>
           </>

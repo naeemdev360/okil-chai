@@ -13,7 +13,14 @@
       "notifications": "Notifications",
       "openNotifications": "Open notifications",
       "noNotifications": "You're all caught up",
-      "notificationsEmptyHint": "Appointment and message notifications will appear here."
+      "notificationsEmptyHint": "Appointment and message notifications will appear here.",
+      "onboarding": {
+        "profileSetup": "Profile setup",
+        "stepsComplete": "{current} of {total} steps done",
+        "completeProfile": "Complete your profile →",
+        "verifyFirst": "Verify your email",
+        "verifyHint": "Click the link we sent you to unlock profile setup."
+      }
     }
   },
   "home": {
@@ -162,7 +169,9 @@
       "password": "Password",
       "forgotPassword": "Forgot password?",
       "submit": "Sign In",
+      "submitting": "Signing in…",
       "magicLink": "Send a magic link instead",
+      "success": "You're signed in.",
       "invalidCredentials": "Invalid email or password.",
       "genericError": "Something went wrong. Please try again.",
       "noAccount": "Don't have one?",
@@ -175,10 +184,12 @@
       "heading": "Create your account",
       "subHeadingClient": "Find a verified lawyer in minutes — not days.",
       "subHeadingLawyer": "Join 25,000+ lawyers building their practice on {appName}.",
-      "fullName": "Full name",
+      "firstName": "First name",
+      "lastName": "Last name",
       "email": "Email address",
       "password": "Password",
       "submit": "Create Account",
+      "submitting": "Creating account…",
       "terms": "I agree to {appName}'s",
       "termsLink": "Terms of Service",
       "and": "and",
@@ -189,15 +200,52 @@
       "changeRole": "change",
       "google": "Continue with Google",
       "apple": "Continue with Apple",
-      "divider": "OR CONTINUE WITH EMAIL"
+      "divider": "OR CONTINUE WITH EMAIL",
+      "success": "Account created! Check your inbox to verify your email.",
+      "emailTaken": "An account with this email already exists.",
+      "genericError": "Something went wrong. Please try again."
     },
     "forgotPassword": {
       "heading": "Reset your password",
       "subheading": "Enter your email and we'll send a reset link.",
       "email": "Email address",
       "submit": "Send Reset Link",
+      "submitting": "Sending…",
       "success": "Check your email for a reset link.",
+      "backToSignIn": "Back to sign in",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "resetPassword": {
+      "heading": "Set a new password",
+      "subheading": "Your new password must be at least 8 characters and include a letter, a number, and a special character.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "passwordMismatch": "Passwords do not match",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Reset Password",
+      "submitting": "Resetting…",
+      "successHeading": "Password updated!",
+      "successBody": "Your password has been reset. You can now sign in with your new password.",
+      "signIn": "Sign in",
+      "invalidTokenHeading": "Link expired",
+      "invalidTokenBody": "This reset link is invalid or has expired. Please request a new one.",
+      "requestNew": "Request a new link",
+      "genericError": "Something went wrong. Please try again.",
       "backToSignIn": "Back to sign in"
+    },
+    "verifyEmail": {
+      "loading": "Verifying your email…",
+      "successHeading": "Email verified!",
+      "successBody": "Your email has been confirmed. You can now sign in to your account.",
+      "signIn": "Sign in",
+      "errorHeading": "Verification failed",
+      "errorBody": "This link is invalid or has expired. Please sign in and request a new verification email.",
+      "backToSignIn": "Back to sign in"
+    },
+    "callback": {
+      "loading": "Signing you in…",
+      "error": "Authentication failed. Please try signing in again."
     },
     "panel": {
       "tagline": "The Trusted Legal Platform",
@@ -232,7 +280,43 @@
       "back": "Back",
       "cancel": "Cancel",
       "continue": "Continue",
+      "saving": "Saving…",
       "submit": "Submit for Verification",
+      "submitting": "Submitting…",
+      "submitSuccess": "Profile submitted for verification! We'll email you within 24-48 hours.",
+      "loadingAuth": "Loading…",
+      "emailGate": {
+        "heading": "Check your inbox",
+        "body": "We sent a verification link to {email}. Click it to confirm your address before setting up your profile.",
+        "resend": "Resend verification email",
+        "sending": "Sending…",
+        "sent": "Email sent — check your inbox!",
+        "alreadyVerified": "Already verified? Refresh status",
+        "spam": "Can't find it? Check your spam or junk folder.",
+        "resendError": "Failed to send. Please try again."
+      },
+      "alreadyComplete": {
+        "heading": "Profile already submitted",
+        "body": "Your lawyer profile is under review. We'll notify you by email once it's approved — usually within 24–48 hours.",
+        "cta": "Go to Dashboard"
+      },
+      "errors": {
+        "required": "This field is required.",
+        "emailInvalid": "Enter a valid email address.",
+        "passwordTooShort": "Password must be at least 8 characters.",
+        "passwordMismatch": "Passwords do not match.",
+        "termsRequired": "You must accept the terms to continue.",
+        "experienceInvalid": "Enter a valid number of years (0–70).",
+        "bioTooShort": "Bio should be at least 50 characters.",
+        "yearAdmittedInvalid": "Enter a valid year (e.g. 2010).",
+        "specializations": "Select at least one practice area.",
+        "languages": "Select at least one language.",
+        "pricePerHour": "Hourly rate must be greater than 0.",
+        "consultationTypes": "Select at least one consultation type.",
+        "availability": "Select at least one working day.",
+        "submitGeneric": "Something went wrong. Please try again.",
+        "submitUnauthorized": "Your session has expired. Please sign in again."
+      },
       "fields": {
         "password": "Password",
         "confirmPassword": "Confirm Password",

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { AuthTokens, UserProfile } from '@repo/api-client';
 import { api } from '../api/client';
-import { clearTokens, getAccessToken, setTokens } from '../auth/auth-storage';
+import { clearTokens, getAccessToken, getRefreshToken, setTokens } from '../auth/auth-storage';
 
 interface AuthState {
   readonly user: UserProfile | null;
@@ -43,8 +43,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   logout: async () => {
+    const refreshToken = getRefreshToken();
     try {
-      await api.auth.logout();
+      if (refreshToken) await api.auth.logout({ refreshToken });
     } finally {
       clearTokens();
       set({ user: null, isAuthenticated: false });

@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useAuthStore } from '../../lib/store/auth.store';
-import { getPortalUrl } from '../../lib/auth/portal-routes';
+import { getPortalUrl, getPrimaryRole } from '../../lib/auth/portal-routes';
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { Logo } from './Logo';
 import { NotificationBell } from './NotificationBell';
@@ -113,7 +113,7 @@ export function Navbar() {
             <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" aria-hidden="true" />
           ) : isLoggedIn ? (
             <>
-              <NotificationBell role={user.role} />
+              <NotificationBell role={getPrimaryRole(user.roles)} />
               <UserMenu user={user} />
             </>
           ) : (
@@ -212,7 +212,7 @@ export function Navbar() {
               <div className="flex flex-col sm:flex-row gap-2 mt-2">
                 {isLoggedIn ? (
                   <Button variant="gold" size="md" asChild className="w-full justify-center">
-                    <Link href={getPortalUrl(user.role)} onClick={() => setMobileOpen(false)}>
+                    <Link href={getPortalUrl(getPrimaryRole(user.roles))} onClick={() => setMobileOpen(false)}>
                       {t('user.goToPortal')}
                     </Link>
                   </Button>

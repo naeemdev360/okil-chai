@@ -17,7 +17,7 @@ async function bootstrap(): Promise<void> {
 
   app.use(helmet());
   app.enableCors({
-    origin: configService.get<string>('app.corsOrigin'),
+    origin: configService.get<string[]>('app.corsOrigin'),
     credentials: true,
   });
 

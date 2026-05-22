@@ -22,6 +22,8 @@ export const UserProfileSchema = BaseEntitySchema.extend({
   isVerified: z.boolean(),
   isActive: z.boolean(),
   roles: z.array(z.nativeEnum(Role)),
+  onboardingComplete: z.boolean(),
+  onboardingStep: z.number().int().min(0).nullable(),
 });
 
 /** Lightweight row — used in admin list views */

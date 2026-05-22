@@ -16,6 +16,11 @@ export function clearTokens(): void {
   window.localStorage.removeItem(REFRESH_TOKEN_KEY);
 }
 
+export function getRefreshToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
 export function hasAccessToken(): boolean {
   return getAccessToken() !== null;
 }

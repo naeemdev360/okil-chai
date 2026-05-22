@@ -54,3 +54,9 @@ export interface LawyerDashboard {
   readonly totalReviews: number;
   readonly averageRating: number;
 }
+
+export interface AvailabilityRuleInput {
+  readonly dayOfWeek: number;
+  readonly startTime: string;
+  readonly endTime: string;
+}

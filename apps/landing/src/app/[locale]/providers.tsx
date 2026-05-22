@@ -1,6 +1,7 @@
 'use client';
 
 import { QueryProvider, ApiClientProvider } from '@repo/hooks';
+import { AppToaster } from '@repo/ui';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ReactNode } from 'react';
 import { api } from '../../lib/api/client';
@@ -16,6 +17,7 @@ export function Providers({ children }: ProvidersProps) {
       <ApiClientProvider client={api}>
         <AuthInitializer />
         {children}
+        <AppToaster />
         {process.env.NODE_ENV === 'development' && (
           <ReactQueryDevtools initialIsOpen={false} />
         )}

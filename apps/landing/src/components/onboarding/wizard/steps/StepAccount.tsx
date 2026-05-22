@@ -5,7 +5,7 @@ import { Input, PasswordInput, Checkbox, GoogleIcon, AppleIcon } from '@repo/ui'
 import { Field } from '../ui';
 import type { StepProps } from '../types';
 
-export function StepAccount({ data, update }: StepProps) {
+export function StepAccount({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
   return (
@@ -23,7 +23,7 @@ export function StepAccount({ data, update }: StepProps) {
         <div className="flex-1 h-px bg-gray-200" />
       </div>
 
-      <Field label={t('email')}>
+      <Field label={t('email')} error={errors?.['email']}>
         <Input
           type="email"
           autoComplete="email"
@@ -32,7 +32,7 @@ export function StepAccount({ data, update }: StepProps) {
         />
       </Field>
 
-      <Field label={t('password')}>
+      <Field label={t('password')} error={errors?.['password']}>
         <PasswordInput
           autoComplete="new-password"
           value={data.password}
@@ -40,7 +40,7 @@ export function StepAccount({ data, update }: StepProps) {
         />
       </Field>
 
-      <Field label={t('confirmPassword')} hint={t('confirmPwHint')}>
+      <Field label={t('confirmPassword')} hint={t('confirmPwHint')} error={errors?.['confirmPassword']}>
         <PasswordInput
           autoComplete="new-password"
           value={data.confirmPassword}
@@ -48,24 +48,29 @@ export function StepAccount({ data, update }: StepProps) {
         />
       </Field>
 
-      <div className="flex items-start gap-2.5">
-        <Checkbox
-          id="terms-accepted"
-          variant="gold"
-          size="md"
-          className="mt-0.5"
-          checked={data.termsAccepted}
-          onCheckedChange={(v) => update('termsAccepted', v === true)}
-        />
-        <label
-          htmlFor="terms-accepted"
-          className="font-sans text-xs text-gray-600 leading-relaxed cursor-pointer"
-        >
-          {t('termsLabel')}{' '}
-          <a href="#" className="text-navy font-medium hover:underline">{t('termsLink')}</a>
-          {' '}{t('termsAnd')}{' '}
-          <a href="#" className="text-navy font-medium hover:underline">{t('privacyLink')}</a>.
-        </label>
+      <div className="flex flex-col gap-1">
+        <div className="flex items-start gap-2.5">
+          <Checkbox
+            id="terms-accepted"
+            variant="gold"
+            size="md"
+            className="mt-0.5"
+            checked={data.termsAccepted}
+            onCheckedChange={(v) => update('termsAccepted', v === true)}
+          />
+          <label
+            htmlFor="terms-accepted"
+            className="font-sans text-xs text-gray-600 leading-relaxed cursor-pointer"
+          >
+            {t('termsLabel')}{' '}
+            <a href="#" className="text-navy font-medium hover:underline">{t('termsLink')}</a>
+            {' '}{t('termsAnd')}{' '}
+            <a href="#" className="text-navy font-medium hover:underline">{t('privacyLink')}</a>.
+          </label>
+        </div>
+        {errors?.['termsAccepted'] && (
+          <p className="font-sans text-xs text-error ml-6">{errors['termsAccepted']}</p>
+        )}
       </div>
     </div>
   );

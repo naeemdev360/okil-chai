@@ -2,17 +2,16 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isApiError } from '@repo/api-client';
-import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@repo/ui';
+import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separator, toast } from '@repo/ui';
 import { ChevronLeft, Mail } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { api } from '../../lib/api/client';
-import { useAuthStore } from '../../lib/store/auth.store';
 import { brand } from '../../lib/brand';
+import { useAuthStore } from '../../lib/store/auth.store';
 
 const signInSchema = z.object({
   email:    z.string().email(),
@@ -27,7 +26,6 @@ export function SignInForm() {
   const locale = useLocale();
   const router = useRouter();
   const login  = useAuthStore((s) => s.login);
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -36,17 +34,17 @@ export function SignInForm() {
   } = useForm<SignInFields>({ resolver: zodResolver(signInSchema) });
 
   const onSubmit = async (data: SignInFields): Promise<void> => {
-    setServerError(null);
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     try {
       const tokens = await api.auth.login(data);
       await login(tokens);
+      toast.success(t('success'));
       router.push(`/${locale}`);
     } catch (error) {
-      console.error('error', error);
       const message = isApiError(error) && error.statusCode === 401
         ? t('invalidCredentials')
         : t('genericError');
-      setServerError(message);
+      toast.error(message);
     }
   };
 
@@ -79,7 +77,13 @@ export function SignInForm() {
 
         {/* OAuth buttons */}
         <div className="flex flex-col gap-2.5 mb-5">
-          <OAuthButton label={t('google')} provider="google" />
+          <OAuthButton
+            label={t('google')}
+            provider="google"
+            onClick={() => {
+              window.location.href = `${process.env.NEXT_PUBLIC_API_URL ?? ''}/auth/google`;
+            }}
+          />
           <OAuthButton label={t('apple')} provider="apple" />
         </div>
 
@@ -126,28 +130,23 @@ export function SignInForm() {
             />
           </div>
 
-          {serverError && (
-            <p role="alert" className="font-sans text-xs text-red-600 text-center -mt-1">
-              {serverError}
-            </p>
-          )}
-
           <Button
             type="submit"
             variant="gold"
             size="lg"
             className="w-full justify-center mt-2"
-            disabled={isSubmitting}
+            isLoading={isSubmitting}
+            loadingText={t('submitting')}
           >
-            {isSubmitting ? '…' : t('submit')}
+            {t('submit')}
           </Button>
 
-          <button
+          {/* <button
             type="button"
             className="font-sans text-xs text-gray-600 hover:text-navy transition-colors mx-auto"
           >
             ✨ {t('magicLink')}
-          </button>
+          </button> */}
         </form>
       </div>
 
@@ -158,10 +157,19 @@ export function SignInForm() {
   );
 }
 
-function OAuthButton({ label, provider }: { label: string; provider: 'google' | 'apple' }) {
+function OAuthButton({
+  label,
+  provider,
+  onClick,
+}: {
+  label: string;
+  provider: 'google' | 'apple';
+  onClick?: () => void;
+}) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-sm font-medium text-navy hover:bg-gray-50 transition-colors duration-150"
     >
       {provider === 'google'

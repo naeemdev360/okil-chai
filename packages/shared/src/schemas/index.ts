@@ -1,4 +1,17 @@
 export {
+  SignUpSchema,
+  LoginSchema,
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
+} from './auth.schemas.js';
+export type {
+  SignUpRequest,
+  LoginRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+} from './auth.schemas.js';
+
+export {
   UserProfileSchema,
   UserListItemSchema,
   UpdateUserProfileSchema,

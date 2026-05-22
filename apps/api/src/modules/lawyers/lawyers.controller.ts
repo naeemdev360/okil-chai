@@ -29,6 +29,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
+import { BatchAvailabilityDto } from './dto/batch-availability.dto';
 import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
 import { CreateAvailabilityRuleDto } from './dto/create-availability-rule.dto';
 import {
@@ -121,6 +122,22 @@ export class LawyersController {
   @ApiResponse({ status: 404, description: 'Profile not found' })
   listAvailabilityRules(@CurrentUser() user: RequestUser): Promise<AvailabilityRuleResponse[]> {
     return this.lawyersService.listAvailabilityRules(user.userId);
+  }
+
+  @Patch('me/availability')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Replace all recurring availability rules',
+    description: 'Deletes existing rules and inserts the provided set atomically. Send an empty array to clear all.',
+  })
+  @ApiResponse({ status: 200, description: 'Updated availability rules' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 404, description: 'Profile not found' })
+  replaceAvailabilityRules(
+    @CurrentUser() user: RequestUser,
+    @Body() dto: BatchAvailabilityDto,
+  ): Promise<AvailabilityRuleResponse[]> {
+    return this.lawyersService.replaceAvailabilityRules(user.userId, dto.rules);
   }
 
   @Post('me/availability')

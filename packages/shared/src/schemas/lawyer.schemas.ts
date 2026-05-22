@@ -51,6 +51,8 @@ export const CompleteOnboardingSchema = z.object({
     .transform((v) => JSON.parse(v) as unknown)
     .pipe(z.array(z.nativeEnum(DocumentType)).min(1))
     .optional(),
+
+  step: z.coerce.number().int().min(1).max(6).optional(),
 });
 
 export type CompleteOnboardingRequest = z.infer<typeof CompleteOnboardingSchema>;

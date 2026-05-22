@@ -1,4 +1,5 @@
 export { MIN_APPOINTMENT_DURATION_MINUTES, MIN_APPOINTMENT_DURATION_MS } from './constants/appointment.constants.js';
+export { LAWYER_ONBOARDING_TOTAL_STEPS } from './constants/lawyer.constants.js';
 export { AppointmentStatus } from './enums/appointment-status.enum.js';
 export { CaseCategory } from './enums/case-category.enum.js';
 export { PaymentStatus } from './enums/payment-status.enum.js';

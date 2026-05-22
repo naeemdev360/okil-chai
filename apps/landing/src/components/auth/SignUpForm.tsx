@@ -1,40 +1,69 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AppleIcon, Badge, Button, Checkbox, cn, GoogleIcon, Input, Label, PasswordInput, Separator } from '@repo/ui';
+import { isApiError } from '@repo/api-client';
+import { Role, SignUpSchema } from '@repo/shared';
+import { AppleIcon, Badge, Button, Checkbox, cn, GoogleIcon, Input, Label, PasswordInput, Separator, toast } from '@repo/ui';
 import { Briefcase, ChevronLeft, Mail, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { api } from '../../lib/api/client';
 import { brand } from '../../lib/brand';
+import { useAuthStore } from '../../lib/store/auth.store';
 
-const signUpSchema = z.object({
-  fullName: z.string().min(2),
-  email:    z.string().email(),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  terms:    z.literal(true, { errorMap: () => ({ message: 'You must accept the terms' }) }),
+const signUpFormSchema = SignUpSchema.extend({
+  terms: z.literal(true, { errorMap: () => ({ message: 'You must accept the terms' }) }),
 });
 
-type SignUpFields = z.infer<typeof signUpSchema>;
-type Role = 'client' | 'lawyer';
+type SignUpFormFields = z.infer<typeof signUpFormSchema>;
+type RoleParam = 'client' | 'lawyer';
 
 export function SignUpForm() {
   const t      = useTranslations('auth.signUp');
   const tAuth  = useTranslations('auth');
   const locale = useLocale();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const role = (searchParams.get('role') ?? 'client') as Role;
+  const role = (searchParams.get('role') ?? 'client') as RoleParam;
+  const login = useAuthStore((s) => s.login);
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpFields>({ resolver: zodResolver(signUpSchema) });
+  } = useForm<SignUpFormFields>({
+    resolver: zodResolver(signUpFormSchema),
+    defaultValues: {
+      role: role === 'lawyer' ? Role.LAWYER : Role.CLIENT,
+    },
+  });
 
-  const onSubmit = async (_data: SignUpFields) => {
-    // TODO: wire to auth API — lawyer role redirects to /onboarding/lawyer
+  const onSubmit = async (data: SignUpFormFields): Promise<void> => {
+    try {
+      const payload = { email: data.email, password: data.password, firstName: data.firstName, lastName: data.lastName };
+      const tokens = role === 'lawyer'
+        ? await api.auth.signupLawyer(payload)
+        : await api.auth.signup(payload);
+      await login(tokens);
+      toast.success(t('success'));
+      router.push(role === 'lawyer' ? `/${locale}/onboarding/lawyer` : `/${locale}`);
+    } catch (error) {
+      const message =
+        isApiError(error) && error.statusCode === 409
+          ? t('emailTaken')
+          : t('genericError');
+      toast.error(message);
+    }
+  };
+
+  const handleGoogleOAuth = () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
+    const intentRole = role === 'lawyer' ? 'LAWYER' : 'CLIENT';
+    window.location.href = `${apiUrl}/auth/google?role=${intentRole}`;
   };
 
   return (
@@ -73,15 +102,26 @@ export function SignUpForm() {
           {t('heading')}
         </h1>
         <p className="font-sans text-[15px] text-gray-600 mb-7 leading-relaxed">
-          {role === 'lawyer' ? t('subHeadingLawyer',{
-            appName: brand.name,
-          }) : t('subHeadingClient')}
+          {role === 'lawyer' ? t('subHeadingLawyer', { appName: brand.name }) : t('subHeadingClient')}
         </p>
 
         {/* OAuth */}
         <div className="flex flex-col gap-2.5 mb-5">
-          <OAuthButton label={t('google')} provider="google" />
-          <OAuthButton label={t('apple')} provider="apple" />
+          <button
+            type="button"
+            onClick={handleGoogleOAuth}
+            className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-sm font-medium text-navy hover:bg-gray-50 transition-colors duration-150"
+          >
+            <GoogleIcon className="size-[18px]" />
+            {t('google')}
+          </button>
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-sm font-medium text-navy hover:bg-gray-50 transition-colors duration-150"
+          >
+            <AppleIcon className="size-[18px] text-navy" />
+            {t('apple')}
+          </button>
         </div>
 
         {/* Divider */}
@@ -95,16 +135,35 @@ export function SignUpForm() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="signup-name">{t('fullName')}</Label>
-            <div className="relative">
-              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" aria-hidden="true" />
+          {/* First name / Last name row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="signup-first-name">{t('firstName')}</Label>
+              <div className="relative">
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" aria-hidden="true" />
+                <Input
+                  id="signup-first-name"
+                  autoComplete="given-name"
+                  className={cn('pl-10', errors.firstName && 'border-error')}
+                  {...register('firstName')}
+                />
+              </div>
+              {errors.firstName && (
+                <p className="font-sans text-xs text-error">{errors.firstName.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="signup-last-name">{t('lastName')}</Label>
               <Input
-                id="signup-name"
-                autoComplete="name"
-                className={cn('pl-10', errors.fullName && 'border-error')}
-                {...register('fullName')}
+                id="signup-last-name"
+                autoComplete="family-name"
+                className={cn(errors.lastName && 'border-error')}
+                {...register('lastName')}
               />
+              {errors.lastName && (
+                <p className="font-sans text-xs text-error">{errors.lastName.message}</p>
+              )}
             </div>
           </div>
 
@@ -120,6 +179,9 @@ export function SignUpForm() {
                 {...register('email')}
               />
             </div>
+            {errors.email && (
+              <p className="font-sans text-xs text-error">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -137,33 +199,41 @@ export function SignUpForm() {
 
           {/* Terms */}
           <div className="flex items-start gap-2.5 mt-1">
-            <Checkbox
-              id="signup-terms"
-              defaultChecked
-              className="mt-0.5"
-              {...register('terms')}
+            <Controller
+              name="terms"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id="signup-terms"
+                  className="mt-0.5"
+                  checked={field.value === true}
+                  onCheckedChange={(checked) => field.onChange(checked === true ? true : false)}
+                />
+              )}
             />
             <label
               htmlFor="signup-terms"
               className="font-sans text-xs text-gray-600 leading-relaxed cursor-pointer"
             >
-              {t('terms',{
-                appName: brand.name,
-              })}{' '}
+              {t('terms', { appName: brand.name })}{' '}
               <Link href="#" className="text-navy font-medium hover:underline">{t('termsLink')}</Link>
               {' '}{t('and')}{' '}
               <Link href="#" className="text-navy font-medium hover:underline">{t('privacyLink')}</Link>.
             </label>
           </div>
+          {errors.terms && (
+            <p className="font-sans text-xs text-error -mt-2">{errors.terms.message}</p>
+          )}
 
           <Button
             type="submit"
             variant="gold"
             size="lg"
             className="w-full justify-center mt-2"
-            disabled={isSubmitting}
+            isLoading={isSubmitting}
+            loadingText={t('submitting')}
           >
-            {isSubmitting ? '…' : t('submit')}
+            {t('submit')}
           </Button>
         </form>
       </div>
@@ -172,20 +242,5 @@ export function SignUpForm() {
         {tAuth('disclaimer', { appName: brand.name })}
       </p>
     </div>
-  );
-}
-
-function OAuthButton({ label, provider }: { label: string; provider: 'google' | 'apple' }) {
-  return (
-    <button
-      type="button"
-      className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-sm font-medium text-navy hover:bg-gray-50 transition-colors duration-150"
-    >
-      {provider === 'google'
-        ? <GoogleIcon className="size-[18px]" />
-        : <AppleIcon className="size-[18px] text-navy" />
-      }
-      {label}
-    </button>
   );
 }

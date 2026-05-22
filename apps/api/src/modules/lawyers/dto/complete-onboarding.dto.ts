@@ -112,4 +112,12 @@ export class CompleteOnboardingDto {
   @IsArray()
   @IsEnum(DocumentType, { each: true })
   documentTypes?: DocumentType[];
+
+  @ApiPropertyOptional({ example: 1, description: 'Wizard step number (1–6) just completed — advances onboardingStep in DB' })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(6)
+  @Transform(({ value }: { value: unknown }) => (value !== undefined ? Number(value) : undefined))
+  step?: number;
 }

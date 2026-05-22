@@ -387,4 +387,23 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
   async deleteAvailabilityRuleById(ruleId: string): Promise<void> {
     await this.db.delete(availability).where(eq(availability.id, ruleId));
   }
+
+  async replaceAvailabilityRules(lawyerId: string, rules: CreateAvailabilityRuleInput[]): Promise<AvailabilityRuleResponse[]> {
+    return this.transaction(async (tx) => {
+      await tx.delete(availability).where(eq(availability.lawyerId, lawyerId));
+
+      if (rules.length === 0) return [];
+
+      return tx
+        .insert(availability)
+        .values(rules.map((r) => ({ lawyerId, dayOfWeek: r.dayOfWeek, startTime: r.startTime, endTime: r.endTime, isRecurring: true })))
+        .returning({
+          id: availability.id,
+          dayOfWeek: availability.dayOfWeek,
+          startTime: availability.startTime,
+          endTime: availability.endTime,
+          isRecurring: availability.isRecurring,
+        });
+    });
+  }
 }

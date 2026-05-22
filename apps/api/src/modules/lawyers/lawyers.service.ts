@@ -39,6 +39,9 @@ export class LawyersService implements ILawyersService {
     if (dto.city !== undefined) profileUpdate.city = dto.city;
     if (dto.country !== undefined) profileUpdate.country = dto.country;
     if (dto.pricePerHour !== undefined) profileUpdate.pricePerHour = String(dto.pricePerHour);
+    if (dto.step !== undefined) {
+      profileUpdate.onboardingStep = Math.max(profile.onboardingStep, dto.step);
+    }
 
     if (profilePhoto) {
       const { url } = await this.storageService.upload({ file: profilePhoto, folder: 'avatars' });
@@ -142,6 +145,19 @@ export class LawyersService implements ILawyersService {
     }
 
     return this.lawyersRepository.insertAvailabilityRule(profile.id, input);
+  }
+
+  async replaceAvailabilityRules(userId: string, rules: CreateAvailabilityRuleInput[]): Promise<AvailabilityRuleResponse[]> {
+    const profile = await this.lawyersRepository.findProfileByUserId(userId);
+    if (!profile) throw new NotFoundException('Lawyer profile not found');
+
+    for (const rule of rules) {
+      if (rule.startTime >= rule.endTime) {
+        throw new BadRequestException('endTime must be after startTime');
+      }
+    }
+
+    return this.lawyersRepository.replaceAvailabilityRules(profile.id, rules);
   }
 
   async deleteAvailabilityRule(userId: string, ruleId: string): Promise<void> {

@@ -1,9 +1,11 @@
 import type { Http } from '../core/http';
 import type {
   AuthTokens,
-  LawyerOnboardingDto,
+  ForgotPasswordDto,
+  LawyerSignupDto,
   LoginDto,
   RefreshDto,
+  ResetPasswordDto,
   SignupDto,
   UserProfile,
 } from '../types/auth.types';
@@ -13,17 +15,29 @@ export function createAuthApi(http: Http) {
     signup: (dto: SignupDto) =>
       http.post<AuthTokens>('/auth/signup', dto),
 
+    signupLawyer: (dto: LawyerSignupDto) =>
+      http.post<AuthTokens>('/auth/signup/lawyer', dto),
+
+    verifyEmail: (token: string) =>
+      http.get<{ message: string }>('/auth/verify-email', { params: { token } }),
+
     login: (dto: LoginDto) =>
       http.post<AuthTokens>('/auth/login', dto),
 
     refresh: (dto: RefreshDto) =>
       http.post<AuthTokens>('/auth/refresh', dto),
 
-    logout: () =>
-      http.post('/auth/logout'),
+    logout: (dto: RefreshDto) =>
+      http.post('/auth/logout', dto),
 
-    lawyerOnboarding: (dto: LawyerOnboardingDto) =>
-      http.post('/auth/lawyer-onboarding', dto),
+    forgotPassword: (dto: ForgotPasswordDto) =>
+      http.post('/auth/forgot-password', dto),
+
+    resetPassword: (dto: ResetPasswordDto) =>
+      http.post('/auth/reset-password', dto),
+
+    resendVerification: () =>
+      http.post<{ message: string }>('/auth/resend-verification'),
 
     getMe: () =>
       http.get<UserProfile>('/auth/me'),

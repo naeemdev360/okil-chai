@@ -1,5 +1,7 @@
+import type { AvailabilityRuleResponse, LawyerProfileResponse } from '@repo/shared';
 import type { Http } from '../core/http';
 import type {
+  AvailabilityRuleInput,
   LawyerAvailability,
   LawyerAvailabilityParams,
   LawyerDashboard,
@@ -24,5 +26,17 @@ export function createLawyersApi(http: Http) {
 
     uploadAvatar: (formData: FormData) =>
       http.upload('/lawyers/me/avatar', formData),
+
+    saveOnboardingData: (formData: FormData) =>
+      http.upload('/lawyers/me/onboarding', formData),
+
+    replaceAvailabilityRules: (rules: AvailabilityRuleInput[]) =>
+      http.patch('/lawyers/me/availability', { rules }),
+
+    getMyProfile: () =>
+      http.get<LawyerProfileResponse>('/lawyers/me'),
+
+    getMyAvailabilityRules: () =>
+      http.get<AvailabilityRuleResponse[]>('/lawyers/me/availability'),
   } as const;
 }

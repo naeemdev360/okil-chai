@@ -1,12 +1,22 @@
 import type { Role } from '@repo/shared';
 
+export interface LawyerSignupDto {
+  readonly email: string;
+  readonly password: string;
+  readonly firstName: string;
+  readonly lastName: string;
+}
+
 export interface UserProfile {
   readonly id: string;
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly role: Role;
+  readonly roles: readonly Role[];
   readonly avatarUrl: string | null;
+  readonly isVerified: boolean;
+  readonly onboardingComplete: boolean;
+  readonly onboardingStep: number | null;
 }
 
 export interface SignupDto {
@@ -14,7 +24,6 @@ export interface SignupDto {
   readonly password: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly role: Role.CLIENT | Role.LAWYER;
 }
 
 export interface LoginDto {
@@ -31,11 +40,12 @@ export interface AuthTokens {
   readonly refreshToken: string;
 }
 
-export interface LawyerOnboardingDto {
-  readonly barNumber: string;
-  readonly specializations: readonly string[];
-  readonly yearsOfExperience: number;
-  readonly bio: string;
-  readonly hourlyRate: number;
-  readonly languages: readonly string[];
+export interface ForgotPasswordDto {
+  readonly email: string;
 }
+
+export interface ResetPasswordDto {
+  readonly token: string;
+  readonly newPassword: string;
+}
+

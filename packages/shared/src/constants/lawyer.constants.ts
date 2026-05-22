@@ -1,0 +1,1 @@
+export const LAWYER_ONBOARDING_TOTAL_STEPS = 6;

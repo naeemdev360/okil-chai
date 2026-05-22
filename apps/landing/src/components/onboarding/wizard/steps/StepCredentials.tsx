@@ -5,21 +5,25 @@ import { Field } from '../ui';
 import { BAR_COUNCILS } from '../constants';
 import type { StepProps } from '../types';
 
-export function StepCredentials({ data, update }: StepProps) {
+export function StepCredentials({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-[2fr_1fr] gap-5">
-        <Field label={t('barNumber')} hint={t('barNumberHint')}>
+        <Field label={t('barNumber')} hint={errors?.['barNumber'] ? undefined : t('barNumberHint')} error={errors?.['barNumber']}>
           <Input
             placeholder={t('barNumberPh')}
             value={data.barNumber}
             onChange={(e) => update('barNumber', e.target.value)}
           />
         </Field>
-        <Field label={t('yearAdmitted')}>
+        <Field label={t('yearAdmitted')} error={errors?.['yearAdmitted']}>
           <Input
+            type="number"
+            min={1950}
+            max={new Date().getFullYear()}
+            placeholder={String(new Date().getFullYear())}
             value={data.yearAdmitted}
             onChange={(e) => update('yearAdmitted', e.target.value)}
           />

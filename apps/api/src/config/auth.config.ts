@@ -13,4 +13,5 @@ export default registerAs('auth', () => ({
   facebookCallbackUrl: process.env['FACEBOOK_CALLBACK_URL'],
   clientPortalUrl: process.env['CLIENT_PORTAL_URL'] ?? 'http://localhost:3001',
   lawyerPortalUrl: process.env['LAWYER_PORTAL_URL'] ?? 'http://localhost:3002',
+  landingUrl: process.env['LANDING_URL'] ?? 'http://localhost:3004',
 }));

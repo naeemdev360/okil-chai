@@ -4,7 +4,7 @@ import { Field, ToggleChip } from '../ui';
 import { DAYS, SLOT_DURATIONS } from '../constants';
 import type { DayKey, StepProps } from '../types';
 
-export function StepAvailability({ data, update }: StepProps) {
+export function StepAvailability({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
   const toggleDay = (d: DayKey) =>
@@ -12,7 +12,7 @@ export function StepAvailability({ data, update }: StepProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Field label={t('workingDays')} hint={t('workingDaysHint')}>
+      <Field label={t('workingDays')} hint={errors?.['availability'] ? undefined : t('workingDaysHint')} error={errors?.['availability']}>
         <div className="grid grid-cols-7 gap-2 mt-1.5">
           {DAYS.map((d) => (
             <ToggleChip key={d} active={data.availability[d]} onClick={() => toggleDay(d)}>

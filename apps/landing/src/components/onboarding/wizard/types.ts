@@ -31,4 +31,5 @@ export type UpdateFn = <K extends keyof WizardData>(key: K, value: WizardData[K]
 export interface StepProps {
   readonly data: WizardData;
   readonly update: UpdateFn;
+  readonly errors?: Record<string, string>;
 }

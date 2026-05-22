@@ -4,7 +4,7 @@ import { Field, ToggleChip } from '../ui';
 import { SPECIALIZATION_OPTIONS, LANGUAGE_OPTIONS } from '../constants';
 import type { StepProps } from '../types';
 
-export function StepSpecs({ data, update }: StepProps) {
+export function StepSpecs({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
   const toggleSpec = (s: string) =>
@@ -21,7 +21,8 @@ export function StepSpecs({ data, update }: StepProps) {
     <div className="flex flex-col gap-6">
       <Field
         label={t('practiceAreas')}
-        hint={`${t('practiceAreasHint')} — ${data.specializations.length}/5`}
+        hint={errors?.['specializations'] ? undefined : `${t('practiceAreasHint')} — ${data.specializations.length}/5`}
+        error={errors?.['specializations']}
       >
         <div className="flex flex-wrap gap-2 mt-1">
           {SPECIALIZATION_OPTIONS.map((s) => (
@@ -32,7 +33,7 @@ export function StepSpecs({ data, update }: StepProps) {
         </div>
       </Field>
 
-      <Field label={t('languages')}>
+      <Field label={t('languages')} error={errors?.['languages']}>
         <div className="flex flex-wrap gap-2 mt-1">
           {LANGUAGE_OPTIONS.map((l) => (
             <ToggleChip key={l} active={data.languages.includes(l)} rounded onClick={() => toggleLang(l)}>

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConsultationType, Role } from '@repo/shared';
+import { ConsultationType, LAWYER_ONBOARDING_TOTAL_STEPS, Role } from '@repo/shared';
 import type { LawyerPublicProfileResponse, UpdateUserProfileRequest, UserProfileResponse } from '@repo/shared';
 import type { PaginationQuery } from '@repo/shared';
 import { and, count, eq, inArray } from 'drizzle-orm';
@@ -36,14 +36,16 @@ export class UsersRepository extends BaseRepository implements IUsersRepository 
 
     if (!userRow) return null;
 
-    const roleRows = await this.db
-      .select({ role: userRoles.role })
-      .from(userRoles)
-      .where(eq(userRoles.userId, userId));
+    const [roleRows, [lawyerRow]] = await Promise.all([
+      this.db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, userId)),
+      this.db.select({ onboardingStep: lawyerProfiles.onboardingStep }).from(lawyerProfiles).where(eq(lawyerProfiles.userId, userId)).limit(1),
+    ]);
 
     return {
       ...userRow,
       roles: roleRows.map((r) => r.role as Role),
+      onboardingComplete: lawyerRow !== undefined && lawyerRow.onboardingStep >= LAWYER_ONBOARDING_TOTAL_STEPS,
+      onboardingStep: lawyerRow?.onboardingStep ?? null,
     };
   }
 
