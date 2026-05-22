@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Inject,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import type { PaginatedReviewsResponse, ReviewResponse } from '@repo/shared';
 import { AppointmentStatus, Role } from '@repo/shared';
@@ -12,7 +14,10 @@ import {
   type IAppointmentsService,
 } from '../appointments/interfaces/appointments.interfaces';
 import { buildPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
-import type { SubmitReviewInput } from './interfaces/reviews.interfaces';
+import type {
+  RespondToReviewInput,
+  SubmitReviewInput,
+} from './interfaces/reviews.interfaces';
 import {
   REVIEWS_REPOSITORY,
   type IReviewsRepository,
@@ -74,6 +79,30 @@ export class ReviewsService implements IReviewsService {
     };
   }
 
+  async respondToReview(
+    lawyerUserId: string,
+    reviewId: string,
+    input: RespondToReviewInput,
+  ): Promise<ReviewResponse> {
+    const review = await this.reviewsRepository.findById(reviewId);
+
+    if (!review) {
+      throw new NotFoundException('Review not found');
+    }
+
+    if (review.lawyerId !== lawyerUserId) {
+      throw new ForbiddenException('You can only respond to reviews for your own profile');
+    }
+
+    const updated = await this.reviewsRepository.upsertLawyerResponse({
+      reviewId,
+      lawyerId: lawyerUserId,
+      text: input.text,
+    });
+
+    return this.toResponse(updated);
+  }
+
   private toResponse(row: ReviewRow): ReviewResponse {
     return {
       id: row.id,
@@ -81,6 +110,8 @@ export class ReviewsService implements IReviewsService {
       lawyerId: row.lawyerId,
       rating: row.rating,
       text: row.text,
+      lawyerResponse: row.lawyerResponse,
+      lawyerRespondedAt: row.lawyerRespondedAt,
       client: {
         id: row.clientId,
         firstName: row.clientFirstName,

@@ -5,8 +5,10 @@ import {
   Inject,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -22,10 +24,10 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { UseGuards } from '@nestjs/common';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { RespondToReviewDto } from './dto/respond-to-review.dto';
 import {
   REVIEWS_SERVICE,
   type IReviewsService,
@@ -56,6 +58,23 @@ export class ReviewsController {
       rating: dto.rating,
       text: dto.text,
     });
+  }
+
+  @Patch(':reviewId/response')
+  @Roles(Role.LAWYER)
+  @UseGuards(RolesGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Add or update a lawyer public response to a review' })
+  @ApiParam({ name: 'reviewId', type: String, format: 'uuid' })
+  @ApiResponse({ status: 200, description: 'Response saved' })
+  @ApiResponse({ status: 403, description: 'Review does not belong to this lawyer' })
+  @ApiResponse({ status: 404, description: 'Review not found' })
+  respondToReview(
+    @CurrentUser() user: RequestUser,
+    @Param('reviewId', ParseUUIDPipe) reviewId: string,
+    @Body() dto: RespondToReviewDto,
+  ): Promise<ReviewResponse> {
+    return this.reviewsService.respondToReview(user.userId, reviewId, { text: dto.text });
   }
 
   @Get('lawyer/:lawyerId')

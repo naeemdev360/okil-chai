@@ -9,6 +9,7 @@ import type {
   InsertReviewData,
   IReviewsRepository,
   ReviewRow,
+  UpsertReviewResponseData,
 } from './interfaces/reviews.interfaces';
 
 const REVIEW_SELECT = {
@@ -17,6 +18,8 @@ const REVIEW_SELECT = {
   lawyerId: reviews.lawyerId,
   rating: reviews.rating,
   text: reviews.text,
+  lawyerResponse: reviews.lawyerResponse,
+  lawyerRespondedAt: reviews.lawyerRespondedAt,
   createdAt: reviews.createdAt,
   clientId: reviews.clientId,
   clientFirstName: users.firstName,
@@ -50,6 +53,17 @@ export class ReviewsRepository extends BaseRepository implements IReviewsReposit
       .limit(1);
 
     return row!;
+  }
+
+  async findById(reviewId: string): Promise<ReviewRow | null> {
+    const [row] = await this.db
+      .select(REVIEW_SELECT)
+      .from(reviews)
+      .innerJoin(users, eq(reviews.clientId, users.id))
+      .where(eq(reviews.id, reviewId))
+      .limit(1);
+
+    return row ?? null;
   }
 
   async findByAppointmentIdAndClientId(
@@ -106,5 +120,24 @@ export class ReviewsRepository extends BaseRepository implements IReviewsReposit
         totalReviews: result?.totalReviews ?? 0,
       })
       .where(eq(lawyerProfiles.id, lawyerId));
+  }
+
+  async upsertLawyerResponse(data: UpsertReviewResponseData): Promise<ReviewRow> {
+    await this.db
+      .update(reviews)
+      .set({
+        lawyerResponse: data.text,
+        lawyerRespondedAt: new Date(),
+      })
+      .where(and(eq(reviews.id, data.reviewId), eq(reviews.lawyerId, data.lawyerId)));
+
+    const [row] = await this.db
+      .select(REVIEW_SELECT)
+      .from(reviews)
+      .innerJoin(users, eq(reviews.clientId, users.id))
+      .where(eq(reviews.id, data.reviewId))
+      .limit(1);
+
+    return row!;
   }
 }

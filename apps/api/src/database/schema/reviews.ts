@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, integer, pgTable, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 import { baseColumns } from './base-columns';
 import { appointments } from './appointments';
@@ -22,6 +22,8 @@ export const reviews = pgTable(
     rating: integer('rating').notNull(),
     text: text('text'),
     isModerated: boolean('is_moderated').notNull().default(false),
+    lawyerResponse: text('lawyer_response'),
+    lawyerRespondedAt: timestamp('lawyer_responded_at', { withTimezone: true }),
   },
   (table) => ([
     uniqueIndex('uq_review_appointment_client').on(table.appointmentId, table.clientId),

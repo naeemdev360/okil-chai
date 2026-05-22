@@ -12,6 +12,8 @@ export interface ReviewRow {
   readonly lawyerId: string;
   readonly rating: number;
   readonly text: string | null;
+  readonly lawyerResponse: string | null;
+  readonly lawyerRespondedAt: Date | null;
   readonly createdAt: Date;
   readonly clientId: string;
   readonly clientFirstName: string;
@@ -27,8 +29,15 @@ export interface InsertReviewData {
   readonly text: string | null;
 }
 
+export interface UpsertReviewResponseData {
+  readonly reviewId: string;
+  readonly lawyerId: string;
+  readonly text: string;
+}
+
 export interface IReviewsRepository {
   insert(data: InsertReviewData): Promise<ReviewRow>;
+  findById(reviewId: string): Promise<ReviewRow | null>;
   findByAppointmentIdAndClientId(
     appointmentId: string,
     clientId: string,
@@ -38,6 +47,7 @@ export interface IReviewsRepository {
     query: PaginationQuery,
   ): Promise<{ items: ReviewRow[]; total: number }>;
   updateLawyerAggregates(lawyerId: string): Promise<void>;
+  upsertLawyerResponse(data: UpsertReviewResponseData): Promise<ReviewRow>;
 }
 
 // ── Service input ─────────────────────────────────────────────────────────────
@@ -48,9 +58,18 @@ export interface SubmitReviewInput {
   readonly text?: string;
 }
 
+export interface RespondToReviewInput {
+  readonly text: string;
+}
+
 // ── Service contract ──────────────────────────────────────────────────────────
 
 export interface IReviewsService {
   submitReview(clientUserId: string, input: SubmitReviewInput): Promise<ReviewResponse>;
   getLawyerReviews(lawyerId: string, query: PaginationQuery): Promise<PaginatedReviewsResponse>;
+  respondToReview(
+    lawyerUserId: string,
+    reviewId: string,
+    input: RespondToReviewInput,
+  ): Promise<ReviewResponse>;
 }
