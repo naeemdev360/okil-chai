@@ -37,6 +37,13 @@ export type {
 } from './notification.schemas.js';
 
 export {
+  FavouriteToggleResponseSchema,
+} from './favourite.schemas.js';
+export type {
+  FavouriteToggleResponse,
+} from './favourite.schemas.js';
+
+export {
   CreateReviewRequestSchema,
   RespondToReviewRequestSchema,
   ReviewResponseSchema,
