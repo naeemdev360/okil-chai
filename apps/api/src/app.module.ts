@@ -27,6 +27,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { FavouritesModule } from './modules/favourites/favourites.module';
+import { MessagesModule } from './modules/messages/messages.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 const envFilePath =
@@ -64,6 +65,7 @@ const envFilePath =
     NotificationsModule,
     ReviewsModule,
     FavouritesModule,
+    MessagesModule,
     DashboardModule,
   ],
   providers: [

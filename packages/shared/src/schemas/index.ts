@@ -37,6 +37,19 @@ export type {
 } from './notification.schemas.js';
 
 export {
+  SendMessageRequestSchema,
+  MessageResponseSchema,
+  ConversationSummarySchema,
+  PaginatedMessagesSchema,
+} from './message.schemas.js';
+export type {
+  SendMessageRequest,
+  MessageResponse,
+  ConversationSummary,
+  PaginatedMessagesResponse,
+} from './message.schemas.js';
+
+export {
   FavouriteToggleResponseSchema,
 } from './favourite.schemas.js';
 export type {
