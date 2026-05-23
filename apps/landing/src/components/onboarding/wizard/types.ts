@@ -29,6 +29,7 @@ export interface WizardData {
   readonly endTime: string;
   readonly slotDuration: SlotDuration;
   readonly syncCalendar: boolean;
+  readonly photo: File | null;
 }
 
 export type UpdateFn = <K extends keyof WizardData>(key: K, value: WizardData[K]) => void;

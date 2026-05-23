@@ -38,11 +38,16 @@ export class UsersRepository extends BaseRepository implements IUsersRepository 
 
     const [roleRows, [lawyerRow]] = await Promise.all([
       this.db.select({ role: userRoles.role }).from(userRoles).where(eq(userRoles.userId, userId)),
-      this.db.select({ onboardingStep: lawyerProfiles.onboardingStep }).from(lawyerProfiles).where(eq(lawyerProfiles.userId, userId)).limit(1),
+      this.db
+        .select({ onboardingStep: lawyerProfiles.onboardingStep, photoUrl: lawyerProfiles.photoUrl })
+        .from(lawyerProfiles)
+        .where(eq(lawyerProfiles.userId, userId))
+        .limit(1),
     ]);
 
     return {
       ...userRow,
+      avatarUrl: userRow.avatarUrl ?? lawyerRow?.photoUrl ?? null,
       roles: roleRows.map((r) => r.role as Role),
       onboardingComplete: lawyerRow !== undefined && lawyerRow.onboardingStep >= LAWYER_ONBOARDING_TOTAL_STEPS,
       onboardingStep: lawyerRow?.onboardingStep ?? null,

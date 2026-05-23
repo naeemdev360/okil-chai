@@ -26,7 +26,7 @@ const ALL_STEPS = [
   { key: 'specs',        icon: Briefcase,  content: (d: WizardData, u: UpdateFn, e: Record<string, string>) => <StepSpecs        data={d} update={u} errors={e} /> },
   { key: 'pricing',      icon: DollarSign, content: (d: WizardData, u: UpdateFn, e: Record<string, string>) => <StepPricing      data={d} update={u} errors={e} /> },
   { key: 'availability', icon: Calendar,   content: (d: WizardData, u: UpdateFn, e: Record<string, string>) => <StepAvailability data={d} update={u} errors={e} /> },
-  { key: 'photo',        icon: Camera,     content: (d: WizardData, _u: UpdateFn, _e: Record<string, string>) => <StepPhoto      data={d} />                       },
+  { key: 'photo',        icon: Camera,     content: (d: WizardData, u: UpdateFn, e: Record<string, string>) => <StepPhoto       data={d} update={u} errors={e} />  },
 ] as const;
 
 const AUTH_STEPS = ALL_STEPS.slice(1);

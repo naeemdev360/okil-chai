@@ -12,6 +12,7 @@ export { FacebookIcon } from './FacebookIcon';
 // UI
 export { QuoteMarkIcon } from './QuoteMarkIcon';
 export { VerifiedCheckIcon } from './VerifiedCheckIcon';
+export { LawyerBadgeIcon } from './LawyerBadgeIcon';
 
 // Logo
 export { ScalesLogoIcon } from './ScalesLogoIcon';

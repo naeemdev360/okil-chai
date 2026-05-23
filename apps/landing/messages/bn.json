@@ -14,6 +14,7 @@
       "openNotifications": "বিজ্ঞপ্তি খুলুন",
       "noNotifications": "সব পড়া হয়েছে",
       "notificationsEmptyHint": "নতুন অ্যাপয়েন্টমেন্ট ও বার্তার বিজ্ঞপ্তি এখানে দেখাবে।",
+      "roleLawyer": "আইনজীবী",
       "onboarding": {
         "profileSetup": "প্রোফাইল সেটআপ",
         "stepsComplete": "{total} টির মধ্যে {current} টি ধাপ সম্পন্ন",
@@ -318,7 +319,9 @@
         "submitGeneric": "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
         "submitUnauthorized": "আপনার সেশন শেষ হয়ে গেছে। আবার সাইন ইন করুন।",
         "deleteDocGeneric": "নথি মুছতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
-        "deleteDocNotFound": "নথি পাওয়া যায়নি। এটি ইতিমধ্যে মুছে ফেলা হয়েছে হতে পারে।"
+        "deleteDocNotFound": "নথি পাওয়া যায়নি। এটি ইতিমধ্যে মুছে ফেলা হয়েছে হতে পারে।",
+        "photoRequired": "চালিয়ে যেতে একটি প্রোফাইল ছবি আপলোড করুন।",
+        "photoUploadFailed": "ছবি আপলোড করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"
       },
       "fields": {
         "password": "পাসওয়ার্ড",
@@ -394,6 +397,11 @@
         "addPhoto": "একটি পেশাদার ছবি যোগ করুন",
         "photoBody": "ছবিসহ প্রোফাইলে ৮ গুণ বেশি বুকিং হয়। পরিষ্কার, উজ্জ্বল হেডশট ব্যবহার করুন। সর্বনিম্ন ৪০০×৪০০ px।",
         "uploadPhoto": "ছবি আপলোড করুন",
+        "changePhoto": "ছবি পরিবর্তন করুন",
+        "removePhoto": "ছবি সরান",
+        "photoSpec": "JPG, PNG, বা WEBP · সর্বোচ্চ ৫ MB · সর্বনিম্ন ৪০০ × ৪০০ px",
+        "photoTooLarge": "{name} অনেক বড় — সর্বোচ্চ ৫ MB।",
+        "photoInvalidType": "{name} সমর্থিত ফরম্যাট নয় (JPG, PNG, WEBP)।",
         "almostDone": "প্রায় শেষ!",
         "almostDoneBullets": [
           "আপনার প্রোফাইল ২৪–৪৮ ঘণ্টার মধ্যে পর্যালোচনা করা হবে।",

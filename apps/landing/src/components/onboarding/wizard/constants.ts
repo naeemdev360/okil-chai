@@ -13,6 +13,7 @@ export const INITIAL_DATA: WizardData = {
   availability: { Mon: true, Tue: true, Wed: true, Thu: true, Fri: true, Sat: false, Sun: false },
   startTime: '09:00', endTime: '18:00', slotDuration: '60 min',
   syncCalendar: true,
+  photo: null as File | null,
 };
 
 export const SPECIALIZATION_OPTIONS = [

@@ -69,6 +69,12 @@ function validateAvailability(data: WizardData): StepErrors {
   return errors;
 }
 
+function validatePhoto(data: WizardData): StepErrors {
+  const errors: StepErrors = {};
+  if (!data.photo) errors['photo'] = 'photoRequired';
+  return errors;
+}
+
 // Order matches ALL_STEPS in the wizard (account first)
 export const STEP_VALIDATORS: ReadonlyArray<(d: WizardData) => StepErrors> = [
   validateAccount,
@@ -77,7 +83,7 @@ export const STEP_VALIDATORS: ReadonlyArray<(d: WizardData) => StepErrors> = [
   validateSpecs,
   validatePricing,
   validateAvailability,
-  () => ({}), // photo — optional
+  validatePhoto,
 ];
 
 // Slice used when the user is already authenticated (account step skipped)

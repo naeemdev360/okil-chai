@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import { cn } from '../../utils/cn';
 
 export interface AvatarProps {
@@ -9,6 +9,8 @@ export interface AvatarProps {
   /** Shows a presence dot when the subject is online. */
   readonly isOnline?: boolean;
   readonly className?: string;
+  /** When provided, displays the photo; falls back to initials if the image fails to load. */
+  readonly src?: string | null;
 }
 
 const SIZE_CLASSES: Record<NonNullable<AvatarProps['size']>, string> = {
@@ -25,19 +27,35 @@ const ONLINE_DOT_CLASSES: Record<NonNullable<AvatarProps['size']>, string> = {
   xl: 'size-3.5',
 };
 
-export function Avatar({ initials, size = 'md', isOnline = false, className }: AvatarProps) {
+export function Avatar({ initials, size = 'md', isOnline = false, className, src }: AvatarProps) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const showImage = src && !imgFailed;
+
   return (
     <span className="relative inline-flex shrink-0">
-      <span
-        aria-hidden="true"
-        className={cn(
-          'inline-flex items-center justify-center rounded-full bg-navy font-semibold text-white select-none',
-          SIZE_CLASSES[size],
-          className,
-        )}
-      >
-        {initials.slice(0, 2).toUpperCase()}
-      </span>
+      {showImage ? (
+        <img
+          src={src}
+          alt={initials}
+          onError={() => setImgFailed(true)}
+          className={cn(
+            'rounded-full object-cover',
+            SIZE_CLASSES[size],
+            className,
+          )}
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'inline-flex items-center justify-center rounded-full bg-navy font-semibold text-white select-none',
+            SIZE_CLASSES[size],
+            className,
+          )}
+        >
+          {initials.slice(0, 2).toUpperCase()}
+        </span>
+      )}
       {isOnline ? (
         <span
           className={cn(

@@ -77,7 +77,7 @@ export class AzureBlobStorageService implements IStorageService {
   }
 
   private resolvePublicUrl(key: string, blobUrl: string): string {
-    if (this.cdnUrl) return `${this.cdnUrl.replace(/\/$/, '')}/${key}`;
+    if (this.cdnUrl) return `${this.cdnUrl.replace(/\/$/, '')}/${this.containerName}/${key}`;
     return blobUrl;
   }
 }

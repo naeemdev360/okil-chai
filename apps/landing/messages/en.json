@@ -14,6 +14,7 @@
       "openNotifications": "Open notifications",
       "noNotifications": "You're all caught up",
       "notificationsEmptyHint": "Appointment and message notifications will appear here.",
+      "roleLawyer": "Lawyer",
       "onboarding": {
         "profileSetup": "Profile setup",
         "stepsComplete": "{current} of {total} steps done",
@@ -318,7 +319,9 @@
         "submitGeneric": "Something went wrong. Please try again.",
         "submitUnauthorized": "Your session has expired. Please sign in again.",
         "deleteDocGeneric": "Failed to delete the document. Please try again.",
-        "deleteDocNotFound": "Document not found. It may have already been removed."
+        "deleteDocNotFound": "Document not found. It may have already been removed.",
+        "photoRequired": "Please upload a profile photo to continue.",
+        "photoUploadFailed": "Failed to upload your photo. Please try again."
       },
       "fields": {
         "password": "Password",
@@ -394,6 +397,11 @@
         "addPhoto": "Add a Professional Photo",
         "photoBody": "Profiles with photos receive 8× more bookings. Use a clear, well-lit headshot in professional attire. Min 400×400 px.",
         "uploadPhoto": "Upload Photo",
+        "changePhoto": "Change Photo",
+        "removePhoto": "Remove photo",
+        "photoSpec": "JPG, PNG, or WEBP · Max 5 MB · Min 400 × 400 px",
+        "photoTooLarge": "{name} is too large — max 5 MB.",
+        "photoInvalidType": "{name} is not a supported format (JPG, PNG, WEBP).",
         "almostDone": "You're almost done!",
         "almostDoneBullets": [
           "Your profile will be reviewed within 24–48 hours.",

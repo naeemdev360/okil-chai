@@ -195,6 +195,16 @@ export function useOnboardingWizard() {
     [],
   );
 
+  // Clear field-level step errors as the user fills in values
+  useEffect(() => {
+    if (!data.photo) return;
+    setStepErrors((prev) => {
+      if (!prev['photo']) return prev;
+      const { photo: _, ...rest } = prev;
+      return rest;
+    });
+  }, [data.photo]);
+
   const handleContinue = useCallback(async () => {
     const validator = activeValidators[stepIdx];
     if (validator) {
@@ -261,11 +271,20 @@ export function useOnboardingWizard() {
   }, [stepIdx, router, locale]);
 
   const handleSubmit = useCallback(async () => {
+    const lastValidator = activeValidators[activeValidators.length - 1];
+    if (lastValidator) {
+      const raw = lastValidator(data);
+      if (Object.keys(raw).length > 0) {
+        setStepErrors(resolveErrors(raw));
+        return;
+      }
+    }
     setIsSubmitting(true);
     setSubmitError(null);
     try {
       const fd = new FormData();
       fd.append('step', String(LAWYER_ONBOARDING_TOTAL_STEPS));
+      if (data.photo) fd.append('profilePhoto', data.photo);
       await api.lawyers.saveOnboardingData(fd);
       clearOnboardingStep();
       await initialize();
@@ -285,7 +304,7 @@ export function useOnboardingWizard() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [initialize, router, locale, t]);
+  }, [activeValidators, data, resolveErrors, initialize, router, locale, t]);
 
   return {
     user,

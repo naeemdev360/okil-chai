@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  LawyerBadgeIcon,
 } from '@repo/ui';
 import { ChevronDown, ExternalLink, LogOut, MailWarning } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -19,8 +20,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { getPortalUrl, getPrimaryRole, usesLawyerPortal } from '../../lib/auth/portal-routes';
-import { useAuthStore } from '../../lib/store/auth.store';
 import { WIZARD_TOTAL_STEPS } from '../../lib/onboarding-progress';
+import { useAuthStore } from '../../lib/store/auth.store';
 
 interface UserMenuProps {
   readonly user: UserProfile;
@@ -66,19 +67,21 @@ export function UserMenu({ user }: UserMenuProps) {
           aria-label={t('openUserMenu')}
           className="flex items-center gap-1.5 rounded-md p-1 hover:bg-gray-50 transition-colors duration-200"
         >
-          {/* Pulse ring on avatar when lawyer has pending actions */}
           <span className="relative inline-flex">
-            <Avatar initials={initials} size="md" />
-            {showOnboardingBanner && (
+            <Avatar initials={initials} size="md" src={user.avatarUrl} />
+            {isLawyer && (
               <span
                 aria-hidden="true"
                 className={cn(
-                  'absolute -top-0.5 -right-0.5 size-2.5 rounded-full border-2 border-white',
-                  needsEmailVerify ? 'bg-amber-400' : 'bg-gold',
+                  'absolute -top-1 -right-1 flex items-center justify-center size-4 rounded-full border-2 border-white shadow-sm',
+                  'bg-gold text-white',
                 )}
-              />
+              >
+                <LawyerBadgeIcon className="size-2.5" />
+              </span>
             )}
           </span>
+
           <ChevronDown className="size-3.5 text-gray-400" aria-hidden="true" />
         </button>
       </DropdownMenuTrigger>
