@@ -1,9 +1,11 @@
+import { DocumentType } from '@repo/shared';
 import type { ConsultationType, DayKey, SlotDuration, WizardData } from './types';
 
 export const INITIAL_DATA: WizardData = {
   email: '', password: '', confirmPassword: '', termsAccepted: false,
   fullName: '', phone: '', experience: '', bio: '',
   barNumber: '', yearAdmitted: '', barCouncil: 'Bangladesh Bar Council',
+  documents: [] as File[], documentTypes: [] as DocumentType[], existingDocuments: [],
   specializations: [], languages: ['English', 'Bengali'],
   city: '',
   pricePerHour: 150,
@@ -14,9 +16,16 @@ export const INITIAL_DATA: WizardData = {
 };
 
 export const SPECIALIZATION_OPTIONS = [
-  'Criminal Law', 'Family Law', 'Corporate Law', 'Immigration',
-  'Real Estate', 'Employment', 'Intellectual Property', 'Tax Law',
-  'Personal Injury', 'Civil Litigation',
+  { slug: 'criminal-law',         label: 'Criminal Law' },
+  { slug: 'family-law',           label: 'Family Law' },
+  { slug: 'corporate-law',        label: 'Corporate Law' },
+  { slug: 'immigration',          label: 'Immigration' },
+  { slug: 'real-estate',          label: 'Real Estate' },
+  { slug: 'employment',           label: 'Employment' },
+  { slug: 'intellectual-property', label: 'Intellectual Property' },
+  { slug: 'tax-law',              label: 'Tax Law' },
+  { slug: 'personal-injury',      label: 'Personal Injury' },
+  { slug: 'civil-litigation',     label: 'Civil Litigation' },
 ] as const;
 
 export const LANGUAGE_OPTIONS = [

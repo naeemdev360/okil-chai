@@ -47,6 +47,7 @@ function mapProfileToData(profile: LawyerProfileResponse): Partial<WizardData> {
       .filter(Boolean),
     specializations:   profile.specializations.map((s) => s.slug),
     languages:         profile.languages.length ? profile.languages : ['English', 'Bengali'],
+    existingDocuments: profile.documents,
   };
 }
 
@@ -75,6 +76,12 @@ function buildStepFormData(stepKey: string, data: WizardData, stepNumber: number
     if (data.barNumber) fd.append('barNumber', data.barNumber);
     if (data.yearAdmitted) fd.append('yearAdmitted', data.yearAdmitted);
     if (data.barCouncil) fd.append('barCouncil', data.barCouncil);
+    for (const file of data.documents) {
+      fd.append('documents', file);
+    }
+    if (data.documentTypes.length > 0) {
+      fd.append('documentTypes', JSON.stringify(data.documentTypes));
+    }
   } else if (stepKey === 'specs') {
     if (data.specializations.length) fd.append('specializationSlugs', JSON.stringify(data.specializations));
     if (data.languages.length) fd.append('languages', JSON.stringify(data.languages));
@@ -115,6 +122,7 @@ export function useOnboardingWizard() {
   const [stepErrors, setStepErrors]     = useState<Record<string, string>>({});
   const [submitError, setSubmitError]   = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingDocId, setDeletingDocId] = useState<string | null>(null);
   const [dataInitialized, setDataInitialized] = useState(false);
   const [stepRestored, setStepRestored]       = useState(false);
   const [profileLoaded, setProfileLoaded]     = useState(false);
@@ -204,6 +212,15 @@ export function useOnboardingWizard() {
       setStepErrors({});
       setStepIdx(next);
       saveOnboardingStep(next);
+      if (currentStepKey === 'credentials') {
+        const refreshed = await api.lawyers.getMyProfile();
+        setData((prev) => ({
+          ...prev,
+          documents: [],
+          documentTypes: [],
+          existingDocuments: refreshed.documents,
+        }));
+      }
     } catch (error) {
       const message = isApiError(error) && error.statusCode === 401
         ? t('errors.submitUnauthorized')
@@ -214,6 +231,25 @@ export function useOnboardingWizard() {
       setIsSubmitting(false);
     }
   }, [activeValidators, stepIdx, data, currentStepKey, resolveErrors, t]);
+
+  const deleteExistingDoc = useCallback(async (documentId: string) => {
+    setDeletingDocId(documentId);
+    try {
+      await api.lawyers.deleteDocument(documentId);
+      // Only remove from local state after confirmed server deletion
+      setData((prev) => ({
+        ...prev,
+        existingDocuments: prev.existingDocuments.filter((d) => d.id !== documentId),
+      }));
+    } catch (error) {
+      const message = isApiError(error) && error.statusCode === 404
+        ? t('errors.deleteDocNotFound')
+        : t('errors.deleteDocGeneric');
+      toast.error(message);
+    } finally {
+      setDeletingDocId(null);
+    }
+  }, [t]);
 
   const handleBack = useCallback(() => {
     setStepErrors({});
@@ -260,9 +296,11 @@ export function useOnboardingWizard() {
     stepErrors,
     submitError,
     isSubmitting,
+    deletingDocId,
     currentStepKey,
     totalSteps: AUTH_STEP_KEYS.length,
     update,
+    deleteExistingDoc,
     handleContinue,
     handleBack,
     handleSubmit,

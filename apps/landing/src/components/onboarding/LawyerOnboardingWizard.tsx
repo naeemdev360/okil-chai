@@ -45,7 +45,9 @@ export function LawyerOnboardingWizard() {
     stepErrors,
     submitError,
     isSubmitting,
+    deletingDocId,
     update,
+    deleteExistingDoc,
     handleContinue,
     handleBack,
     handleSubmit,
@@ -158,7 +160,9 @@ export function LawyerOnboardingWizard() {
 
           {/* Step content */}
           <div className="px-9 py-8">
-            {currentStep.content(data, update, stepErrors)}
+            {currentStep.key === 'credentials'
+              ? <StepCredentials data={data} update={update} errors={stepErrors} onDeleteExistingDoc={deleteExistingDoc} deletingDocId={deletingDocId} />
+              : currentStep.content(data, update, stepErrors)}
           </div>
 
           {/* Submit-level error */}

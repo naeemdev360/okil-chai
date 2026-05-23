@@ -38,5 +38,8 @@ export function createLawyersApi(http: Http) {
 
     getMyAvailabilityRules: () =>
       http.get<AvailabilityRuleResponse[]>('/lawyers/me/availability'),
+
+    deleteDocument: (documentId: string) =>
+      http.remove(`/lawyers/me/documents/${documentId}`),
   } as const;
 }

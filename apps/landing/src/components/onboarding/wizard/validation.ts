@@ -44,6 +44,7 @@ function validateCredentials(data: WizardData): StepErrors {
       errors['yearAdmitted'] = 'yearAdmittedInvalid';
     }
   }
+  if (data.documents.length === 0 && data.existingDocuments.length === 0) errors['documents'] = 'documentsRequired';
   return errors;
 }
 

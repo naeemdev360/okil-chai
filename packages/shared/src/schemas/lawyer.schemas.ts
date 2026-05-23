@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ConsultationType } from '../enums/consultation-type.enum.js';
+import { DocumentStatus } from '../enums/document-status.enum.js';
 import { DocumentType } from '../enums/document-type.enum.js';
 import { VerificationStatus } from '../enums/verification-status.enum.js';
 
@@ -59,6 +60,16 @@ export type CompleteOnboardingRequest = z.infer<typeof CompleteOnboardingSchema>
 
 // ── Response schemas ──────────────────────────────────────────────────────────
 
+export const LawyerDocumentSchema = z.object({
+  id:        z.string().uuid(),
+  type:      z.nativeEnum(DocumentType),
+  name:      z.string(),
+  sizeBytes: z.number().int(),
+  status:    z.nativeEnum(DocumentStatus),
+});
+
+export type LawyerDocumentResponse = z.infer<typeof LawyerDocumentSchema>;
+
 export const LawyerProfileSchema = z.object({
   id: z.string().uuid(),
   userId: z.string().uuid(),
@@ -77,6 +88,7 @@ export const LawyerProfileSchema = z.object({
   consultationTypes: z.array(z.nativeEnum(ConsultationType)),
   specializations: z.array(z.object({ slug: z.string(), name: z.string(), isPrimary: z.boolean() })),
   languages: z.array(z.string()),
+  documents: z.array(LawyerDocumentSchema),
   verificationStatus: z.nativeEnum(VerificationStatus),
   onboardingStep: z.number().int(),
   isPublished: z.boolean(),

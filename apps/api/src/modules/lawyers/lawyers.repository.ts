@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConsultationType, DocumentType, VerificationStatus } from '@repo/shared';
-import type { AvailabilityRuleResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
+import { ConsultationType, DocumentStatus, DocumentType, VerificationStatus } from '@repo/shared';
+import type { AvailabilityRuleResponse, LawyerDocumentResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
 import { and, count, eq, gte, ilike, inArray, lte, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
@@ -37,7 +37,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
 
     if (!profile) return null;
 
-    const [langRows, specRows] = await Promise.all([
+    const [langRows, specRows, docRows] = await Promise.all([
       this.db
         .select({ language: lawyerLanguages.language })
         .from(lawyerLanguages)
@@ -51,7 +51,25 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
         .from(lawyerSpecializations)
         .innerJoin(specializations, eq(lawyerSpecializations.specializationId, specializations.id))
         .where(eq(lawyerSpecializations.lawyerId, profile.id)),
+      this.db
+        .select({
+          id: lawyerDocuments.id,
+          type: lawyerDocuments.type,
+          name: lawyerDocuments.name,
+          sizeBytes: lawyerDocuments.sizeBytes,
+          status: lawyerDocuments.status,
+        })
+        .from(lawyerDocuments)
+        .where(eq(lawyerDocuments.lawyerId, profile.id)),
     ]);
+
+    const documents: LawyerDocumentResponse[] = docRows.map((d) => ({
+      id: d.id,
+      type: d.type as DocumentType,
+      name: d.name,
+      sizeBytes: d.sizeBytes,
+      status: d.status as DocumentStatus,
+    }));
 
     return {
       id: profile.id,
@@ -75,6 +93,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
         isPrimary: s.isPrimary,
       })),
       languages: langRows.map((l) => l.language),
+      documents,
       verificationStatus: profile.verificationStatus as VerificationStatus,
       onboardingStep: profile.onboardingStep,
       isPublished: profile.isPublished,

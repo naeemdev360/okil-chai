@@ -7,10 +7,10 @@ import type { StepProps } from '../types';
 export function StepSpecs({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
-  const toggleSpec = (s: string) =>
-    update('specializations', data.specializations.includes(s)
-      ? data.specializations.filter((x) => x !== s)
-      : data.specializations.length < 5 ? [...data.specializations, s] : data.specializations);
+  const toggleSpec = (slug: string) =>
+    update('specializations', data.specializations.includes(slug)
+      ? data.specializations.filter((x) => x !== slug)
+      : data.specializations.length < 5 ? [...data.specializations, slug] : data.specializations);
 
   const toggleLang = (l: string) =>
     update('languages', data.languages.includes(l)
@@ -25,9 +25,9 @@ export function StepSpecs({ data, update, errors }: StepProps) {
         error={errors?.['specializations']}
       >
         <div className="flex flex-wrap gap-2 mt-1">
-          {SPECIALIZATION_OPTIONS.map((s) => (
-            <ToggleChip key={s} active={data.specializations.includes(s)} rounded onClick={() => toggleSpec(s)}>
-              {s}
+          {SPECIALIZATION_OPTIONS.map(({ slug, label }) => (
+            <ToggleChip key={slug} active={data.specializations.includes(slug)} rounded onClick={() => toggleSpec(slug)}>
+              {label}
             </ToggleChip>
           ))}
         </div>

@@ -1,5 +1,6 @@
 // Utilities
 export { cn } from './utils/cn';
+export { formatBytes } from './utils/format';
 
 // Loading
 export { Spinner } from './components/loading/spinner';

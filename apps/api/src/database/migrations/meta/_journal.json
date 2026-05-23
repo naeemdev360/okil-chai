@@ -22,6 +22,27 @@
       "when": 1779215447305,
       "tag": "0002_careless_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779300000000,
+      "tag": "0003_payments_payout",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779300000001,
+      "tag": "0004_review_lawyer_response",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779300000002,
+      "tag": "0005_seed_specializations",
+      "breakpoints": true
     }
   ]
 }

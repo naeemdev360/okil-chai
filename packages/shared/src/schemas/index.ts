@@ -99,6 +99,7 @@ export type {
 
 export {
   CompleteOnboardingSchema,
+  LawyerDocumentSchema,
   LawyerProfileSchema,
   LawyerPublicProfileSchema,
   PaginatedLawyersSchema,
@@ -107,6 +108,7 @@ export {
 } from './lawyer.schemas.js';
 export type {
   CompleteOnboardingRequest,
+  LawyerDocumentResponse,
   LawyerProfileResponse,
   LawyerPublicProfileResponse,
   PaginatedLawyersResponse,

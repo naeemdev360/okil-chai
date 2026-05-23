@@ -314,8 +314,11 @@
         "pricePerHour": "Hourly rate must be greater than 0.",
         "consultationTypes": "Select at least one consultation type.",
         "availability": "Select at least one working day.",
+        "documentsRequired": "Please upload at least one credential document.",
         "submitGeneric": "Something went wrong. Please try again.",
-        "submitUnauthorized": "Your session has expired. Please sign in again."
+        "submitUnauthorized": "Your session has expired. Please sign in again.",
+        "deleteDocGeneric": "Failed to delete the document. Please try again.",
+        "deleteDocNotFound": "Document not found. It may have already been removed."
       },
       "fields": {
         "password": "Password",
@@ -344,6 +347,23 @@
         "uploadHint": "Bar certificate, ID proof. PDF or image — encrypted in transit.",
         "uploadCta": "Drop files here or click to browse",
         "uploadSpec": "PDF, JPG, PNG · Max 10 MB per file",
+        "previouslyUploadedFiles": "Previously uploaded documents",
+        "uploadedFiles": "Uploaded documents",
+        "removeFile": "Remove file",
+        "docStatus": {
+          "pending":  "Pending review",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "fileTooLarge": "{name} exceeds the 10 MB limit.",
+        "fileInvalidType": "{name} is not a supported format (PDF, JPG, PNG).",
+        "docType": {
+          "barCertificate": "Bar Certificate",
+          "lawDegree": "Law Degree",
+          "governmentId": "Government ID",
+          "certification": "Certification",
+          "other": "Other"
+        },
         "verificationNote": "Verification typically takes 24–48 hours. We cross-check your bar number with the official registry. You'll receive an email once approved.",
         "practiceAreas": "Practice Areas",
         "practiceAreasHint": "Select up to 5",
