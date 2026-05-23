@@ -61,11 +61,12 @@ export type CompleteOnboardingRequest = z.infer<typeof CompleteOnboardingSchema>
 // ── Response schemas ──────────────────────────────────────────────────────────
 
 export const LawyerDocumentSchema = z.object({
-  id:        z.string().uuid(),
-  type:      z.nativeEnum(DocumentType),
-  name:      z.string(),
-  sizeBytes: z.number().int(),
-  status:    z.nativeEnum(DocumentStatus),
+  id:         z.string().uuid(),
+  type:       z.nativeEnum(DocumentType),
+  name:       z.string(),
+  sizeBytes:  z.number().int(),
+  status:     z.nativeEnum(DocumentStatus),
+  uploadedAt: z.string().datetime().optional(),
 });
 
 export type LawyerDocumentResponse = z.infer<typeof LawyerDocumentSchema>;

@@ -80,6 +80,12 @@ export { PortalAuthGate } from './components/auth/portal-auth-gate';
 export type { PortalAuthGateProps, PortalKind } from './components/auth/portal-auth-gate';
 
 // Primitives
+export { ConfirmDialog } from './components/ui/confirm-dialog';
+export type { ConfirmDialogProps } from './components/ui/confirm-dialog';
+
+export { DocumentItem } from './components/ui/document-item';
+export type { DocumentItemProps } from './components/ui/document-item';
+
 export { Button, buttonVariants } from './components/ui/button';
 export type { ButtonProps } from './components/ui/button';
 
@@ -144,3 +150,6 @@ export {
   SelectItem,
   SelectSeparator,
 } from './components/ui/select';
+
+export { TimePicker } from './components/ui/time-picker';
+export type { TimePickerProps } from './components/ui/time-picker';

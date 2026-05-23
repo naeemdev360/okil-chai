@@ -1,7 +1,7 @@
 'use client';
 
 import { Role } from '@repo/shared';
-import { Button, cn, SurfaceCard } from '@repo/ui';
+import { Button, cn, PageLoader, SurfaceCard } from '@repo/ui';
 import {
   Briefcase, Calendar, Camera, Check, ChevronLeft, ChevronRight,
   DollarSign, Lock, Shield, User,
@@ -9,13 +9,13 @@ import {
 import { useTranslations } from 'next-intl';
 import { brand } from '../../lib/brand';
 import { EmailVerificationGate } from '../auth/EmailVerificationGate';
-import { StepIcon } from './wizard/ui';
 import {
   StepAccount, StepAvailability, StepCredentials,
   StepPersonal, StepPhoto, StepPricing, StepSpecs,
 } from './wizard/steps';
+import type { UpdateFn, WizardData } from './wizard/types';
+import { StepIcon } from './wizard/ui';
 import { useOnboardingWizard } from './wizard/useOnboardingWizard';
-import type { WizardData, UpdateFn } from './wizard/types';
 
 // ─── Steps rendering config (icons + content — presentation only) ─────────────
 
@@ -60,11 +60,7 @@ export function LawyerOnboardingWizard() {
     : `calc(${(stepIdx / (activeSteps.length - 1)) * 100}% - 38px)`;
 
   if (isAuthLoading) {
-    return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="font-sans text-sm text-gray-500 animate-pulse">{t('loadingAuth')}</p>
-      </div>
-    );
+    return <PageLoader fullPage message={t('loadingAuth')} />;
   }
 
   if (!isAuthenticated || (user && !user.roles.includes(Role.LAWYER))) {

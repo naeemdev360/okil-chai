@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import { Input } from '@repo/ui';
-import { Field, ToggleChip } from '../ui';
+import { Input, ToggleChip } from '@repo/ui';
+import { Field } from '../ui';
 import { SPECIALIZATION_OPTIONS, LANGUAGE_OPTIONS } from '../constants';
 import type { StepProps } from '../types';
 

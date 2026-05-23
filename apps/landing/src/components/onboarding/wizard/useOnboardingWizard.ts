@@ -71,7 +71,6 @@ function buildStepFormData(stepKey: string, data: WizardData, stepNumber: number
     if (data.phone) fd.append('phone', data.phone);
     fd.append('yearsOfExperience', String(parseInt(data.experience, 10) || 0));
     if (data.bio) fd.append('bio', data.bio);
-    if (data.city) fd.append('city', data.city);
   } else if (stepKey === 'credentials') {
     if (data.barNumber) fd.append('barNumber', data.barNumber);
     if (data.yearAdmitted) fd.append('yearAdmitted', data.yearAdmitted);
@@ -85,11 +84,12 @@ function buildStepFormData(stepKey: string, data: WizardData, stepNumber: number
   } else if (stepKey === 'specs') {
     if (data.specializations.length) fd.append('specializationSlugs', JSON.stringify(data.specializations));
     if (data.languages.length) fd.append('languages', JSON.stringify(data.languages));
-    if (data.consultationTypes.length) {
-      fd.append('consultationTypes', JSON.stringify(data.consultationTypes.map((ct) => ct.toUpperCase())));
-    }
+    if (data.city) fd.append('city', data.city);
   } else if (stepKey === 'pricing') {
     if (data.pricePerHour) fd.append('pricePerHour', String(data.pricePerHour));
+    if (data.consultationTypes.length) {
+      fd.append('consultationTypes', JSON.stringify(data.consultationTypes.map((ct) => ct.replace('-', '_').toUpperCase())));
+    }
   }
   return fd;
 }

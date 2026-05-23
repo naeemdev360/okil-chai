@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { PLATFORM_FEE_RATE } from '@repo/shared';
 
 export default registerAs('app', () => ({
   port: parseInt(process.env['PORT'] ?? '4000', 10),
@@ -8,5 +9,5 @@ export default registerAs('app', () => ({
     .map((o) => o.trim()),
   apiBaseUrl: process.env['API_BASE_URL'] ?? 'http://localhost:4000',
   name: process.env['APP_NAME'] ?? 'OkilChai',
-  platformFeePercent: parseFloat(process.env['PLATFORM_FEE_PERCENT'] ?? '10'),
+  platformFeePercent: parseFloat(process.env['PLATFORM_FEE_PERCENT'] ?? String(PLATFORM_FEE_RATE * 100)),
 }));

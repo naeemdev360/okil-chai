@@ -1,10 +1,11 @@
 'use client';
 
 import { DocumentStatus, DocumentType } from '@repo/shared';
-import { Badge, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, cn, formatBytes } from '@repo/ui';
+import { ConfirmDialog, DocumentItem, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, cn, formatBytes } from '@repo/ui';
 import type { BadgeProps } from '@repo/ui';
 import { Check, FileText, Loader2, Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { BAR_COUNCILS } from '../constants';
 import { ACCEPTED_ATTR, useDocumentUpload } from '../hooks/useDocumentUpload';
 import type { StepProps } from '../types';
@@ -24,8 +25,13 @@ const DOC_TYPE_OPTIONS: Array<{ value: DocumentType; labelKey: string }> = [
   { value: DocumentType.OTHER,           labelKey: 'docType.other'          },
 ];
 
+type PendingDelete =
+  | { kind: 'new'; index: number }
+  | { kind: 'existing'; id: string };
+
 export function StepCredentials({ data, update, errors, onDeleteExistingDoc, deletingDocId }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
 
   const {
     inputRef,
@@ -41,6 +47,16 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
     removeFile,
     changeDocType,
   } = useDocumentUpload({ documents: data.documents, documentTypes: data.documentTypes, update, t });
+
+  function handleConfirmDelete() {
+    if (!pendingDelete) return;
+    if (pendingDelete.kind === 'new') {
+      removeFile(pendingDelete.index);
+    } else {
+      void onDeleteExistingDoc?.(pendingDelete.id);
+    }
+    setPendingDelete(null);
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -113,32 +129,28 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
           {data.existingDocuments.map((doc) => {
             const isDeleting = deletingDocId === doc.id;
             return (
-              <li
-                key={doc.id}
-                className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg"
-              >
-                <FileText className="size-4 text-navy shrink-0" aria-hidden="true" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-sans text-sm font-medium text-navy truncate">{doc.name}</p>
-                  <p className="font-sans text-xs text-gray-400">{formatBytes(doc.sizeBytes)}</p>
-                </div>
-                <span className="font-sans text-[11px] font-medium px-2 py-0.5 rounded border shrink-0 bg-gray-50 text-gray-600 border-gray-200">
-                  {t(DOC_TYPE_OPTIONS.find((o) => o.value === doc.type)?.labelKey ?? 'docType.other')}
-                </span>
-                <Badge variant={STATUS_VARIANT[doc.status]} className="shrink-0">
-                  {t(`docStatus.${doc.status.toLowerCase()}`)}
-                </Badge>
-                <button
-                  type="button"
-                  disabled={isDeleting}
-                  onClick={() => { void onDeleteExistingDoc?.(doc.id); }}
-                  aria-label={t('removeFile')}
-                  className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {isDeleting
-                    ? <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-                    : <X className="size-4" aria-hidden="true" />}
-                </button>
+              <li key={doc.id}>
+                <DocumentItem
+                  name={doc.name}
+                  sizeBytes={doc.sizeBytes}
+                  typeLabel={t(DOC_TYPE_OPTIONS.find((o) => o.value === doc.type)?.labelKey ?? 'docType.other')}
+                  status={t(`docStatus.${doc.status.toLowerCase()}`)}
+                  statusVariant={STATUS_VARIANT[doc.status]}
+                  uploadedAt={doc.uploadedAt}
+                  actions={
+                    <button
+                      type="button"
+                      disabled={isDeleting}
+                      onClick={() => setPendingDelete({ kind: 'existing', id: doc.id })}
+                      aria-label={t('removeFile')}
+                      className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {isDeleting
+                        ? <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                        : <X className="size-4" aria-hidden="true" />}
+                    </button>
+                  }
+                />
               </li>
             );
           })}
@@ -172,7 +184,7 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
               </Select>
               <button
                 type="button"
-                onClick={() => removeFile(idx)}
+                onClick={() => setPendingDelete({ kind: 'new', index: idx })}
                 aria-label={t('removeFile')}
                 className="p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
               >
@@ -195,6 +207,18 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
         <Check className="size-4 text-success shrink-0 mt-0.5" strokeWidth={2.2} aria-hidden="true" />
         <p className="font-sans text-xs text-gray-800 leading-relaxed">{t('verificationNote')}</p>
       </div>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => { if (!open) setPendingDelete(null); }}
+        onConfirm={handleConfirmDelete}
+        variant="destructive"
+        title={t('removeFileConfirmTitle')}
+        description={t('removeFileConfirmDesc')}
+        confirmLabel={t('removeFileConfirmOk')}
+        cancelLabel={t('removeFileConfirmCancel')}
+        isLoading={pendingDelete !== null && pendingDelete.kind === 'existing' && deletingDocId === pendingDelete.id}
+      />
     </div>
   );
 }

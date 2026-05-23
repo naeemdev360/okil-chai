@@ -1,4 +1,5 @@
 import { Calendar, Clock, CheckCircle } from 'lucide-react';
+import { CLIENT_SERVICE_FEE_RATE } from '@repo/shared';
 import { StarRating } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
 import { CONSULT_META } from './constants';
@@ -21,7 +22,7 @@ export function LawyerSummaryCard({
   consultType,
 }: LawyerSummaryCardProps) {
   const fee = consultType ? consultFee(lawyer, consultType) : lawyer.pricePerHour;
-  const platformFee = Math.round(fee * 0.05);
+  const platformFee = Math.round(fee * CLIENT_SERVICE_FEE_RATE);
   const total = fee + platformFee;
 
   const ConsultIcon = consultType ? CONSULT_META[consultType].icon : null;
@@ -77,7 +78,7 @@ export function LawyerSummaryCard({
           <span>${fee}.00</span>
         </div>
         <div className="flex justify-between font-sans text-[13px] text-gray-600">
-          <span>Platform fee (5%)</span>
+          <span>Platform fee ({CLIENT_SERVICE_FEE_RATE * 100}%)</span>
           <span>${platformFee}.00</span>
         </div>
         <div className="flex justify-between font-sans text-sm font-bold text-navy border-t border-gray-100 pt-2.5 mt-1">

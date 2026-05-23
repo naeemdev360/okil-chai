@@ -350,6 +350,10 @@
         "previouslyUploadedFiles": "আগে আপলোড করা নথি",
         "uploadedFiles": "আপলোড করা নথি",
         "removeFile": "ফাইল সরান",
+        "removeFileConfirmTitle": "এই ডকুমেন্টটি সরাবেন?",
+        "removeFileConfirmDesc": "এই ডকুমেন্টটি স্থায়ীভাবে মুছে যাবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+        "removeFileConfirmOk": "হ্যাঁ, সরান",
+        "removeFileConfirmCancel": "রাখুন",
         "docStatus": {
           "pending":  "পর্যালোচনা চলছে",
           "approved": "অনুমোদিত",

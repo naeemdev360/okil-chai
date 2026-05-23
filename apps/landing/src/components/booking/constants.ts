@@ -1,9 +1,10 @@
 import { Video, Phone, Building2 } from 'lucide-react';
+import { CLIENT_SERVICE_FEE_RATE } from '@repo/shared';
 import type { BookingStep, ConsultMeta } from './types';
 
-export const PLATFORM_FEE_RATE = 0.05;  // 5% — charged on top of consultation fee
-export const TAX_RATE          = 0.08;  // 8% applied on (base + platform)
-export const PROMO_FIRST20_DISCOUNT = 20; // BDT/USD flat discount for FIRST20
+export { CLIENT_SERVICE_FEE_RATE as PLATFORM_FEE_RATE };
+export const TAX_RATE               = 0.08;  // 8% applied on (base + platform)
+export const PROMO_FIRST20_DISCOUNT = 20;    // BDT/USD flat discount for FIRST20
 
 export const WEEK_DAYS = [
   { label: 'Mon', date: 'May 4',  available: false },

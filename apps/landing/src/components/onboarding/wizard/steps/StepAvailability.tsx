@@ -1,8 +1,8 @@
+import { Checkbox, TimePicker, ToggleChip } from '@repo/ui';
 import { useTranslations } from 'next-intl';
-import { Input } from '@repo/ui';
-import { Field, ToggleChip } from '../ui';
 import { DAYS, SLOT_DURATIONS } from '../constants';
 import type { DayKey, StepProps } from '../types';
+import { Field } from '../ui';
 
 export function StepAvailability({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
@@ -19,15 +19,15 @@ export function StepAvailability({ data, update, errors }: StepProps) {
               {d}
             </ToggleChip>
           ))}
-        </div>
+        </div> 
       </Field>
 
       <div className="grid grid-cols-2 gap-5">
         <Field label={t('startTime')}>
-          <Input type="time" value={data.startTime} onChange={(e) => update('startTime', e.target.value)} />
+          <TimePicker value={data.startTime} onChange={(v) => update('startTime', v)} />
         </Field>
         <Field label={t('endTime')}>
-          <Input type="time" value={data.endTime} onChange={(e) => update('endTime', e.target.value)} />
+          <TimePicker value={data.endTime} onChange={(v) => update('endTime', v)} />
         </Field>
       </div>
 
@@ -42,11 +42,10 @@ export function StepAvailability({ data, update, errors }: StepProps) {
       </Field>
 
       <label className="flex items-center gap-3 p-4 bg-cream rounded-md border border-gray-100 cursor-pointer">
-        <input
-          type="checkbox"
+        <Checkbox
           checked={data.syncCalendar}
-          onChange={(e) => update('syncCalendar', e.target.checked)}
-          className="size-4 accent-gold"
+          onCheckedChange={(checked) => update('syncCalendar', checked as boolean)}
+          variant="gold"
         />
         <div>
           <p className="font-sans text-sm font-semibold text-navy">{t('googleCalSync')}</p>

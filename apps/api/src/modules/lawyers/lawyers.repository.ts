@@ -58,6 +58,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
           name: lawyerDocuments.name,
           sizeBytes: lawyerDocuments.sizeBytes,
           status: lawyerDocuments.status,
+          createdAt: lawyerDocuments.createdAt,
         })
         .from(lawyerDocuments)
         .where(eq(lawyerDocuments.lawyerId, profile.id)),
@@ -69,6 +70,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
       name: d.name,
       sizeBytes: d.sizeBytes,
       status: d.status as DocumentStatus,
+      uploadedAt: d.createdAt.toISOString(),
     }));
 
     return {

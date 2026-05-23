@@ -350,6 +350,10 @@
         "previouslyUploadedFiles": "Previously uploaded documents",
         "uploadedFiles": "Uploaded documents",
         "removeFile": "Remove file",
+        "removeFileConfirmTitle": "Remove this document?",
+        "removeFileConfirmDesc": "This document will be permanently removed. This action cannot be undone.",
+        "removeFileConfirmOk": "Yes, remove",
+        "removeFileConfirmCancel": "Keep it",
         "docStatus": {
           "pending":  "Pending review",
           "approved": "Approved",

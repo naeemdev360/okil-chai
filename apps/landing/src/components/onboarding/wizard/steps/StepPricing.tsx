@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { PLATFORM_FEE_RATE } from '@repo/shared';
 import { Input, cn } from '@repo/ui';
 import { Field } from '../ui';
 import { CONSULTATION_TYPES } from '../constants';
@@ -7,8 +8,8 @@ import type { ConsultationType, StepProps } from '../types';
 
 export function StepPricing({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
-  const payout = Math.round(data.pricePerHour * 0.9);
-  const fee    = Math.round(data.pricePerHour * 0.1);
+  const fee    = Math.round(data.pricePerHour * PLATFORM_FEE_RATE);
+  const payout = data.pricePerHour - fee;
 
   const toggleType = (k: ConsultationType) =>
     update('consultationTypes', data.consultationTypes.includes(k)
