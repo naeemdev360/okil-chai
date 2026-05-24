@@ -14,7 +14,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "ts-node --transpile-only src/database/seeds/seed-lawyers.ts"
+    "db:seed": "ts-node --transpile-only src/database/seeds/seed-lawyers.ts",
+    "db:seed:reviews": "ts-node --transpile-only src/database/seeds/seed-reviews.ts"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.31.0",

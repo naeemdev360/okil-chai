@@ -7,7 +7,7 @@ export interface ReviewData {
   readonly author: string;
   readonly rating: number;
   readonly date: string;
-  readonly title: string;
+  readonly title?: string;
   readonly body: string;
   readonly tags?: readonly string[];
   readonly reply?: string | null;
@@ -38,7 +38,7 @@ export function ReviewCard({ review, replierName }: ReviewCardProps) {
         <Badge variant="available" className="shrink-0">✓ Verified</Badge>
       </div>
 
-      <h4 className="font-heading text-[15px] font-semibold text-navy mb-1.5">{review.title}</h4>
+      {review.title && <h4 className="font-heading text-[15px] font-semibold text-navy mb-1.5">{review.title}</h4>}
       <p className="font-sans text-sm text-gray-800 leading-relaxed mb-3">{review.body}</p>
 
       {review.tags && review.tags.length > 0 && (

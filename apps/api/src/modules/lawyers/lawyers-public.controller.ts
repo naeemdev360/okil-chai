@@ -26,7 +26,7 @@ export class LawyersPublicController {
     @Query() query: SearchLawyersDto,
     @CurrentUser() user: RequestUser | undefined,
   ): Promise<PaginatedLawyersResponse> {
-    const excludeUserId = user?.roles.includes(Role.LAWYER) ? user.userId : undefined;
+    const excludeUserId = user?.roles?.includes(Role.LAWYER) ? user.userId : undefined;
     return this.lawyersService.searchLawyers({ ...query, excludeUserId });
   }
 

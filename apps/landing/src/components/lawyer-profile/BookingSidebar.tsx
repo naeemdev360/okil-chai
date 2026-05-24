@@ -2,21 +2,24 @@
 
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
-import { Lock, Phone, Video } from 'lucide-react';
+import { Lock, Phone, Video, Building2 } from 'lucide-react';
 import { Button, SurfaceCard } from '@repo/ui';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
+import type { LawyerPublicProfileResponse } from '@repo/shared';
+import { ConsultationType } from '@repo/shared';
 
 interface BookingSidebarProps {
-  readonly lawyer: Lawyer;
+  readonly lawyer: LawyerPublicProfileResponse;
 }
 
-const CONSULT_OPTIONS = [
-  { icon: Video, label: 'Video Call',  priceDelta: 0  },
-  { icon: Phone, label: 'Phone Call',  priceDelta: -20 },
-] as const;
+const CONSULT_META: Record<ConsultationType, { icon: React.ElementType; label: string }> = {
+  [ConsultationType.VIDEO]:     { icon: Video,     label: 'Video Call'  },
+  [ConsultationType.PHONE]:     { icon: Phone,     label: 'Phone Call'  },
+  [ConsultationType.IN_PERSON]: { icon: Building2, label: 'In-Person'   },
+};
 
 export function BookingSidebar({ lawyer }: BookingSidebarProps) {
   const locale = useLocale();
+  const price = parseFloat(lawyer.pricePerHour ?? '0');
 
   return (
     <SurfaceCard className="sticky top-[88px]">
@@ -25,19 +28,26 @@ export function BookingSidebar({ lawyer }: BookingSidebarProps) {
         No commitment. Cancel free up to 24 hours before.
       </p>
 
-      <div className="flex flex-col gap-2.5 mb-5">
-        {CONSULT_OPTIONS.map(({ icon: Icon, label, priceDelta }) => (
-          <div key={label} className="flex items-center justify-between px-3.5 py-3 border border-gray-200 rounded-lg">
-            <span className="flex items-center gap-2 font-sans text-sm text-gray-800">
-              <Icon className="size-4 text-gray-400" aria-hidden />
-              {label}
-            </span>
-            <span className="font-sans text-sm font-medium text-navy">
-              from ${lawyer.pricePerHour + priceDelta}/hr
-            </span>
-          </div>
-        ))}
-      </div>
+      {lawyer.consultationTypes.length > 0 && (
+        <div className="flex flex-col gap-2.5 mb-5">
+          {lawyer.consultationTypes.map((type) => {
+            const { icon: Icon, label } = CONSULT_META[type];
+            return (
+              <div key={type} className="flex items-center justify-between px-3.5 py-3 border border-gray-200 rounded-lg">
+                <span className="flex items-center gap-2 font-sans text-sm text-gray-800">
+                  <Icon className="size-4 text-gray-400" aria-hidden />
+                  {label}
+                </span>
+                {price > 0 && (
+                  <span className="font-sans text-sm font-medium text-navy">
+                    from ৳{price}/hr
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <Button variant="gold" size="lg" className="w-full justify-center" asChild>
         <Link href={`/${locale}/book/${lawyer.id}`}>Book Now</Link>

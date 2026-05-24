@@ -35,21 +35,23 @@ function GridAvatar({
 }) {
   return (
     <div className="relative mb-4">
-      <div className="size-24 rounded-full bg-white/10 border-[2.5px] border-white/25 overflow-hidden flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.24)]">
+      <div className="size-28 rounded-full overflow-hidden flex items-center justify-center shadow-[0_12px_40px_rgba(0,0,0,0.32)] ring-[3px] ring-white/20">
         {photoUrl ? (
           <img src={photoUrl} alt="" aria-hidden="true" className="w-full h-full object-cover" />
         ) : (
-          <span className="font-heading text-[32px] font-bold text-white leading-none tracking-tight">
-            {initials}
-          </span>
+          <div className="w-full h-full bg-white/10 flex items-center justify-center">
+            <span className="font-heading text-[38px] font-bold text-white leading-none tracking-tight">
+              {initials}
+            </span>
+          </div>
         )}
       </div>
       {verified && (
         <span
-          className="absolute -bottom-0.5 -right-0.5 size-6 bg-gold rounded-full flex items-center justify-center ring-[2.5px] ring-navy shadow-sm"
+          className="absolute -bottom-0.5 -right-0.5 size-7 bg-gold rounded-full flex items-center justify-center ring-[2.5px] ring-navy shadow-sm"
           aria-label="Verified"
         >
-          <VerifiedCheckIcon className="size-3" />
+          <VerifiedCheckIcon className="size-3.5" />
         </span>
       )}
     </div>

@@ -5,7 +5,6 @@ import type {
   LawyerAvailability,
   LawyerAvailabilityParams,
   LawyerDashboard,
-  LawyerProfile,
   LawyerSearchParams,
 } from '../types/lawyers.types';
 
@@ -15,7 +14,7 @@ export function createLawyersApi(http: Http) {
       http.list<LawyerPublicProfileResponse>('/lawyers', { params }),
 
     getById: (id: string) =>
-      http.get<LawyerProfile>(`/lawyers/${id}`),
+      http.get<LawyerPublicProfileResponse>(`/lawyers/${id}`),
 
     getAvailability: (id: string, params: LawyerAvailabilityParams) =>
       http.get<LawyerAvailability>(`/lawyers/${id}/availability`, { params }),

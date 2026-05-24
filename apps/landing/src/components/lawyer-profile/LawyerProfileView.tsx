@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import type { LawyerPublicProfileResponse } from '@repo/shared';
 import { ProfileHero } from './ProfileHero';
 import { BookingSidebar } from './BookingSidebar';
 import { AboutTab } from './tabs/AboutTab';
 import { ReviewsTab } from './tabs/ReviewsTab';
 import { AvailabilityTab } from './tabs/AvailabilityTab';
-import { LocationTab } from './tabs/LocationTab';
 import type { Tab } from './types';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
 
 interface LawyerProfileViewProps {
-  readonly lawyer: Lawyer;
+  readonly lawyer: LawyerPublicProfileResponse;
 }
 
 export function LawyerProfileView({ lawyer }: LawyerProfileViewProps) {
@@ -40,7 +39,11 @@ export function LawyerProfileView({ lawyer }: LawyerProfileViewProps) {
           {activeTab === 'about'        && <AboutTab lawyer={lawyer} />}
           {activeTab === 'reviews'      && <ReviewsTab lawyer={lawyer} />}
           {activeTab === 'availability' && <AvailabilityTab lawyer={lawyer} />}
-          {activeTab === 'location'     && <LocationTab />}
+          {activeTab === 'location'     && (
+            <div className="font-sans text-sm text-gray-500 py-12 text-center">
+              Location map coming soon.
+            </div>
+          )}
         </main>
         <aside>
           <BookingSidebar lawyer={lawyer} />

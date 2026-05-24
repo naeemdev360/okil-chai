@@ -43,6 +43,7 @@ export function LawyerCard({ lawyer }: LawyerCardProps) {
           initials={lawyer.initials}
           verified={lawyer.verified}
           photoUrl={lawyer.photoUrl}
+          size="lg"
         />
 
         {/* Body */}
