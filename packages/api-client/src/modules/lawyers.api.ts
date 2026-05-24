@@ -1,4 +1,4 @@
-import type { AvailabilityRuleResponse, LawyerProfileResponse } from '@repo/shared';
+import type { AvailabilityRuleResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
 import type { Http } from '../core/http';
 import type {
   AvailabilityRuleInput,
@@ -7,13 +7,12 @@ import type {
   LawyerDashboard,
   LawyerProfile,
   LawyerSearchParams,
-  LawyerSummary,
 } from '../types/lawyers.types';
 
 export function createLawyersApi(http: Http) {
   return {
     search: (params: LawyerSearchParams) =>
-      http.list<LawyerSummary>('/lawyers', { params }),
+      http.list<LawyerPublicProfileResponse>('/lawyers', { params }),
 
     getById: (id: string) =>
       http.get<LawyerProfile>(`/lawyers/${id}`),

@@ -63,12 +63,16 @@ export interface DocumentRecord {
 }
 
 export interface LawyerSearchFilters {
+  /** Free-text search across lawyer name, city, and specialization name. */
+  readonly q?: string;
   readonly specialization?: string;
   readonly city?: string;
   readonly lang?: string;
   readonly minPrice?: number;
   readonly maxPrice?: number;
   readonly rating?: number;
+  readonly consultationType?: ConsultationType;
+  readonly isInstantBooking?: boolean;
   readonly page?: number;
   readonly limit?: number;
 }

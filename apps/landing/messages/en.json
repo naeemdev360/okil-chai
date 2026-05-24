@@ -511,6 +511,11 @@
     "noResults": {
       "title": "No lawyers found",
       "subtitle": "Try a different search term or remove a filter."
-    }
+    },
+    "error": {
+      "title": "Something went wrong",
+      "subtitle": "We couldn't load lawyers. Please try again."
+    },
+    "retry": "Try again"
   }
 }

@@ -1,8 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { ConsultationType } from '@repo/shared';
 
 export class SearchLawyersDto {
+  @ApiPropertyOptional({ description: 'Free-text search across lawyer name, city, and specialization' })
+  @IsOptional()
+  @IsString()
+  q?: string;
+
   @ApiPropertyOptional({ description: 'Filter by specialization slug, e.g. "criminal-law"' })
   @IsOptional()
   @IsString()
@@ -39,6 +45,17 @@ export class SearchLawyersDto {
   @Min(1)
   @Max(5)
   rating?: number;
+
+  @ApiPropertyOptional({ enum: ConsultationType, description: 'Filter by consultation type' })
+  @IsOptional()
+  @IsEnum(ConsultationType)
+  consultationType?: ConsultationType;
+
+  @ApiPropertyOptional({ description: 'Filter by instant booking availability' })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  isInstantBooking?: boolean;
 
   @ApiPropertyOptional({ default: 1, description: 'Page number (1-based)' })
   @IsOptional()

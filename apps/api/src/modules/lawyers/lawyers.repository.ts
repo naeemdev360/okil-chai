@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, DocumentStatus, DocumentType, VerificationStatus } from '@repo/shared';
 import type { AvailabilityRuleResponse, LawyerDocumentResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
-import { and, count, eq, gte, ilike, inArray, lte, sql } from 'drizzle-orm';
+import { and, count, eq, gte, ilike, inArray, lte, or, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
   availability,
@@ -182,7 +182,7 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
   async searchLawyers(
     filters: LawyerSearchFilters,
   ): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }> {
-    const { specialization, city, lang, minPrice, maxPrice, rating, page = 1, limit = 20 } = filters;
+    const { q, specialization, city, lang, minPrice, maxPrice, rating, consultationType, isInstantBooking, page = 1, limit = 20 } = filters;
     const offset = (page - 1) * limit;
 
     const conditions = [
@@ -190,10 +190,33 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
       eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
     ];
 
+    if (q) {
+      conditions.push(
+        or(
+          sql`(${lawyerProfiles.firstName} || ' ' || ${lawyerProfiles.lastName}) ILIKE ${'%' + q + '%'}`,
+          ilike(lawyerProfiles.city, `%${q}%`),
+          sql`EXISTS (
+            SELECT 1 FROM ${lawyerSpecializations}
+            INNER JOIN ${specializations} ON ${lawyerSpecializations.specializationId} = ${specializations.id}
+            WHERE ${lawyerSpecializations.lawyerId} = ${lawyerProfiles.id}
+              AND (${specializations.name} ILIKE ${'%' + q + '%'} OR ${specializations.slug} ILIKE ${'%' + q + '%'})
+          )`,
+        )!,
+      );
+    }
+
     if (city) conditions.push(ilike(lawyerProfiles.city, `%${city}%`));
     if (minPrice !== undefined) conditions.push(gte(lawyerProfiles.pricePerHour, String(minPrice)));
     if (maxPrice !== undefined) conditions.push(lte(lawyerProfiles.pricePerHour, String(maxPrice)));
     if (rating !== undefined) conditions.push(gte(lawyerProfiles.avgRating, String(rating)));
+
+    if (consultationType) {
+      conditions.push(sql`${lawyerProfiles.consultationTypes} @> ${JSON.stringify([consultationType])}::jsonb`);
+    }
+
+    if (isInstantBooking !== undefined) {
+      conditions.push(eq(lawyerProfiles.isInstantBooking, isInstantBooking));
+    }
 
     if (specialization) {
       conditions.push(

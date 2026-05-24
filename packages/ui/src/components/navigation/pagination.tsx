@@ -7,6 +7,8 @@ export interface PaginationProps {
   readonly totalItems: number;
   readonly itemsPerPage: number;
   readonly onPageChange: (page: number) => void;
+  /** Label for the item count text, e.g. "lawyers", "reviews". Defaults to "items". */
+  readonly itemLabel?: string;
   readonly className?: string;
 }
 
@@ -44,6 +46,7 @@ export function Pagination({
   totalItems,
   itemsPerPage,
   onPageChange,
+  itemLabel = 'items',
   className,
 }: PaginationProps) {
   const firstItem = (currentPage - 1) * itemsPerPage + 1;
@@ -54,7 +57,7 @@ export function Pagination({
     <div className={cn('flex flex-col sm:flex-row items-center justify-between gap-3 px-1 py-3', className)}>
       <p className="font-sans text-[12px] text-gray-400 select-none">
         Showing <span className="font-semibold text-gray-600">{firstItem}–{lastItem}</span> of{' '}
-        <span className="font-semibold text-gray-600">{totalItems}</span> reviews
+        <span className="font-semibold text-gray-600">{totalItems}</span> {itemLabel}
       </p>
 
       <div className="flex items-center gap-1">

@@ -1,12 +1,16 @@
 import type { ConsultationType } from '@repo/shared';
 
 export interface LawyerSearchParams {
+  /** Free-text search across lawyer name, city, and specialization name. */
+  readonly q?: string;
   readonly specialization?: string;
-  readonly location?: string;
-  readonly priceMin?: number;
-  readonly priceMax?: number;
+  readonly city?: string;
+  readonly lang?: string;
+  readonly minPrice?: number;
+  readonly maxPrice?: number;
   readonly rating?: number;
   readonly consultationType?: ConsultationType;
+  readonly isInstantBooking?: boolean;
   readonly page?: number;
   readonly limit?: number;
 }

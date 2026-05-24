@@ -1,14 +1,18 @@
 'use client';
 
-import { cn, SurfaceCard } from '@repo/ui';
+import { cn, Pagination, SurfaceCard } from '@repo/ui';
+import { useLawyerSearch } from '@repo/hooks';
+import { ConsultationType } from '@repo/shared';
+import type { LawyerSearchParams } from '@repo/api-client';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import { MOCK_LAWYERS } from '../../lib/search/mock-lawyers';
+import { useEffect, useMemo, useState } from 'react';
+import { toLawyerDisplay } from '../../lib/search/lawyer-display';
+import type { LawyerDisplay } from '../../lib/search/lawyer-display';
 import { LawyerCard } from './LawyerCard';
 import { LawyerCardGrid } from './LawyerCardGrid';
+import { SearchCardSkeleton } from './SearchCardSkeleton';
 
 type FilterKey = 'all' | 'availableToday' | 'video' | 'under150' | 'topRated';
 type ViewMode  = 'list' | 'grid';
@@ -16,32 +20,16 @@ type ViewMode  = 'list' | 'grid';
 const FILTER_KEYS: readonly FilterKey[] = [
   'all', 'availableToday', 'video', 'under150', 'topRated',
 ];
+const PAGE_LIMIT = 12;
+const SKELETON_COUNT = 6;
 
-function filterLawyers(
-  lawyers: readonly Lawyer[],
-  query: string,
-  filter: FilterKey,
-): Lawyer[] {
-  let results = [...lawyers];
-
-  if (query.trim()) {
-    const lower = query.toLowerCase();
-    results = results.filter(
-      (l) =>
-        l.name.toLowerCase().includes(lower) ||
-        l.specialization.toLowerCase().includes(lower) ||
-        l.city.toLowerCase().includes(lower),
-    );
-  }
-
-  switch (filter) {
-    case 'availableToday': return results.filter((l) => l.availableToday);
-    case 'video':          return results.filter((l) => l.consultTypes.includes('video'));
-    case 'under150':       return results.filter((l) => l.pricePerHour < 150);
-    case 'topRated':       return results.filter((l) => l.badge === 'topRated');
-    default:               return results;
-  }
-}
+const FILTER_PARAMS: Readonly<Record<FilterKey, Partial<LawyerSearchParams>>> = {
+  all:            {},
+  availableToday: { isInstantBooking: true },
+  video:          { consultationType: ConsultationType.VIDEO },
+  under150:       { maxPrice: 150 },
+  topRated:       { rating: 4 },
+};
 
 // ─── View toggle ──────────────────────────────────────────────────────────────
 
@@ -90,23 +78,43 @@ function ViewToggle({ view, onChange }: ViewToggleProps) {
   );
 }
 
-// ─── Results list / grid ──────────────────────────────────────────────────────
+// ─── Loading skeletons ────────────────────────────────────────────────────────
 
-function ResultsList({ lawyers }: { lawyers: Lawyer[] }) {
+function LoadingSkeleton({ view }: { view: ViewMode }) {
+  const items = Array.from({ length: SKELETON_COUNT }, (_, i) => i);
+  if (view === 'grid') {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        {items.map((i) => <SearchCardSkeleton key={i} variant="grid" />)}
+      </div>
+    );
+  }
   return (
     <ul className="flex flex-col gap-4 list-none p-0">
+      {items.map((i) => <li key={i}><SearchCardSkeleton variant="list" /></li>)}
+    </ul>
+  );
+}
+
+// ─── Results ──────────────────────────────────────────────────────────────────
+
+function ResultsList({ lawyers }: { readonly lawyers: LawyerDisplay[] }) {
+  return (
+    <ul className="flex flex-col gap-4 list-none p-0" aria-live="polite" aria-atomic="false">
       {lawyers.map((lawyer) => (
-        <li key={lawyer.id}>
-          <LawyerCard lawyer={lawyer} />
-        </li>
+        <li key={lawyer.id}><LawyerCard lawyer={lawyer} /></li>
       ))}
     </ul>
   );
 }
 
-function ResultsGrid({ lawyers }: { lawyers: Lawyer[] }) {
+function ResultsGrid({ lawyers }: { readonly lawyers: LawyerDisplay[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    <div
+      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
+      aria-live="polite"
+      aria-atomic="false"
+    >
       {lawyers.map((lawyer) => (
         <LawyerCardGrid key={lawyer.id} lawyer={lawyer} />
       ))}
@@ -117,16 +125,33 @@ function ResultsGrid({ lawyers }: { lawyers: Lawyer[] }) {
 // ─── Main pane ────────────────────────────────────────────────────────────────
 
 export function SearchResultsPane() {
-  const searchParams  = useSearchParams();
-  const query         = searchParams.get('q') ?? '';
+  const urlParams      = useSearchParams();
+  const query          = urlParams.get('q') ?? '';
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
-  const [view, setView]                 = useState<ViewMode>('grid');
+  const [view,         setView]         = useState<ViewMode>('grid');
+  const [page,         setPage]         = useState(1);
   const t = useTranslations('search');
 
-  const filtered = useMemo(
-    () => filterLawyers(MOCK_LAWYERS, query, activeFilter),
-    [query, activeFilter],
+  useEffect(() => { setPage(1); }, [query, activeFilter]);
+
+  const apiParams = useMemo<LawyerSearchParams>(
+    () => ({
+      q: query.trim() || undefined,
+      ...FILTER_PARAMS[activeFilter],
+      page,
+      limit: PAGE_LIMIT,
+    }),
+    [query, activeFilter, page],
   );
+
+  const { data, isLoading, isError, refetch, isFetching } = useLawyerSearch(apiParams);
+
+  const lawyers = useMemo<LawyerDisplay[]>(
+    () => (data?.lawyers ?? []).map(toLawyerDisplay),
+    [data?.lawyers],
+  );
+
+  const meta = data?.meta;
 
   return (
     <section className="bg-cream min-h-[calc(100vh-200px)]">
@@ -134,11 +159,21 @@ export function SearchResultsPane() {
 
         {/* Toolbar: count, filters, view toggle */}
         <div className="mb-6">
-          <p className="font-sans text-sm text-gray-600 mb-3">
-            {t('showing')}{' '}
-            <strong className="text-navy">{filtered.length} {t('lawyers')}</strong>
-            {query && (
-              <> {t('for')} &ldquo;<span className="text-navy">{query}</span>&rdquo;</>
+          <p
+            className="font-sans text-sm text-gray-600 mb-3"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {isLoading ? (
+              <span className="inline-block w-32 h-4 bg-gray-200 rounded animate-pulse" />
+            ) : !isError && (
+              <>
+                {t('showing')}{' '}
+                <strong className="text-navy">{meta?.total ?? lawyers.length} {t('lawyers')}</strong>
+                {query && (
+                  <> {t('for')} &ldquo;<span className="text-navy">{query}</span>&rdquo;</>
+                )}
+              </>
             )}
           </p>
 
@@ -149,7 +184,7 @@ export function SearchResultsPane() {
                   key={key}
                   onClick={() => setActiveFilter(key)}
                   className={cn(
-                    'font-sans text-sm rounded-full px-4 py-1.5 border transition-all duration-150',
+                    'font-sans text-sm rounded-full px-4 py-1.5 border transition-all duration-150 whitespace-nowrap',
                     activeFilter === key
                       ? 'bg-navy text-white border-navy'
                       : 'bg-white text-gray-600 border-gray-200 hover:border-navy hover:text-navy',
@@ -163,17 +198,58 @@ export function SearchResultsPane() {
           </div>
         </div>
 
-        {/* Results */}
-        {filtered.length === 0 ? (
+        {/* Loading */}
+        {isLoading && <LoadingSkeleton view={view} />}
+
+        {/* Error */}
+        {isError && !isLoading && (
+          <div className="text-center py-20">
+            <p className="font-heading text-2xl text-navy mb-2">{t('error.title')}</p>
+            <p className="font-sans text-gray-600 mb-6">{t('error.subtitle')}</p>
+            <button
+              onClick={() => void refetch()}
+              className="font-sans text-sm font-semibold px-6 py-2.5 rounded-xl transition-all duration-150 hover:scale-[1.02] active:scale-[0.97]"
+              style={{
+                background: 'linear-gradient(138deg, #E8C96A 0%, #C8A84B 100%)',
+                color: '#0F1F3D',
+              }}
+            >
+              {t('retry')}
+            </button>
+          </div>
+        )}
+
+        {/* No results */}
+        {!isLoading && !isError && lawyers.length === 0 && (
           <div className="text-center py-20">
             <p className="font-heading text-2xl text-navy mb-2">{t('noResults.title')}</p>
             <p className="font-sans text-gray-600">{t('noResults.subtitle')}</p>
           </div>
-        ) : view === 'list' ? (
-          <ResultsList lawyers={filtered} />
-        ) : (
-          <ResultsGrid lawyers={filtered} />
         )}
+
+        {/* Results — fade on background re-fetches */}
+        {!isLoading && !isError && lawyers.length > 0 && (
+          <div className={cn('transition-opacity duration-200', isFetching && 'opacity-60')}>
+            {view === 'list'
+              ? <ResultsList lawyers={lawyers} />
+              : <ResultsGrid lawyers={lawyers} />
+            }
+          </div>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && !isError && meta && meta.totalPages > 1 && (
+          <Pagination
+            currentPage={page}
+            totalPages={meta.totalPages}
+            totalItems={meta.total}
+            itemsPerPage={PAGE_LIMIT}
+            itemLabel={t('lawyers')}
+            onPageChange={setPage}
+            className="mt-8"
+          />
+        )}
+
       </div>
     </section>
   );
