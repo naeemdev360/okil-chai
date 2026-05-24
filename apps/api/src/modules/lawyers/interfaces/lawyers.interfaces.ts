@@ -75,6 +75,8 @@ export interface LawyerSearchFilters {
   readonly isInstantBooking?: boolean;
   readonly page?: number;
   readonly limit?: number;
+  /** Server-set: exclude this user's own lawyer profile from results. Never accepted from client input. */
+  readonly excludeUserId?: string;
 }
 
 export interface AvailabilityRule {

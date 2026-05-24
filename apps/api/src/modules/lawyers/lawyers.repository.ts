@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, DocumentStatus, DocumentType, VerificationStatus } from '@repo/shared';
 import type { AvailabilityRuleResponse, LawyerDocumentResponse, LawyerProfileResponse, LawyerPublicProfileResponse } from '@repo/shared';
-import { and, count, eq, gte, ilike, inArray, lte, or, sql } from 'drizzle-orm';
+import { and, count, eq, gte, ilike, inArray, lte, ne, or, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
   availability,
@@ -182,13 +182,17 @@ export class LawyersRepository extends BaseRepository implements ILawyersReposit
   async searchLawyers(
     filters: LawyerSearchFilters,
   ): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }> {
-    const { q, specialization, city, lang, minPrice, maxPrice, rating, consultationType, isInstantBooking, page = 1, limit = 20 } = filters;
+    const { q, specialization, city, lang, minPrice, maxPrice, rating, consultationType, isInstantBooking, excludeUserId, page = 1, limit = 20 } = filters;
     const offset = (page - 1) * limit;
 
     const conditions = [
       eq(lawyerProfiles.isPublished, true),
       eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
     ];
+
+    if (excludeUserId) {
+      conditions.push(ne(lawyerProfiles.userId, excludeUserId));
+    }
 
     if (q) {
       conditions.push(

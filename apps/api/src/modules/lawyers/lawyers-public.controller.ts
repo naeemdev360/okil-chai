@@ -1,7 +1,11 @@
-import { Controller, Get, Inject, Param, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Inject, Param, ParseUUIDPipe, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { AvailabilitySlot, LawyerPublicProfileResponse, PaginatedLawyersResponse } from '@repo/shared';
+import { Role } from '@repo/shared';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
+import { OptionalJwtAuthGuard } from '../../common/guards/optional-jwt-auth.guard';
+import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import { GetAvailabilityDto } from './dto/get-availability.dto';
 import { SearchLawyersDto } from './dto/search-lawyers.dto';
 import { LAWYERS_SERVICE, type ILawyersService } from './interfaces/lawyers.interfaces';
@@ -15,10 +19,15 @@ export class LawyersPublicController {
   constructor(@Inject(LAWYERS_SERVICE) private readonly lawyersService: ILawyersService) {}
 
   @Get()
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiOperation({ summary: 'Search and filter verified lawyers' })
   @ApiResponse({ status: 200, description: 'Paginated list of lawyers' })
-  searchLawyers(@Query() query: SearchLawyersDto): Promise<PaginatedLawyersResponse> {
-    return this.lawyersService.searchLawyers(query);
+  searchLawyers(
+    @Query() query: SearchLawyersDto,
+    @CurrentUser() user: RequestUser | undefined,
+  ): Promise<PaginatedLawyersResponse> {
+    const excludeUserId = user?.roles.includes(Role.LAWYER) ? user.userId : undefined;
+    return this.lawyersService.searchLawyers({ ...query, excludeUserId });
   }
 
   @Get(':id')
