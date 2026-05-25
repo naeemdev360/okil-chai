@@ -5,6 +5,7 @@ import { createLawyersApi } from './modules/lawyers.api';
 import { createAppointmentsApi } from './modules/appointments.api';
 import { createReviewsApi } from './modules/reviews.api';
 import { createAdminApi } from './modules/admin.api';
+import { createAiMatchApi } from './modules/ai-match.api';
 import type { ApiClientConfig } from './core/types';
 
 export function createApiClient(config: ApiClientConfig) {
@@ -12,11 +13,12 @@ export function createApiClient(config: ApiClientConfig) {
   const http = createHttp(instance);
 
   return {
-    auth: createAuthApi(http),
-    lawyers: createLawyersApi(http),
+    auth:         createAuthApi(http),
+    lawyers:      createLawyersApi(http),
     appointments: createAppointmentsApi(http),
-    reviews: createReviewsApi(http),
-    admin: createAdminApi(http),
+    reviews:      createReviewsApi(http),
+    admin:        createAdminApi(http),
+    aiMatch:      createAiMatchApi(http),
   } as const;
 }
 
@@ -35,3 +37,4 @@ export type * from './types/lawyers.types';
 export type * from './types/appointments.types';
 export type * from './types/reviews.types';
 export type * from './types/admin.types';
+export type * from './types/ai-match.types';

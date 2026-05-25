@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import appConfig from './config/app.config';
+import aiConfig from './config/ai.config';
 import authConfig from './config/auth.config';
 import bkashConfig from './config/bkash.config';
 import brandConfig from './config/brand.config';
@@ -29,6 +30,8 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
 import { FavouritesModule } from './modules/favourites/favourites.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { AiModule }       from './modules/ai/ai.module';
+import { AiMatchModule }  from './modules/ai-match/ai-match.module';
 
 const envFilePath =
   process.env.NODE_ENV === 'production' ? '.env' : '.env.dev';
@@ -37,7 +40,7 @@ const envFilePath =
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, authConfig, brandConfig, mailerConfig, redisConfig, storageConfig, bkashConfig],
+      load: [appConfig, aiConfig, databaseConfig, authConfig, brandConfig, mailerConfig, redisConfig, storageConfig, bkashConfig],
       envFilePath,
     }),
     BullModule.forRootAsync({
@@ -67,6 +70,8 @@ const envFilePath =
     FavouritesModule,
     MessagesModule,
     DashboardModule,
+    AiModule,
+    AiMatchModule,
   ],
   providers: [
     // Guard execution order: authenticate → enforce admin paths → authorize roles → verify email

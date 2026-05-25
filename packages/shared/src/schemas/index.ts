@@ -98,6 +98,19 @@ export type {
 } from './payment.schemas.js';
 
 export {
+  UrgencySchema,
+  BudgetSchema,
+  AiMatchRequestSchema,
+  AiMatchedLawyerSchema,
+  AiMatchResponseSchema,
+} from './ai-match.schemas.js';
+export type {
+  AiMatchRequest,
+  AiMatchedLawyerResponse,
+  AiMatchResponse,
+} from './ai-match.schemas.js';
+
+export {
   CompleteOnboardingSchema,
   LawyerDocumentSchema,
   LawyerProfileSchema,

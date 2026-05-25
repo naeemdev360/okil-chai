@@ -12,3 +12,5 @@ export { useCancelAppointment } from './appointments/useCancelAppointment';
 
 export { useCreateReview } from './reviews/useCreateReview';
 export { useLawyerReviews } from './reviews/useLawyerReviews';
+
+export { useAiMatch } from './ai-match/useAiMatch';
