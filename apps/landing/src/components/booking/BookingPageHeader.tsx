@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { BookingStepIndicator } from './BookingStepIndicator';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import type { BookingStep } from './types';
+import type { BookingLawyerProfile, BookingStep } from './types';
 
 interface BookingPageHeaderProps {
   readonly locale: string;
-  readonly lawyer: Lawyer;
+  readonly lawyer: BookingLawyerProfile;
   readonly step: BookingStep;
 }
 

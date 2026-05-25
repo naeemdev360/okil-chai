@@ -3,42 +3,46 @@
 import { useState } from 'react';
 import { CheckCircle, Calendar, Download, Share2, X, ArrowRight } from 'lucide-react';
 import { cn } from '@repo/ui';
-import { consultFee, computeFees, generateBookingRef } from './utils';
+import type { AvailabilitySlot } from '@repo/shared';
+import type { AppointmentWithPayment } from '@repo/api-client';
+import { computeFees } from './utils';
+import { consultFee } from './utils';
 import { CancelModal } from './CancelModal';
 import { ConfirmationCard } from './ConfirmationCard';
 import { ConfirmationSidebar } from './ConfirmationSidebar';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import type { ConsultType } from './types';
+import type { BookingLawyerProfile, ConsultType } from './types';
 
 export interface SuccessStepProps {
-  readonly lawyer: Lawyer;
-  readonly consultType: ConsultType;
-  readonly selectedDay: string;
-  readonly selectedTime: string;
-  readonly locale: string;
+  readonly lawyer:       BookingLawyerProfile;
+  readonly consultType:  ConsultType;
+  readonly selectedDay:  string;
+  readonly selectedSlot: AvailabilitySlot;
+  readonly appointment:  AppointmentWithPayment | null;
+  readonly locale:       string;
 }
 
 export function SuccessStep({
   lawyer,
   consultType,
   selectedDay,
-  selectedTime,
+  selectedSlot,
+  appointment,
   locale,
 }: SuccessStepProps) {
   const [addedToCalendar, setAddedToCalendar] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showCancelModal, setShowCancelModal]  = useState(false);
 
-  const base = consultFee(lawyer, consultType);
-  const fees = computeFees(base, false);
-  const bookingRef = useState(() => generateBookingRef())[0];
+  const base      = consultFee(lawyer, consultType);
+  const fees      = computeFees(base, false);
+  const bookingRef = appointment?.id.slice(0, 8).toUpperCase() ?? '—';
 
   return (
     <div className="bg-cream min-h-screen pb-20">
       {showCancelModal && (
         <CancelModal
-          lawyerName={lawyer.name}
+          lawyerName={lawyer.fullName}
           day={selectedDay}
-          time={selectedTime}
+          time={selectedSlot.startTime}
           onConfirm={() => setShowCancelModal(false)}
           onDismiss={() => setShowCancelModal(false)}
         />
@@ -59,13 +63,13 @@ export function SuccessStep({
 
       {/* Two-column layout */}
       <div className="max-w-[1080px] mx-auto px-6 pt-10 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
-        {/* Left — main content + actions */}
+        {/* Left */}
         <div className="flex flex-col gap-5">
           <ConfirmationCard
             lawyer={lawyer}
             consultType={consultType}
             selectedDay={selectedDay}
-            selectedTime={selectedTime}
+            selectedSlot={selectedSlot}
             locale={locale}
           />
 
@@ -124,7 +128,7 @@ export function SuccessStep({
           </div>
         </div>
 
-        {/* Right — details sidebar */}
+        {/* Right */}
         <ConfirmationSidebar
           lawyer={lawyer}
           bookingRef={bookingRef}

@@ -1,32 +1,54 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { MOCK_LAWYERS } from '../../../../../lib/search/mock-lawyers';
+import { fetchPublicLawyerProfile, fetchLawyerAvailability } from '../../../../../lib/api/server';
 import { BookingView } from '../../../../../components/booking/BookingView';
+import { fromPublicProfile } from '../../../../../components/booking/utils';
 import { brand } from '../../../../../lib/brand';
 
 interface BookingPageProps {
   readonly params:       Promise<{ locale: string; id: string }>;
-  readonly searchParams: Promise<{ day?: string; time?: string }>;
+  readonly searchParams: Promise<{ day?: string }>;
 }
+
+const AVAILABILITY_WINDOW_DAYS = 30;
 
 export async function generateMetadata({ params }: BookingPageProps): Promise<Metadata> {
   const { id } = await params;
-  const lawyer = MOCK_LAWYERS.find((l) => l.id === Number(id));
+  const profile = await fetchPublicLawyerProfile(id);
 
-  if (!lawyer) return { title: 'Booking Not Found' };
+  if (!profile) return { title: 'Booking Not Found' };
 
+  const lawyer = fromPublicProfile(profile);
   return {
-    title:       `Book ${lawyer.name} — ${brand.name}`,
-    description: lawyer.bio,
+    title:       `Book ${lawyer.fullName} — ${brand.name}`,
+    description: lawyer.bio ?? undefined,
   };
 }
 
 export default async function BookingPage({ params, searchParams }: BookingPageProps) {
-  const { id }        = await params;
-  const { day, time } = await searchParams;
-  const lawyer        = MOCK_LAWYERS.find((l) => l.id === Number(id));
+  const { id }  = await params;
+  const { day } = await searchParams;
 
-  if (!lawyer) notFound();
+  const profile = await fetchPublicLawyerProfile(id);
+  if (!profile) notFound();
 
-  return <BookingView lawyer={lawyer} initialDay={day} initialTime={time} />;
+  const today = new Date();
+  const from  = today.toISOString().slice(0, 10);
+  const to    = new Date(today.getTime() + AVAILABILITY_WINDOW_DAYS * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
+  const [availabilitySlots] = await Promise.all([
+    fetchLawyerAvailability(id, from, to),
+  ]);
+
+  const lawyer = fromPublicProfile(profile);
+
+  return (
+    <BookingView
+      lawyer={lawyer}
+      availabilitySlots={availabilitySlots}
+      initialDay={day}
+    />
+  );
 }

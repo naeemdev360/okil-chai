@@ -1,33 +1,55 @@
 'use client';
 
+import { useMemo } from 'react';
+import type { AvailabilitySlot } from '@repo/shared';
 import { cn, TogglePill } from '@repo/ui';
-import { CONSULT_META, TIME_SLOTS, WEEK_DAYS } from './constants';
-import { consultFee } from './utils';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import type { ConsultType } from './types';
+import { CONSULT_META } from './constants';
+import { consultFee, formatDateLabel, formatTime, getWeekdayLabel, groupSlotsByDate } from './utils';
+import type { BookingLawyerProfile, ConsultType } from './types';
 
 export interface DetailsStepProps {
-  readonly lawyer: Lawyer;
+  readonly lawyer: BookingLawyerProfile;
+  readonly availabilitySlots: readonly AvailabilitySlot[];
   readonly consultType: ConsultType | null;
   readonly selectedDay: string | null;
-  readonly selectedTime: string | null;
+  readonly selectedSlot: AvailabilitySlot | null;
   readonly onConsultChange: (type: ConsultType) => void;
   readonly onDayChange: (day: string) => void;
-  readonly onTimeChange: (time: string | null) => void;
+  readonly onSlotChange: (slot: AvailabilitySlot | null) => void;
   readonly onContinue: () => void;
 }
 
 export function DetailsStep({
   lawyer,
+  availabilitySlots,
   consultType,
   selectedDay,
-  selectedTime,
+  selectedSlot,
   onConsultChange,
   onDayChange,
-  onTimeChange,
+  onSlotChange,
   onContinue,
 }: DetailsStepProps) {
-  const canContinue = consultType !== null && selectedDay !== null && selectedTime !== null;
+  const slotsByDate = useMemo(() => groupSlotsByDate(availabilitySlots), [availabilitySlots]);
+  const availableDates = useMemo(() => Array.from(slotsByDate.keys()).sort(), [slotsByDate]);
+  const slotsForDay = useMemo(
+    () => (selectedDay ? (slotsByDate.get(selectedDay) ?? []) : []),
+    [slotsByDate, selectedDay],
+  );
+
+  const monthLabel = useMemo(() => {
+    const first = availableDates[0];
+    if (!first) return '';
+    const parts = first.split('-');
+    const year  = parseInt(parts[0] ?? '0', 10);
+    const month = parseInt(parts[1] ?? '1', 10);
+    return new Date(year, month - 1, 1).toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+  }, [availableDates]);
+
+  const canContinue = consultType !== null && selectedDay !== null && selectedSlot !== null;
 
   return (
     <div className="flex flex-col gap-5">
@@ -63,52 +85,58 @@ export function DetailsStep({
                   {desc}
                 </span>
                 <span className={cn('font-sans text-[11px] mt-0.5', active ? 'text-gold/70' : 'text-gray-400')}>
-                  ${consultFee(lawyer, type)}/hr
+                  ৳{consultFee(lawyer, type)}/hr
                 </span>
               </TogglePill>
             );
           })}
         </div>
 
-        {/* ── Date grid — 7 cols × 14 days ── */}
-        <p className="font-sans text-[11px] font-semibold tracking-[0.08em] uppercase text-gray-600 mb-2.5">
-          May 2026
-        </p>
-        <div className="grid grid-cols-7 gap-1.5 mb-6">
-          {WEEK_DAYS.map((day) => (
-            <TogglePill
-              key={day.date}
-              variant="card"
-              size="card"
-              active={selectedDay === day.date}
-              disabled={!day.available}
-              className="py-2.5"
-              onClick={() => { onDayChange(day.date); onTimeChange(null); }}
-            >
-              <span className="text-[9px] opacity-70 mb-0.5">{day.label}</span>
-              <span className="font-semibold text-xs">{day.date.split(' ')[1]}</span>
-            </TogglePill>
-          ))}
-        </div>
-
-        {/* ── Time slots — 5 cols, revealed after day is picked ── */}
-        {selectedDay && (
+        {/* ── Date grid ── */}
+        {availableDates.length === 0 ? (
+          <p className="font-sans text-sm text-gray-500 py-4 text-center">
+            No available slots in the next 30 days.
+          </p>
+        ) : (
           <>
             <p className="font-sans text-[11px] font-semibold tracking-[0.08em] uppercase text-gray-600 mb-2.5">
-              Available Slots · {WEEK_DAYS.find((d) => d.date === selectedDay)?.label},{' '}
-              {selectedDay}
+              {monthLabel}
+            </p>
+            <div className="grid grid-cols-7 gap-1.5 mb-6">
+              {availableDates.map((date) => (
+                <TogglePill
+                  key={date}
+                  variant="card"
+                  size="card"
+                  active={selectedDay === date}
+                  className="py-2.5"
+                  onClick={() => { onDayChange(date); onSlotChange(null); }}
+                >
+                  <span className="text-[9px] opacity-70 mb-0.5">{getWeekdayLabel(date)}</span>
+                  <span className="font-semibold text-xs">{formatDateLabel(date)}</span>
+                </TogglePill>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ── Time slots ── */}
+        {selectedDay && slotsForDay.length > 0 && (
+          <>
+            <p className="font-sans text-[11px] font-semibold tracking-[0.08em] uppercase text-gray-600 mb-2.5">
+              Available Slots · {getWeekdayLabel(selectedDay)}, {formatDateLabel(selectedDay)}
             </p>
             <div className="grid grid-cols-5 gap-2">
-              {TIME_SLOTS.map((time) => (
+              {slotsForDay.map((slot) => (
                 <TogglePill
-                  key={time}
+                  key={`${slot.date}-${slot.startTime}`}
                   variant="default"
                   size="sm"
-                  active={selectedTime === time}
+                  active={selectedSlot?.startTime === slot.startTime && selectedSlot?.date === slot.date}
                   className="w-full py-2.5 justify-center text-navy hover:border-navy"
-                  onClick={() => onTimeChange(time)}
+                  onClick={() => onSlotChange(slot)}
                 >
-                  {time}
+                  {formatTime(slot.startTime)}
                 </TogglePill>
               ))}
             </div>

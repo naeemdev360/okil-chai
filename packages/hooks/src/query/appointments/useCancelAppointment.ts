@@ -8,11 +8,9 @@ export function useCancelAppointment() {
 
   return useMutation({
     mutationFn: (id: string) => api.appointments.cancel(id),
-    onSuccess: (appointment) => {
-      queryClient.setQueryData(
-        appointmentsKeys.detail(appointment.id),
-        appointment,
-      );
+    onSuccess: (_data, id) => {
+      queryClient.invalidateQueries({ queryKey: appointmentsKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: appointmentsKeys.all() });
     },
   });
 }

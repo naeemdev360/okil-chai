@@ -20,7 +20,11 @@ const signInSchema = z.object({
 
 type SignInFields = z.infer<typeof signInSchema>;
 
-export function SignInForm() {
+interface SignInFormProps {
+  readonly returnUrl?: string;
+}
+
+export function SignInForm({ returnUrl }: SignInFormProps) {
   const t      = useTranslations('auth.signIn');
   const tAuth  = useTranslations('auth');
   const locale = useLocale();
@@ -34,12 +38,11 @@ export function SignInForm() {
   } = useForm<SignInFields>({ resolver: zodResolver(signInSchema) });
 
   const onSubmit = async (data: SignInFields): Promise<void> => {
-    // await new Promise((resolve) => setTimeout(resolve, 5000));
     try {
       const tokens = await api.auth.login(data);
       await login(tokens);
       toast.success(t('success'));
-      router.push(`/${locale}`);
+      router.push(returnUrl ?? `/${locale}`);
     } catch (error) {
       const message = isApiError(error) && error.statusCode === 401
         ? t('invalidCredentials')

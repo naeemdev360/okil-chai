@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { useLocale } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
+import type { AvailabilitySlot } from '@repo/shared';
+import type { AppointmentWithPayment } from '@repo/api-client';
 import { BookingPageHeader } from './BookingPageHeader';
 import { DetailsStep } from './DetailsStep';
 import { UserDetailsStep } from './UserDetailsStep';
@@ -9,22 +12,39 @@ import { LawyerSummaryCard } from './LawyerSummaryCard';
 import { ReviewStep } from './ReviewStep';
 import { SuccessStep } from './SuccessStep';
 import { resolveInitialDay } from './utils';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import type { BookingStep, ConsultType } from './types';
+import { useAuthStore } from '../../lib/store/auth.store';
+import type { BookingDetails, BookingLawyerProfile, BookingStep, ConsultType } from './types';
 
 export interface BookingViewProps {
-  readonly lawyer: Lawyer;
+  readonly lawyer: BookingLawyerProfile;
+  readonly availabilitySlots: readonly AvailabilitySlot[];
   readonly initialDay?: string;
-  readonly initialTime?: string;
 }
 
-export function BookingView({ lawyer, initialDay, initialTime }: BookingViewProps) {
-  const locale = useLocale();
+export function BookingView({ lawyer, availabilitySlots, initialDay }: BookingViewProps) {
+  const locale   = useLocale();
+  const router   = useRouter();
+  const pathname = usePathname();
 
-  const [step, setStep] = useState<BookingStep>('time');
+  const { isAuthenticated } = useAuthStore();
+
+  const [step, setStep]             = useState<BookingStep>('time');
   const [consultType, setConsultType] = useState<ConsultType | null>(null);
-  const [selectedDay, setSelectedDay] = useState<string | null>(resolveInitialDay(initialDay));
-  const [selectedTime, setSelectedTime] = useState<string | null>(initialTime ?? null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(
+    resolveInitialDay(initialDay, availabilitySlots),
+  );
+  const [selectedSlot, setSelectedSlot] = useState<AvailabilitySlot | null>(null);
+  const [userDetails, setUserDetails]   = useState<BookingDetails | null>(null);
+  const [appointment, setAppointment]   = useState<AppointmentWithPayment | null>(null);
+
+  function handleContinueFromTime() {
+    if (!isAuthenticated) {
+      const returnUrl = selectedDay ? `${pathname}?day=${selectedDay}` : pathname;
+      router.push(`/${locale}/auth/signin?returnUrl=${encodeURIComponent(returnUrl)}`);
+      return;
+    }
+    setStep('details');
+  }
 
   if (step === 'confirmation') {
     return (
@@ -32,7 +52,8 @@ export function BookingView({ lawyer, initialDay, initialTime }: BookingViewProp
         lawyer={lawyer}
         consultType={consultType!}
         selectedDay={selectedDay!}
-        selectedTime={selectedTime!}
+        selectedSlot={selectedSlot!}
+        appointment={appointment}
         locale={locale}
       />
     );
@@ -43,26 +64,29 @@ export function BookingView({ lawyer, initialDay, initialTime }: BookingViewProp
       <BookingPageHeader locale={locale} lawyer={lawyer} step={step} />
 
       <div className="max-w-[1100px] mx-auto px-6 py-8">
-        {/* Steps 1 & 2: main content left, booking sidebar right */}
         {(step === 'time' || step === 'details') && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
             <main>
               {step === 'time' && (
                 <DetailsStep
                   lawyer={lawyer}
+                  availabilitySlots={availabilitySlots}
                   consultType={consultType}
                   selectedDay={selectedDay}
-                  selectedTime={selectedTime}
+                  selectedSlot={selectedSlot}
                   onConsultChange={setConsultType}
-                  onDayChange={(d) => { setSelectedDay(d); setSelectedTime(null); }}
-                  onTimeChange={setSelectedTime}
-                  onContinue={() => setStep('details')}
+                  onDayChange={(d) => { setSelectedDay(d); setSelectedSlot(null); }}
+                  onSlotChange={setSelectedSlot}
+                  onContinue={handleContinueFromTime}
                 />
               )}
               {step === 'details' && (
                 <UserDetailsStep
                   onBack={() => setStep('time')}
-                  onContinue={() => setStep('payment')}
+                  onContinue={(details: BookingDetails) => {
+                    setUserDetails(details);
+                    setStep('payment');
+                  }}
                 />
               )}
             </main>
@@ -70,22 +94,25 @@ export function BookingView({ lawyer, initialDay, initialTime }: BookingViewProp
               <LawyerSummaryCard
                 lawyer={lawyer}
                 selectedDay={selectedDay}
-                selectedTime={selectedTime}
+                selectedSlot={selectedSlot}
                 consultType={consultType}
               />
             </aside>
           </div>
         )}
 
-        {/* Step 3: payment manages its own two-column layout */}
         {step === 'payment' && (
           <ReviewStep
             lawyer={lawyer}
             consultType={consultType!}
             selectedDay={selectedDay!}
-            selectedTime={selectedTime!}
+            selectedSlot={selectedSlot!}
+            userDetails={userDetails!}
             onBack={() => setStep('details')}
-            onSuccess={() => setStep('confirmation')}
+            onSuccess={(appt: AppointmentWithPayment) => {
+              setAppointment(appt);
+              setStep('confirmation');
+            }}
           />
         )}
       </div>

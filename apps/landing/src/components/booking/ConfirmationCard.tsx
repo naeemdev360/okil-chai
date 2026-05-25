@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { Calendar, Clock, Lock, Mail, Star, Video } from 'lucide-react';
 import { cn } from '@repo/ui';
+import type { AvailabilitySlot } from '@repo/shared';
+import { LawyerAvatar } from '../shared/LawyerAvatar';
 import { CONSULT_META } from './constants';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
-import type { ConsultType } from './types';
+import { formatDateLabel, formatTime } from './utils';
+import type { BookingLawyerProfile, ConsultType } from './types';
 
 interface ConfirmationCardProps {
-  readonly lawyer: Lawyer;
-  readonly consultType: ConsultType;
-  readonly selectedDay: string;
-  readonly selectedTime: string;
-  readonly locale: string;
+  readonly lawyer:       BookingLawyerProfile;
+  readonly consultType:  ConsultType;
+  readonly selectedDay:  string;
+  readonly selectedSlot: AvailabilitySlot;
+  readonly locale:       string;
 }
 
 const WHAT_TO_EXPECT: ReadonlyArray<{
@@ -35,31 +37,29 @@ export function ConfirmationCard({
   lawyer,
   consultType,
   selectedDay,
-  selectedTime,
+  selectedSlot,
   locale,
 }: ConfirmationCardProps) {
   const { label: consultLabel, icon: ConsultIcon } = CONSULT_META[consultType];
 
   const infoItems = [
-    { icon: Calendar,    label: 'Date',   value: selectedDay                 },
-    { icon: Clock,       label: 'Time',   value: `${selectedTime} · 60 min` },
-    { icon: ConsultIcon, label: 'Format', value: consultLabel                },
+    { icon: Calendar,    label: 'Date',   value: formatDateLabel(selectedDay)                                   },
+    { icon: Clock,       label: 'Time',   value: `${formatTime(selectedSlot.startTime)} – ${formatTime(selectedSlot.endTime)}` },
+    { icon: ConsultIcon, label: 'Format', value: consultLabel                                                    },
   ] as const;
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-md overflow-hidden">
       {/* Navy header */}
       <div className="bg-navy px-9 py-8 flex items-center gap-5">
-        <div className="size-20 rounded-full bg-gold flex items-center justify-center font-heading text-[28px] font-bold text-navy shrink-0">
-          {lawyer.initials}
-        </div>
+        <LawyerAvatar initials={lawyer.initials} verified photoUrl={lawyer.photoUrl} size="xl" />
         <div>
           <p className="font-sans text-xs text-gold font-semibold tracking-[0.1em] uppercase mb-1">
             Your Consultation is Confirmed
           </p>
-          <h1 className="font-heading text-[26px] font-bold text-white mb-1">{lawyer.name}</h1>
+          <h1 className="font-heading text-[26px] font-bold text-white mb-1">{lawyer.fullName}</h1>
           <p className="font-sans text-xs text-white/60 tracking-[0.06em] uppercase">
-            {lawyer.specialization}
+            {lawyer.primarySpecialization}
           </p>
         </div>
       </div>
@@ -122,7 +122,7 @@ export function ConfirmationCard({
         </div>
       </div>
 
-      {/* Prepare — navy block */}
+      {/* Prepare */}
       <div className="mx-9 mb-9 bg-navy rounded-xl p-7">
         <h3 className="font-heading text-lg font-semibold text-white mb-3.5">
           Prepare for Your Consultation

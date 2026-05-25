@@ -8,14 +8,20 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('heading') };
 }
 
-export default function SignInPage() {
+interface SignInPageProps {
+  readonly searchParams: Promise<{ returnUrl?: string }>;
+}
+
+export default async function SignInPage({ searchParams }: SignInPageProps) {
+  const { returnUrl } = await searchParams;
+
   return (
     <div className="min-h-screen grid lg:grid-cols-[1fr_1fr]">
       <div className="hidden lg:flex lg:flex-col">
         <AuthMarketingPanel />
       </div>
       <div className="bg-white flex flex-col min-h-screen lg:min-h-0">
-        <SignInForm />
+        <SignInForm returnUrl={returnUrl} />
       </div>
     </div>
   );

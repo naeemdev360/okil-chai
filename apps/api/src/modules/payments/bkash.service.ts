@@ -90,7 +90,7 @@ export class BkashGateway implements IPaymentGateway {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
         'X-APP-Key': this.appKey,
       },
       body: JSON.stringify(body),

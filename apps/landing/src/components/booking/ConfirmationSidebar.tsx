@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { cn } from '@repo/ui';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
-import type { Lawyer } from '../../lib/search/mock-lawyers';
+import type { BookingLawyerProfile } from './types';
 import type { FeeBreakdown } from './utils';
 
 interface ConfirmationSidebarProps {
-  readonly lawyer: Lawyer;
+  readonly lawyer:     BookingLawyerProfile;
   readonly bookingRef: string;
-  readonly fees: FeeBreakdown;
-  readonly locale: string;
+  readonly fees:       FeeBreakdown;
+  readonly locale:     string;
 }
 
 const DETAIL_STYLE = {
@@ -25,11 +25,10 @@ export function ConfirmationSidebar({
   locale,
 }: ConfirmationSidebarProps) {
   const details: ReadonlyArray<[string, string, keyof typeof DETAIL_STYLE]> = [
-    ['Booking Ref',    bookingRef,                    'mono'   ],
-    ['Status',         '✓ Confirmed',                 'success'],
-    ['Payment',        `$${fees.total} charged`,      'navy'   ],
-    ['Card',           'Visa •••• 4242',              'navy'   ],
-    ['Cancellation',   'Free until 24h before',       'navy'   ],
+    ['Booking Ref',  bookingRef,                  'mono'   ],
+    ['Status',       '✓ Confirmed',               'success'],
+    ['Payment',      `৳${fees.total} charged`,    'navy'   ],
+    ['Cancellation', 'Free until 24h before',     'navy'   ],
   ];
 
   return (
@@ -77,26 +76,33 @@ export function ConfirmationSidebar({
           About Your Lawyer
         </p>
         <div className="flex items-center gap-2.5 mb-3">
-          <LawyerAvatar initials={lawyer.initials} verified={lawyer.verified} size="md" />
+          <LawyerAvatar
+            initials={lawyer.initials}
+            verified
+            photoUrl={lawyer.photoUrl}
+            size="md"
+          />
           <div>
-            <p className="font-heading text-sm font-semibold text-navy">{lawyer.name}</p>
-            <span className="flex items-center gap-0.5 mt-0.5">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    'size-3',
-                    i <= Math.round(lawyer.rating)
-                      ? 'fill-gold text-gold'
-                      : 'fill-gray-200 text-gray-200',
-                  )}
-                  aria-hidden
-                />
-              ))}
-              <span className="font-sans text-xs text-gray-400 ml-0.5">
-                ({lawyer.reviewCount})
+            <p className="font-heading text-sm font-semibold text-navy">{lawyer.fullName}</p>
+            {lawyer.rating !== null && (
+              <span className="flex items-center gap-0.5 mt-0.5">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star
+                    key={i}
+                    className={cn(
+                      'size-3',
+                      i <= Math.round(lawyer.rating!)
+                        ? 'fill-gold text-gold'
+                        : 'fill-gray-200 text-gray-200',
+                    )}
+                    aria-hidden
+                  />
+                ))}
+                <span className="font-sans text-xs text-gray-400 ml-0.5">
+                  ({lawyer.reviewCount})
+                </span>
               </span>
-            </span>
+            )}
           </div>
         </div>
         <Link
