@@ -1,14 +1,24 @@
-const ACCESS_TOKEN_KEY = 'accessToken' as const;
-
-export function hasAccessToken(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.localStorage.getItem(ACCESS_TOKEN_KEY) !== null;
-}
+import { getPortalKind, PortalKind, type Role } from '@repo/shared';
 
 const LANDING_URL = (import.meta.env.VITE_LANDING_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 
-export const authRoutes = {
-  signIn: `${LANDING_URL}/auth/signin?portal=lawyer`,
-  signUp: `${LANDING_URL}/auth/signup?portal=lawyer`,
-  home:   `${LANDING_URL}/`,
-} as const;
+/** The portal this app serves — used to redirect users whose roles belong elsewhere. */
+export const PORTAL_KIND = PortalKind.LAWYER;
+
+const PORTAL_URL: Record<PortalKind, string> = {
+  [PortalKind.CLIENT]: (import.meta.env.VITE_CLIENT_PORTAL_URL ?? 'http://localhost:3001').replace(/\/$/, ''),
+  [PortalKind.LAWYER]: (import.meta.env.VITE_LAWYER_PORTAL_URL ?? 'http://localhost:3002').replace(/\/$/, ''),
+  [PortalKind.ADMIN]:  (import.meta.env.VITE_ADMIN_PORTAL_URL ?? 'http://localhost:3003').replace(/\/$/, ''),
+};
+
+export function getPortalUrlForRoles(roles: readonly Role[]): string {
+  return PORTAL_URL[getPortalKind(roles)];
+}
+
+/** Landing sign-in URL that returns the user to where they are now after authenticating. */
+export function signInUrl(): string {
+  const returnUrl = typeof window !== 'undefined' ? window.location.href : '';
+  return `${LANDING_URL}/auth/signin?returnUrl=${encodeURIComponent(returnUrl)}`;
+}
+
+export const landingHome = `${LANDING_URL}/`;

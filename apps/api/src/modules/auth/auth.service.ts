@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable, NotFoundException, Unauthorize
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import type { AuthTokensResponse, LawyerSignUpRequest, UserSignUpRequest } from '@repo/shared';
-import { Role } from '@repo/shared';
+import { getPortalKind, PortalKind, Role } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { sha256 } from '../../common/utils/crypto.util';
@@ -114,7 +114,7 @@ export class AuthService implements IAuthService {
   }
 
   getFrontendCallbackUrl(roles: readonly Role[]): string {
-    return this.resolvePortalUrl(roles.includes(Role.LAWYER) ? Role.LAWYER : Role.CLIENT);
+    return this.resolvePortalUrl(getPortalKind(roles));
   }
 
   // ── Private helpers ────────────────────────────────────────────────────────
@@ -150,13 +150,18 @@ export class AuthService implements IAuthService {
   }
 
   private resolveLandingUrl(): string {
-    return this.configService.get<string>('auth.landingUrl', 'http://localhost:3000');
+    return this.configService.get<string>('auth.landingUrl')!;
   }
 
-  private resolvePortalUrl(role: Role): string {
-    return role === Role.LAWYER
-      ? this.configService.get<string>('auth.lawyerPortalUrl', 'http://localhost:3002')
-      : this.configService.get<string>('auth.clientPortalUrl', 'http://localhost:3001');
+  private resolvePortalUrl(kind: PortalKind): string {
+    switch (kind) {
+      case PortalKind.LAWYER:
+        return this.configService.get<string>('auth.lawyerPortalUrl')!;
+      case PortalKind.ADMIN:
+        return this.configService.get<string>('auth.adminPortalUrl')!;
+      default:
+        return this.configService.get<string>('auth.clientPortalUrl')!;
+    }
   }
 
   private async issueTokenPair(user: ValidatedUser): Promise<AuthTokensResponse> {

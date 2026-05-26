@@ -1,6 +1,12 @@
+/** Issued internally by the auth service; the refresh token is delivered to the client as an httpOnly cookie, never in the body. */
 export interface AuthTokensResponse {
   readonly accessToken: string;
   readonly refreshToken: string;
+}
+
+/** Client-facing auth response. The refresh token lives in an httpOnly cookie, so only the access token is returned. */
+export interface AccessTokenResponse {
+  readonly accessToken: string;
 }
 
 export interface UserSignUpRequest {

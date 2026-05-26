@@ -3,6 +3,11 @@ import path from 'path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  server: {
+    host: true,
+    // Allow any *.lvh.me subdomain so the dev server accepts client.lvh.me.
+    allowedHosts: ['localhost', '127.0.0.1', '.lvh.me'],
+  },
   plugins: [react()],
   resolve: {
     alias: {

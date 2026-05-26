@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import type { AuthTokens, UserProfile } from '@repo/api-client';
 import { api } from '../api/client';
-import { clearTokens, getAccessToken, getRefreshToken, setTokens } from '../auth/auth-storage';
 
 interface AuthState {
   readonly user: UserProfile | null;
@@ -22,32 +21,23 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isLoading: true,
   isAuthenticated: false,
 
+  // Silently restore the session from the refresh cookie (no token in localStorage).
   initialize: async () => {
-    if (!getAccessToken()) {
-      set({ isLoading: false });
-      return;
-    }
-    try {
-      const user = await api.auth.getMe();
-      set({ user, isAuthenticated: true, isLoading: false });
-    } catch {
-      clearTokens();
-      set({ user: null, isAuthenticated: false, isLoading: false });
-    }
+    const user = await api.bootstrap();
+    set({ user, isAuthenticated: user !== null, isLoading: false });
   },
 
-  login: async (tokens: AuthTokens) => {
-    setTokens(tokens.accessToken, tokens.refreshToken);
+  login: async ({ accessToken }: AuthTokens) => {
+    api.setAccessToken(accessToken);
     const user = await api.auth.getMe();
     set({ user, isAuthenticated: true });
   },
 
   logout: async () => {
-    const refreshToken = getRefreshToken();
     try {
-      if (refreshToken) await api.auth.logout({ refreshToken });
+      await api.auth.logout();
     } finally {
-      clearTokens();
+      api.setAccessToken(null);
       set({ user: null, isAuthenticated: false });
     }
   },

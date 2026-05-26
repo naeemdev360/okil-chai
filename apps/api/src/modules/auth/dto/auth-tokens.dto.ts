@@ -1,9 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AuthTokensDto {
+/** The refresh token is delivered as an httpOnly cookie, so only the access token is in the body. */
+export class AccessTokenDto {
   @ApiProperty()
   accessToken!: string;
-
-  @ApiProperty()
-  refreshToken!: string;
 }

@@ -1,22 +1,19 @@
-import { PortalAuthGate } from '@repo/ui';
+import { usePortalGuard } from '@repo/hooks';
+import { PageLoader } from '@repo/ui';
 import type { ReactNode } from 'react';
-import { authRoutes, hasAccessToken } from '../../lib/auth';
-import { CLIENT_PORTAL_LOGO } from '../layout/client-portal.constants';
+import { getPortalUrlForRoles, PORTAL_KIND, signInUrl } from '../../lib/auth';
 
 interface RequireAuthProps {
   readonly children: ReactNode;
 }
 
 export function RequireAuth({ children }: RequireAuthProps) {
-  if (hasAccessToken()) return <>{children}</>;
+  const state = usePortalGuard({
+    portalKind: PORTAL_KIND,
+    signInUrl: signInUrl(),
+    resolvePortalUrl: getPortalUrlForRoles,
+  });
 
-  return (
-    <PortalAuthGate
-      portal="client"
-      logo={CLIENT_PORTAL_LOGO}
-      signInHref={authRoutes.signIn}
-      signUpHref={authRoutes.signUp}
-      homeHref={authRoutes.home}
-    />
-  );
+  if (state !== 'authorized') return <PageLoader />;
+  return <>{children}</>;
 }

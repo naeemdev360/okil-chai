@@ -1,41 +1,33 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useAuthStore } from '../../../../../lib/store/auth.store';
+import { api } from '../../../../../lib/api/client';
+import { getPortalUrlForRoles } from '../../../../../lib/auth/portal-routes';
 
 export default function OAuthCallbackPage() {
   const t = useTranslations('auth.callback');
   const tForgot = useTranslations('auth.forgotPassword');
   const locale = useLocale();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const login = useAuthStore((s) => s.login);
   const [error, setError] = useState(false);
   // Guard against StrictMode double-invocation
-  const exchanged = useRef(false);
+  const handled = useRef(false);
 
   useEffect(() => {
-    if (exchanged.current) return;
-    exchanged.current = true;
+    if (handled.current) return;
+    handled.current = true;
 
-    const accessToken = searchParams.get('at');
-    const refreshToken = searchParams.get('rt');
-
-    if (!accessToken || !refreshToken) {
-      setError(true);
-      return;
-    }
-
-    login({ accessToken, refreshToken })
-      .then(() => {
-        router.replace(`/${locale}`);
+    // The refresh cookie was set by the OAuth callback; restore the session, then route by role.
+    api.bootstrap()
+      .then((user) => {
+        if (!user) {
+          setError(true);
+          return;
+        }
+        window.location.href = getPortalUrlForRoles(user.roles);
       })
-      .catch(() => {
-        setError(true);
-      });
-  }, [searchParams, login, router, locale]);
+      .catch(() => setError(true));
+  }, []);
 
   if (error) {
     return (

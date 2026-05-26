@@ -6,10 +6,10 @@ import { AppleIcon, Button, cn, GoogleIcon, Input, Label, PasswordInput, Separat
 import { ChevronLeft, Mail } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { api } from '../../lib/api/client';
+import { resolvePostLoginRedirect } from '../../lib/auth/portal-routes';
 import { brand } from '../../lib/brand';
 import { useAuthStore } from '../../lib/store/auth.store';
 
@@ -28,7 +28,6 @@ export function SignInForm({ returnUrl }: SignInFormProps) {
   const t      = useTranslations('auth.signIn');
   const tAuth  = useTranslations('auth');
   const locale = useLocale();
-  const router = useRouter();
   const login  = useAuthStore((s) => s.login);
 
   const {
@@ -42,7 +41,9 @@ export function SignInForm({ returnUrl }: SignInFormProps) {
       const tokens = await api.auth.login(data);
       await login(tokens);
       toast.success(t('success'));
-      router.push(returnUrl ?? `/${locale}`);
+      // Cross-origin portal redirect needs a full navigation, not the Next router.
+      const roles = useAuthStore.getState().user?.roles ?? [];
+      window.location.href = resolvePostLoginRedirect(returnUrl, roles);
     } catch (error) {
       const message = isApiError(error) && error.statusCode === 401
         ? t('invalidCredentials')

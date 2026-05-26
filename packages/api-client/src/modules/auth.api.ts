@@ -4,7 +4,6 @@ import type {
   ForgotPasswordDto,
   LawyerSignupDto,
   LoginDto,
-  RefreshDto,
   ResetPasswordDto,
   SignupDto,
   UserProfile,
@@ -24,11 +23,12 @@ export function createAuthApi(http: Http) {
     login: (dto: LoginDto) =>
       http.post<AuthTokens>('/auth/login', dto),
 
-    refresh: (dto: RefreshDto) =>
-      http.post<AuthTokens>('/auth/refresh', dto),
+    // Refresh token is read from the httpOnly cookie, so no body is sent.
+    refresh: () =>
+      http.post<AuthTokens>('/auth/refresh'),
 
-    logout: (dto: RefreshDto) =>
-      http.post('/auth/logout', dto),
+    logout: () =>
+      http.post('/auth/logout'),
 
     forgotPassword: (dto: ForgotPasswordDto) =>
       http.post('/auth/forgot-password', dto),

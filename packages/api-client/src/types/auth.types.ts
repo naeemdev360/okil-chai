@@ -31,13 +31,9 @@ export interface LoginDto {
   readonly password: string;
 }
 
-export interface RefreshDto {
-  readonly refreshToken: string;
-}
-
+/** The refresh token lives in an httpOnly cookie, so only the access token is returned to the client. */
 export interface AuthTokens {
   readonly accessToken: string;
-  readonly refreshToken: string;
 }
 
 export interface ForgotPasswordDto {

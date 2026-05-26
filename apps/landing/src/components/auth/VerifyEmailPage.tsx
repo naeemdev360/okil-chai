@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../../lib/api/client';
-import { getRefreshToken } from '../../lib/auth/auth-storage';
 import { useAuthStore } from '../../lib/store/auth.store';
 
 type VerifyStatus = 'loading' | 'success' | 'error';
@@ -36,14 +35,12 @@ export function VerifyEmailPage() {
 
     api.auth.verifyEmail(token)
       .then(async () => {
-        const refreshToken = getRefreshToken();
-        if (refreshToken) {
-          try {
-            const freshTokens = await api.auth.refresh({ refreshToken });
-            await login(freshTokens);
-          } catch {
-            // refresh failed — user will get updated isVerified on next sign-in
-          }
+        try {
+          // Mint a fresh access token (with isVerified=true) from the refresh cookie, if a session exists.
+          const tokens = await api.auth.refresh();
+          await login(tokens);
+        } catch {
+          // No active session in this browser — user will get updated isVerified on next sign-in.
         }
         setStatus('success');
       })
