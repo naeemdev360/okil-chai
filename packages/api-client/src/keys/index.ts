@@ -3,3 +3,6 @@ export { lawyersKeys } from './lawyers.keys';
 export { appointmentsKeys } from './appointments.keys';
 export { reviewsKeys } from './reviews.keys';
 export { adminKeys } from './admin.keys';
+export { favouritesKeys } from './favourites.keys';
+export { messagesKeys } from './messages.keys';
+export { dashboardKeys } from './dashboard.keys';

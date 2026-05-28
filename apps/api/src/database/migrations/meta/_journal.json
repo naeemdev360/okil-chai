@@ -43,6 +43,13 @@
       "when": 1779300000002,
       "tag": "0005_seed_specializations",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1779793037462,
+      "tag": "0006_add-feeamount",
+      "breakpoints": true
     }
   ]
 }

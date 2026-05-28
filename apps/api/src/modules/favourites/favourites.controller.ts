@@ -21,7 +21,7 @@ import { Role } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
+import { SearchQueryDto } from '../../common/dto/search-query.dto';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import {
   FAVOURITES_SERVICE,
@@ -53,10 +53,11 @@ export class FavouritesController {
   @ApiOperation({ summary: 'List all saved lawyers for the current client' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'search', required: false, type: String })
   @ApiResponse({ status: 200, description: 'Paginated saved lawyers' })
   listFavourites(
     @CurrentUser() user: RequestUser,
-    @Query() query: PaginationQueryDto,
+    @Query() query: SearchQueryDto,
   ): Promise<PaginatedLawyersResponse> {
     return this.favouritesService.listFavourites(user.userId, query);
   }

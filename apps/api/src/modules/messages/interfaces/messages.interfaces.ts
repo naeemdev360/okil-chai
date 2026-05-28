@@ -53,6 +53,7 @@ export interface IMessagesRepository {
   ): Promise<{ items: MessageRow[]; total: number }>;
   findConversations(userId: string): Promise<ConversationRow[]>;
   markThreadAsRead(userId: string, otherUserId: string): Promise<void>;
+  countUnreadByUserId(userId: string): Promise<number>;
 }
 
 // ── Service input ─────────────────────────────────────────────────────────────

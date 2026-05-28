@@ -1,5 +1,13 @@
 import type { AppointmentStatus, CaseCategory, ConsultationType } from '@repo/shared';
 
+export interface ListAppointmentsParams {
+  readonly status?: AppointmentStatus;
+  readonly upcoming?: boolean;
+  readonly past?: boolean;
+  readonly page?: number;
+  readonly limit?: number;
+}
+
 export interface CreateAppointmentDto {
   readonly lawyerId: string;
   readonly consultationType: ConsultationType;
@@ -25,6 +33,7 @@ export interface Appointment {
   readonly startAt: string;
   readonly endAt: string;
   readonly status: AppointmentStatus;
+  readonly feeAmount: string;
   readonly clientNotes: string | null;
   readonly client: AppointmentParticipant;
   readonly lawyer: AppointmentParticipant;

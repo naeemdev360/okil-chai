@@ -19,6 +19,7 @@ export interface AppointmentRow {
   readonly startAt: Date;
   readonly endAt: Date;
   readonly status: AppointmentStatus;
+  readonly feeAmount: string;
   readonly clientNotes: string | null;
   readonly externalPaymentId: string | null;
   readonly createdAt: Date;
@@ -57,6 +58,8 @@ export interface CreateAppointmentInput {
 
 export interface ListAppointmentsQuery {
   readonly status?: AppointmentStatus;
+  readonly upcoming?: boolean;
+  readonly past?: boolean;
   readonly page?: number;
   readonly limit?: number;
 }
@@ -70,6 +73,7 @@ export interface InsertAppointmentData {
   readonly caseCategory: CaseCategory;
   readonly startAt: Date;
   readonly endAt: Date;
+  readonly feeAmount: string;
   readonly clientNotes: string | null;
   readonly externalPaymentId: string | null;
   readonly status: AppointmentStatus;

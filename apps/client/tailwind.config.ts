@@ -1,5 +1,6 @@
 import { okilChaiPreset } from '@repo/design-tokens/tailwind';
 import forms from '@tailwindcss/forms';
+import animate from 'tailwindcss-animate';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -9,7 +10,7 @@ const config: Config = {
     './src/**/*.{ts,tsx}',
     '../../packages/ui/src/**/*.{ts,tsx}',
   ],
-  plugins: [forms],
+  plugins: [forms, animate],
 };
 
 export default config;

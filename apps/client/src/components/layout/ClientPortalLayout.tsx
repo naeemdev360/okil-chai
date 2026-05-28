@@ -1,16 +1,19 @@
+import { usePortalAuth } from '@repo/hooks';
+import type { DarkNavSection } from '@repo/ui';
 import { DarkSidebarNav, PortalTopbar } from '@repo/ui';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { CURRENT_USER } from '../../lib/mock-data';
+import { landingHome } from '../../lib/auth';
+import { useNavCounts } from '../../lib/useNavCounts';
 import { CLIENT_PORTAL_LOGO, CLIENT_PORTAL_NAV_SECTIONS } from './client-portal.constants';
 
-const PORTAL_USER = {
-  name: CURRENT_USER.name,
-  subtitle: 'Client',
-  initials: CURRENT_USER.initials,
-} as const;
-
 const COLLAPSE_KEY = 'client_sidebar_collapsed';
+
+const COUNT_KEYS: Record<string, keyof ReturnType<typeof useNavCounts>> = {
+  '/appointments': 'appointments',
+  '/saved': 'saved',
+  '/messages': 'messages',
+};
 
 function readCollapsed(): boolean {
   try { return localStorage.getItem(COLLAPSE_KEY) === 'true'; }
@@ -20,6 +23,26 @@ function readCollapsed(): boolean {
 export function ClientPortalLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout, user } = usePortalAuth();
+  const navCounts = useNavCounts();
+
+  const navSections = useMemo<readonly DarkNavSection[]>(() =>
+    CLIENT_PORTAL_NAV_SECTIONS.map(section => ({
+      ...section,
+      items: section.items.map(item => {
+        const countKey = COUNT_KEYS[item.key];
+        const count = countKey !== undefined ? navCounts[countKey] : undefined;
+        return count !== undefined && count > 0 ? { ...item, count } : item;
+      }),
+    })),
+    [navCounts],
+  );
+
+  const portalUser = {
+    name: user ? `${user.firstName} ${user.lastName}` : '',
+    subtitle: 'Client',
+    initials: user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : '',
+  };
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readCollapsed);
 
@@ -43,7 +66,7 @@ export function ClientPortalLayout() {
       <PortalTopbar
         logo={CLIENT_PORTAL_LOGO}
         searchPlaceholder="Search lawyers, appointments, documents…"
-        user={PORTAL_USER}
+        user={portalUser}
         onNotificationsClick={() => handleNav('/notifications')}
         onMenuClick={() => setMobileNavOpen(true)}
         onHelpClick={() => {}}
@@ -51,14 +74,14 @@ export function ClientPortalLayout() {
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
         <DarkSidebarNav
-          sections={CLIENT_PORTAL_NAV_SECTIONS}
+          sections={navSections}
           activeItem={activeKey}
           onItemChange={handleNav}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={handleToggleCollapse}
           isMobileOpen={mobileNavOpen}
           onMobileClose={() => setMobileNavOpen(false)}
-          onLogout={() => navigate('/')}
+          onLogout={async () => { await logout(); window.location.href = landingHome; }}
         />
 
         <main className="flex-1 min-w-0 overflow-y-auto px-7 py-6 pb-10">

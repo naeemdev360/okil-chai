@@ -7,6 +7,7 @@ import { ArrowLeft, MapPin } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
 import { LawyerAvatar } from '../shared/LawyerAvatar';
+import { SaveFavouriteButton } from '../shared/SaveFavouriteButton';
 import type { Tab } from './types';
 
 const TAB_ORDER: readonly Tab[] = ['about', 'reviews', 'availability', 'location'];
@@ -96,7 +97,8 @@ export function ProfileHero({ lawyer, activeTab, onTabChange, tabLabels }: Profi
             </div>
           </div>
 
-          <div className="pb-5 shrink-0">
+          <div className="flex items-center gap-3 pb-5 shrink-0">
+            <SaveFavouriteButton lawyerId={lawyer.id} className="text-white/70" />
             <Button variant="gold" size="lg" asChild>
               <Link href={`/${locale}/book/${lawyer.id}`}>Book Consultation</Link>
             </Button>

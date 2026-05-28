@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { FavouriteToggleResponse, PaginatedLawyersResponse } from '@repo/shared';
-import type { PaginationQuery } from '@repo/shared';
+import type { FavouriteToggleResponse, PaginatedLawyersResponse, SearchPaginationQuery } from '@repo/shared';
 import { buildPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
 import {
   FAVOURITES_REPOSITORY,
@@ -27,7 +26,7 @@ export class FavouritesService implements IFavouritesService {
     return { lawyerId, isFavourited: true };
   }
 
-  async listFavourites(userId: string, query: PaginationQuery): Promise<PaginatedLawyersResponse> {
+  async listFavourites(userId: string, query: SearchPaginationQuery): Promise<PaginatedLawyersResponse> {
     const { page, limit } = buildPagination(query);
     const { lawyers, total } = await this.favouritesRepository.findFavouritesByUserId(
       userId,

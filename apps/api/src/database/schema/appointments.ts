@@ -1,4 +1,4 @@
-import { index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { index, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { AppointmentStatus } from '@repo/shared';
 
 import { appointmentStatusEnum, caseCategoryEnum, consultationTypeEnum } from './enums';
@@ -21,6 +21,7 @@ export const appointments = pgTable(
     startAt: timestamp('start_at', { withTimezone: true }).notNull(),
     endAt: timestamp('end_at', { withTimezone: true }).notNull(),
     status: appointmentStatusEnum('status').notNull().default(AppointmentStatus.DRAFT),
+    feeAmount: numeric('fee_amount', { precision: 10, scale: 2 }).notNull().default('0'),
     externalPaymentId: text('external_payment_id'),
     clientNotes: text('client_notes'),
   },

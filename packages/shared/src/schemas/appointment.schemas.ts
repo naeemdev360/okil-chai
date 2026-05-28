@@ -32,6 +32,7 @@ export const AppointmentResponseSchema = z.object({
   startAt: z.coerce.date(),
   endAt: z.coerce.date(),
   status: z.nativeEnum(AppointmentStatus),
+  feeAmount: z.string(),
   clientNotes: z.string().nullable(),
   client: AppointmentParticipantSchema,
   lawyer: AppointmentParticipantSchema,

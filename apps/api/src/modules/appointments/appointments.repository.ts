@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AppointmentStatus, ConsultationType } from '@repo/shared';
-import { and, count, desc, eq, gt, gte, inArray, lt, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, inArray, lt, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import { appointments, lawyerProfiles, users } from '../../database/schema';
@@ -19,6 +19,17 @@ const CONFLICT_STATUSES: AppointmentStatus[] = [
   AppointmentStatus.IN_PROGRESS,
 ];
 
+const PAST_STATUSES: AppointmentStatus[] = [
+  AppointmentStatus.COMPLETED,
+  AppointmentStatus.CANCELLED_BY_CLIENT,
+  AppointmentStatus.CANCELLED_BY_LAWYER,
+  AppointmentStatus.CANCELLED_BY_ADMIN,
+  AppointmentStatus.NO_SHOW_CLIENT,
+  AppointmentStatus.NO_SHOW_LAWYER,
+  AppointmentStatus.REFUNDED,
+  AppointmentStatus.DISPUTED,
+];
+
 const APPOINTMENT_SELECT = {
   id: appointments.id,
   clientId: appointments.clientId,
@@ -28,6 +39,7 @@ const APPOINTMENT_SELECT = {
   startAt: appointments.startAt,
   endAt: appointments.endAt,
   status: appointments.status,
+  feeAmount: appointments.feeAmount,
   clientNotes: appointments.clientNotes,
   externalPaymentId: appointments.externalPaymentId,
   createdAt: appointments.createdAt,
@@ -57,6 +69,7 @@ export class AppointmentsRepository extends BaseRepository implements IAppointme
         caseCategory: data.caseCategory,
         startAt: data.startAt,
         endAt: data.endAt,
+        feeAmount: data.feeAmount,
         clientNotes: data.clientNotes,
         externalPaymentId: data.externalPaymentId,
         status: data.status as AppointmentStatus,
@@ -84,16 +97,20 @@ export class AppointmentsRepository extends BaseRepository implements IAppointme
     isLawyer: boolean,
     query: ListAppointmentsQuery,
   ): Promise<{ items: AppointmentRow[]; total: number }> {
-    const { status, page = 1, limit = 20 } = query;
+    const { status, upcoming, past, page = 1, limit = 20 } = query;
     const offset = (page - 1) * limit;
 
     const participantCondition = isLawyer
       ? eq(lawyerProfiles.userId, userId)
       : eq(appointments.clientId, userId);
 
-    const where = status
-      ? and(participantCondition, eq(appointments.status, status as AppointmentStatus))
-      : participantCondition;
+    const conditions = [participantCondition];
+    if (status) conditions.push(eq(appointments.status, status as AppointmentStatus));
+    if (upcoming) conditions.push(gte(appointments.startAt, new Date()));
+    if (past) conditions.push(inArray(appointments.status, PAST_STATUSES));
+
+    const where = conditions.length === 1 ? conditions[0] : and(...conditions);
+    const order = upcoming ? asc(appointments.startAt) : desc(appointments.startAt);
 
     const [countRow] = await this.db
       .select({ total: count() })
@@ -108,7 +125,7 @@ export class AppointmentsRepository extends BaseRepository implements IAppointme
       .innerJoin(users, eq(appointments.clientId, users.id))
       .innerJoin(lawyerProfiles, eq(appointments.lawyerId, lawyerProfiles.id))
       .where(where)
-      .orderBy(desc(appointments.startAt))
+      .orderBy(order)
       .limit(limit)
       .offset(offset);
 

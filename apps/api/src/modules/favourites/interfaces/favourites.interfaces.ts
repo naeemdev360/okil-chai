@@ -1,5 +1,4 @@
-import type { FavouriteToggleResponse, PaginatedLawyersResponse } from '@repo/shared';
-import type { PaginationQuery } from '@repo/shared';
+import type { FavouriteToggleResponse, PaginatedLawyersResponse, SearchPaginationQuery } from '@repo/shared';
 
 export const FAVOURITES_SERVICE = Symbol('FAVOURITES_SERVICE');
 export const FAVOURITES_REPOSITORY = Symbol('FAVOURITES_REPOSITORY');
@@ -17,14 +16,15 @@ export interface IFavouritesRepository {
   deleteById(id: string): Promise<void>;
   findFavouritesByUserId(
     userId: string,
-    query: PaginationQuery,
+    query: SearchPaginationQuery,
   ): Promise<{ lawyers: import('@repo/shared').LawyerPublicProfileResponse[]; total: number }>;
+  countByUserId(userId: string): Promise<number>;
 }
 
 // ── Service contract ──────────────────────────────────────────────────────────
 
 export interface IFavouritesService {
   toggleFavourite(userId: string, lawyerId: string): Promise<FavouriteToggleResponse>;
-  listFavourites(userId: string, query: PaginationQuery): Promise<PaginatedLawyersResponse>;
+  listFavourites(userId: string, query: SearchPaginationQuery): Promise<PaginatedLawyersResponse>;
   isFavourited(userId: string, lawyerId: string): Promise<FavouriteToggleResponse>;
 }

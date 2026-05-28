@@ -26,7 +26,7 @@ export type {
   ResetPasswordRequest,
   UserSignUpRequest,
 } from './types/auth.types.js';
-export type { PaginationMeta, PaginationQuery } from './types/pagination.types.js';
+export type { PaginationMeta, PaginationQuery, SearchPaginationQuery } from './types/pagination.types.js';
 export * from './schemas/index.js';
 export { formatDate, formatDateTime } from './utils/date.utils.js';
 export { PLATFORM_FEE_RATE, CLIENT_SERVICE_FEE_RATE } from './utils/billing.utils.js';

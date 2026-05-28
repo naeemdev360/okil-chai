@@ -22,5 +22,6 @@ import { MESSAGES_REPOSITORY, MESSAGES_SERVICE } from './interfaces/messages.int
     { provide: MESSAGES_SERVICE, useClass: MessagesService },
     MessagesGateway,
   ],
+  exports: [MESSAGES_REPOSITORY, MESSAGES_SERVICE],
 })
 export class MessagesModule {}

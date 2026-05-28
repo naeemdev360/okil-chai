@@ -70,6 +70,20 @@ export class PaymentsRepository extends BaseRepository implements IPaymentsRepos
       .where(eq(payments.appointmentId, appointmentId));
   }
 
+  async sumAmountByClientId(clientId: string): Promise<string> {
+    const [row] = await this.db
+      .select({ total: sum(payments.amount) })
+      .from(payments)
+      .innerJoin(appointments, eq(payments.appointmentId, appointments.id))
+      .where(
+        and(
+          eq(appointments.clientId, clientId),
+          eq(payments.status, PaymentStatus.COMPLETED),
+        ),
+      );
+    return row?.total ?? '0';
+  }
+
   async findHistoryByClientId(
     clientId: string,
     opts: PaymentHistoryOptions,

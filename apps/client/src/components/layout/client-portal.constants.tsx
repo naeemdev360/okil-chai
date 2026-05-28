@@ -17,9 +17,9 @@ export const CLIENT_PORTAL_NAV_SECTIONS: readonly DarkNavSection[] = [
     label: 'My Portal',
     items: [
       { key: '/dashboard',     label: 'Dashboard',       icon: <LayoutDashboard size={16} strokeWidth={1.5} /> },
-      { key: '/appointments',  label: 'My Appointments', icon: <Calendar size={16} strokeWidth={1.5} />, count: 3 },
-      { key: '/saved',         label: 'Saved Lawyers',   icon: <Heart size={16} strokeWidth={1.5} />, count: 7 },
-      { key: '/messages',      label: 'Messages',        icon: <MessageSquare size={16} strokeWidth={1.5} />, count: 2 },
+      { key: '/appointments',  label: 'My Appointments', icon: <Calendar size={16} strokeWidth={1.5} /> },
+      { key: '/saved',         label: 'Saved Lawyers',   icon: <Heart size={16} strokeWidth={1.5} /> },
+      { key: '/messages',      label: 'Messages',        icon: <MessageSquare size={16} strokeWidth={1.5} /> },
       { key: '/documents',     label: 'Documents',       icon: <FileText size={16} strokeWidth={1.5} /> },
       { key: '/payments',      label: 'Payments',        icon: <CreditCard size={16} strokeWidth={1.5} /> },
       { key: '/notifications', label: 'Notifications',   icon: <Bell size={16} strokeWidth={1.5} /> },

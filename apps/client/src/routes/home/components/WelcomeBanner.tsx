@@ -1,18 +1,26 @@
+import { useClientDashboard, usePortalAuth } from '@repo/hooks';
 import { Button, DecorativeOrb, StatCard } from '@repo/ui';
 import { Calendar, Clock, CreditCard, Heart, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { CURRENT_USER } from '../../../lib/mock-data';
-
-const STAT_DATA = [
-  { label: 'Total Consultations', value: String(CURRENT_USER.stats.totalConsultations), icon: <Calendar   size={15} />, delta: '+2 this month' },
-  { label: 'Hours Consulted',     value: CURRENT_USER.stats.hoursConsulted,              icon: <Clock      size={15} />, delta: '60 min avg'   },
-  { label: 'Total Spent',         value: CURRENT_USER.stats.totalSpent,                  icon: <CreditCard size={15} />, delta: '7 invoices'   },
-  { label: 'Saved Lawyers',       value: String(CURRENT_USER.stats.savedLawyers),        icon: <Heart      size={15} />, delta: 'View all'     },
-] as const;
+import { appUrls } from '../../../lib/app-urls';
 
 export function WelcomeBanner() {
-  const navigate = useNavigate();
-  const { name, upcomingCount, unreadMessages } = CURRENT_USER;
+  const { user } = usePortalAuth();
+  const { data: stats } = useClientDashboard();
+
+  const name = user ? `${user.firstName} ${user.lastName}` : '';
+  const upcomingCount = stats?.upcomingCount ?? 0;
+  const unreadMessages = stats?.unreadMessagesCount ?? 0;
+
+  const totalSpent = stats?.totalAmountSpent
+    ? `$${parseFloat(stats.totalAmountSpent).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+    : '$0';
+
+  const statData = [
+    { label: 'Total Consultations', value: String(stats?.completedCount ?? 0),  icon: <Calendar   size={15} />, delta: '+2 this month' },
+    { label: 'Hours Consulted',     value: '—',                                  icon: <Clock      size={15} />, delta: '60 min avg'   },
+    { label: 'Total Spent',         value: totalSpent,                            icon: <CreditCard size={15} />, delta: 'invoices'     },
+    { label: 'Saved Lawyers',       value: String(stats?.savedLawyersCount ?? 0), icon: <Heart      size={15} />, delta: 'View all'     },
+  ] as const;
 
   return (
     <div className="relative mb-7 overflow-hidden rounded-xl bg-navy p-5 sm:p-8">
@@ -27,18 +35,18 @@ export function WelcomeBanner() {
           <h1 className="font-heading text-2xl sm:text-[32px] font-bold text-white mb-2 leading-tight">{name}</h1>
           <p className="font-sans text-sm text-white/65 leading-relaxed">
             You have{' '}
-            <span className="text-gold font-semibold">{upcomingCount} upcoming consultations</span>
+            <span className="text-gold font-semibold">{upcomingCount} upcoming {upcomingCount === 1 ? 'consultation' : 'consultations'}</span>
             {' '}and{' '}
-            <span className="text-gold font-semibold">{unreadMessages} unread messages</span>.
+            <span className="text-gold font-semibold">{unreadMessages} unread {unreadMessages === 1 ? 'message' : 'messages'}</span>.
           </p>
         </div>
-        <Button variant="gold" onClick={() => navigate('/search')} className="w-full shrink-0 sm:w-auto">
+        <Button variant="gold" onClick={() => { window.location.href = appUrls.search; }} className="w-full shrink-0 sm:w-auto">
           <Plus size={14} /> Book a Consultation
         </Button>
       </div>
 
       <div className="relative z-[1] mt-7 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4">
-        {STAT_DATA.map((s) => (
+        {statData.map((s) => (
           <StatCard
             key={s.label}
             label={s.label}

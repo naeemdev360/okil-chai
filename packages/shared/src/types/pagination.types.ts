@@ -9,3 +9,7 @@ export interface PaginationQuery {
   readonly page?: number;
   readonly limit?: number;
 }
+
+export interface SearchPaginationQuery extends PaginationQuery {
+  readonly search?: string;
+}

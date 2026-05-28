@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, VerificationStatus } from '@repo/shared';
-import type { LawyerPublicProfileResponse, PaginationQuery } from '@repo/shared';
-import { and, count, eq, inArray } from 'drizzle-orm';
+import type { LawyerPublicProfileResponse, SearchPaginationQuery } from '@repo/shared';
+import { and, count, eq, ilike, inArray, or } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import {
   lawyerFavourites,
@@ -48,22 +48,30 @@ export class FavouritesRepository extends BaseRepository implements IFavouritesR
 
   async findFavouritesByUserId(
     userId: string,
-    query: PaginationQuery,
+    query: SearchPaginationQuery,
   ): Promise<{ lawyers: LawyerPublicProfileResponse[]; total: number }> {
-    const { page, limit, offset } = buildPagination(query);
+    const { limit, offset } = buildPagination(query);
+    const searchTerm = query.search?.trim();
+    const searchFilter = searchTerm
+      ? or(
+          ilike(lawyerProfiles.firstName, `%${searchTerm}%`),
+          ilike(lawyerProfiles.lastName, `%${searchTerm}%`),
+        )
+      : undefined;
+
+    const baseCondition = and(
+      eq(lawyerFavourites.userId, userId),
+      eq(lawyerProfiles.isPublished, true),
+      eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
+      searchFilter,
+    );
 
     const [countResult, rows] = await Promise.all([
       this.db
         .select({ total: count() })
         .from(lawyerFavourites)
         .innerJoin(lawyerProfiles, eq(lawyerFavourites.lawyerId, lawyerProfiles.id))
-        .where(
-          and(
-            eq(lawyerFavourites.userId, userId),
-            eq(lawyerProfiles.isPublished, true),
-            eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
-          ),
-        ),
+        .where(baseCondition),
       this.db
         .select({
           id: lawyerProfiles.id,
@@ -84,13 +92,7 @@ export class FavouritesRepository extends BaseRepository implements IFavouritesR
         })
         .from(lawyerFavourites)
         .innerJoin(lawyerProfiles, eq(lawyerFavourites.lawyerId, lawyerProfiles.id))
-        .where(
-          and(
-            eq(lawyerFavourites.userId, userId),
-            eq(lawyerProfiles.isPublished, true),
-            eq(lawyerProfiles.verificationStatus, VerificationStatus.APPROVED),
-          ),
-        )
+        .where(baseCondition)
         .orderBy(lawyerFavourites.createdAt)
         .limit(limit)
         .offset(offset),
@@ -153,5 +155,13 @@ export class FavouritesRepository extends BaseRepository implements IFavouritesR
     }));
 
     return { lawyers, total };
+  }
+
+  async countByUserId(userId: string): Promise<number> {
+    const [row] = await this.db
+      .select({ total: count() })
+      .from(lawyerFavourites)
+      .where(eq(lawyerFavourites.userId, userId));
+    return row?.total ?? 0;
   }
 }

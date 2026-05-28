@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { PaginationQuery } from '@repo/shared';
-import { and, count, desc, eq, or, sql } from 'drizzle-orm';
+import { and, count, eq, or, sql } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
 import { messages, users } from '../../database/schema';
 import { BaseRepository } from '../../common/utils/base.repository';
@@ -170,5 +170,13 @@ export class MessagesRepository extends BaseRepository implements IMessagesRepos
           eq(messages.isRead, false),
         ),
       );
+  }
+
+  async countUnreadByUserId(userId: string): Promise<number> {
+    const [row] = await this.db
+      .select({ total: count() })
+      .from(messages)
+      .where(and(eq(messages.receiverId, userId), eq(messages.isRead, false)));
+    return row?.total ?? 0;
   }
 }

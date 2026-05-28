@@ -1,8 +1,12 @@
+import type { AppointmentResponse } from '@repo/shared';
 import type { Http } from '../core/http';
-import type { Appointment, AppointmentWithPayment, CreateAppointmentDto } from '../types/appointments.types';
+import type { Appointment, AppointmentWithPayment, CreateAppointmentDto, ListAppointmentsParams } from '../types/appointments.types';
 
 export function createAppointmentsApi(http: Http) {
   return {
+    list: (params?: ListAppointmentsParams) =>
+      http.list<AppointmentResponse>('/appointments', { params }),
+
     create: (dto: CreateAppointmentDto) =>
       http.post<AppointmentWithPayment>('/appointments', dto),
 

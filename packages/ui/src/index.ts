@@ -13,6 +13,8 @@ export { PageLoader } from './components/loading/page-loader';
 export type { PageLoaderProps } from './components/loading/page-loader';
 export { LawyerCardSkeleton } from './components/loading/lawyer-card-skeleton';
 export type { LawyerCardSkeletonProps } from './components/loading/lawyer-card-skeleton';
+export { AppointmentCardSkeleton } from './components/loading/appointment-card-skeleton';
+export type { AppointmentCardSkeletonProps } from './components/loading/appointment-card-skeleton';
 
 // Toast
 export { AppToaster } from './components/ui/toaster';
@@ -39,6 +41,10 @@ export type { PortalFooterLink, PortalFooterProps } from './components/layout/po
 // Cards
 export { StatCard } from './components/cards/stat-card';
 export type { StatCardProps } from './components/cards/stat-card';
+export { LawyerGridCard } from './components/cards/lawyer-grid-card';
+export type { LawyerCardData, LawyerGridCardProps, LawyerBadge } from './components/cards/lawyer-grid-card';
+export { LawyerListCard } from './components/cards/lawyer-list-card';
+export type { LawyerListCardProps } from './components/cards/lawyer-list-card';
 
 // Icons
 export * from './icons';
@@ -80,6 +86,9 @@ export { PortalAuthGate } from './components/auth/portal-auth-gate';
 export type { PortalAuthGateProps, PortalKind } from './components/auth/portal-auth-gate';
 
 // Primitives
+export { FavouriteButton } from './components/ui/favourite-button';
+export type { FavouriteButtonProps } from './components/ui/favourite-button';
+
 export { ConfirmDialog } from './components/ui/confirm-dialog';
 export type { ConfirmDialogProps } from './components/ui/confirm-dialog';
 

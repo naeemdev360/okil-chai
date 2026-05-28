@@ -63,6 +63,7 @@ export class LawyerDashboardController {
         startAt: row.startAt,
         endAt: row.endAt,
         status: row.status,
+        feeAmount: row.feeAmount,
         clientNotes: row.clientNotes,
         client: {
           id: row.clientId,

@@ -106,6 +106,7 @@ export interface IPaymentsRepository {
   insert(data: InsertPaymentData): Promise<PaymentRecord>;
   findByAppointmentId(appointmentId: string): Promise<PaymentRecord | null>;
   updateStatusToRefunded(appointmentId: string): Promise<void>;
+  sumAmountByClientId(clientId: string): Promise<string>;
   findHistoryByClientId(
     clientId: string,
     opts: PaymentHistoryOptions,

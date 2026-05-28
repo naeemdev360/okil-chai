@@ -1,10 +1,11 @@
+import { useFavouriteLawyers } from '@repo/hooks';
 import { Avatar, Button, StarRating } from '@repo/ui';
-import { Link, useNavigate } from 'react-router-dom';
-import { SAVED_LAWYERS } from '../../../lib/mock-data';
+import { Link } from 'react-router-dom';
+import { appUrls } from '../../../lib/app-urls';
 
 export function SavedLawyersWidget() {
-  const navigate = useNavigate();
-  const preview  = SAVED_LAWYERS.slice(0, 2);
+  const { data }  = useFavouriteLawyers({ limit: 2 });
+  const preview   = data?.lawyers ?? [];
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
@@ -18,21 +19,28 @@ export function SavedLawyersWidget() {
         </Link>
       </div>
 
-      {preview.map((l, i) => (
-        <div
-          key={l.id}
-          className={`flex items-center gap-2.5 px-5 py-3.5${i === 0 ? ' border-b border-gray-100' : ''}`}
-        >
-          <Avatar initials={l.initials} size="md" />
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-navy font-sans">{l.name}</p>
-            <StarRating rating={l.rating} count={null} size="xs" />
+      {preview.map((l, i) => {
+        const initials = `${l.firstName[0]}${l.lastName[0]}`.toUpperCase();
+        const rating   = l.avgRating !== null ? parseFloat(l.avgRating) : 0;
+
+        return (
+          <div
+            key={l.id}
+            className={`flex items-center gap-2.5 px-5 py-3.5${i === 0 ? ' border-b border-gray-100' : ''}`}
+          >
+            <Avatar initials={initials} size="md" />
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-semibold text-navy font-sans">
+                {l.firstName} {l.lastName}
+              </p>
+              <StarRating rating={rating} count={null} size="xs" />
+            </div>
+            <Button variant="primary" size="sm" onClick={() => { window.location.href = appUrls.book(l.id); }}>
+              Book
+            </Button>
           </div>
-          <Button variant="primary" size="sm" onClick={() => navigate('/booking')}>
-            Book
-          </Button>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

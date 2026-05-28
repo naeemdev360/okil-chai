@@ -18,6 +18,8 @@ export interface PortalAuthValue {
   readonly user: UserProfile | null;
   /** Re-run the silent refresh + profile load (e.g. after a profile update). */
   readonly refresh: () => Promise<void>;
+  /** Revoke the session on the server, clear local auth state, and resolve. Caller handles redirect. */
+  readonly logout: () => Promise<void>;
 }
 
 const PortalAuthContext = createContext<PortalAuthValue | null>(null);
@@ -38,12 +40,23 @@ export function AuthProvider({ client, children }: AuthProviderProps) {
     setStatus(profile !== null ? 'authed' : 'guest');
   }, [client]);
 
+  const logout = useCallback(async () => {
+    // Don't update React state — caller will hard-navigate away, which reloads the page.
+    // Updating status to 'guest' here would trigger usePortalGuard's sign-in redirect
+    // before the caller's redirect fires, sending the user to signin instead.
+    try {
+      await client.auth.logout();
+    } finally {
+      client.setAccessToken(null);
+    }
+  }, [client]);
+
   useEffect(() => {
     void refresh();
   }, [refresh]);
 
   return (
-    <PortalAuthContext.Provider value={{ status, user, refresh }}>
+    <PortalAuthContext.Provider value={{ status, user, refresh, logout }}>
       {children}
     </PortalAuthContext.Provider>
   );

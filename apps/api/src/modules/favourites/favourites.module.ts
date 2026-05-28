@@ -13,5 +13,6 @@ import {
     { provide: FAVOURITES_REPOSITORY, useClass: FavouritesRepository },
     { provide: FAVOURITES_SERVICE, useClass: FavouritesService },
   ],
+  exports: [FAVOURITES_REPOSITORY],
 })
 export class FavouritesModule {}

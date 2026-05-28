@@ -7,6 +7,9 @@ import { createAppointmentsApi } from './modules/appointments.api';
 import { createReviewsApi } from './modules/reviews.api';
 import { createAdminApi } from './modules/admin.api';
 import { createAiMatchApi } from './modules/ai-match.api';
+import { createFavouritesApi } from './modules/favourites.api';
+import { createMessagesApi } from './modules/messages.api';
+import { createDashboardApi } from './modules/dashboard.api';
 import type { ApiClientConfig, TokenStore } from './core/types';
 import type { UserProfile } from './types/auth.types';
 
@@ -28,6 +31,9 @@ export function createApiClient(config: ApiClientConfig) {
     reviews:      createReviewsApi(http),
     admin:        createAdminApi(http),
     aiMatch:      createAiMatchApi(http),
+    favourites:   createFavouritesApi(http),
+    messages:     createMessagesApi(http),
+    dashboard:    createDashboardApi(http),
 
     setAccessToken: (token: string | null): void => tokens.set(token),
     getAccessToken: (): string | null => tokens.get(),
@@ -64,3 +70,7 @@ export type * from './types/appointments.types';
 export type * from './types/reviews.types';
 export type * from './types/admin.types';
 export type * from './types/ai-match.types';
+
+// Module types
+export type { ListFavouritesParams } from './modules/favourites.api';
+export type { ClientDashboardStats } from './modules/dashboard.api';

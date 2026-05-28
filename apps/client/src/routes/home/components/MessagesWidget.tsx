@@ -1,10 +1,20 @@
+import { useConversations } from '@repo/hooks';
 import { Avatar } from '@repo/ui';
 import { Link } from 'react-router-dom';
-import { CONVERSATIONS } from '../../../lib/mock-data';
+
+function timeAgo(date: Date): string {
+  const diffMs = Date.now() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60_000);
+  if (diffMins < 60) return `${diffMins}m`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h`;
+  return `${Math.floor(diffHours / 24)}d`;
+}
 
 export function MessagesWidget() {
-  const unreadTotal = CONVERSATIONS.reduce((acc, c) => acc + c.unread, 0);
-  const preview = CONVERSATIONS.slice(0, 2);
+  const { data: conversations = [] } = useConversations();
+  const unreadTotal = conversations.reduce((acc, c) => acc + c.unreadCount, 0);
+  const preview = conversations.slice(0, 2);
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
@@ -25,29 +35,36 @@ export function MessagesWidget() {
         </Link>
       </div>
 
-      {preview.map((m, i) => (
-        <Link
-          key={m.id}
-          to="/messages"
-          className={`flex items-center gap-2.5 px-5 py-3 hover:bg-gray-50 transition-colors${
-            i === 0 ? ' border-b border-gray-100' : ''
-          }`}
-        >
-          <Avatar initials={m.initials} size="md" isOnline={m.online} />
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-navy font-sans">{m.name}</p>
-            <p className="text-[11px] text-gray-600 font-sans truncate">{m.last}</p>
-          </div>
-          <div className="flex flex-col items-end gap-1 shrink-0">
-            <span className="text-[10px] text-gray-400 font-sans">{m.time}</span>
-            {m.unread > 0 && (
-              <span className="bg-gold text-navy text-[9px] font-bold font-sans px-1.5 py-0.5 rounded-full leading-none">
-                {m.unread}
-              </span>
-            )}
-          </div>
-        </Link>
-      ))}
+      {preview.map((m, i) => {
+        const firstName = m.otherUser.firstName;
+        const lastName  = m.otherUser.lastName;
+        const initials  = `${firstName[0]}${lastName[0]}`.toUpperCase();
+        const sentAt    = new Date(m.lastMessage.createdAt);
+
+        return (
+          <Link
+            key={m.otherUser.id}
+            to="/messages"
+            className={`flex items-center gap-2.5 px-5 py-3 hover:bg-gray-50 transition-colors${
+              i === 0 ? ' border-b border-gray-100' : ''
+            }`}
+          >
+            <Avatar initials={initials} size="md" />
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-semibold text-navy font-sans">{firstName} {lastName}</p>
+              <p className="text-[11px] text-gray-600 font-sans truncate">{m.lastMessage.content}</p>
+            </div>
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <span className="text-[10px] text-gray-400 font-sans">{timeAgo(sentAt)}</span>
+              {m.unreadCount > 0 && (
+                <span className="bg-gold text-navy text-[9px] font-bold font-sans px-1.5 py-0.5 rounded-full leading-none">
+                  {m.unreadCount}
+                </span>
+              )}
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
