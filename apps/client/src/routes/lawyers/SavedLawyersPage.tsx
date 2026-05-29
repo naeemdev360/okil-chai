@@ -1,8 +1,8 @@
 import { useDebounce, useFavouriteLawyers, useLocalStorage, useToggleFavourite } from '@repo/hooks';
 import type { LawyerCardData } from '@repo/ui';
-import { Button, Input, LawyerGridCard, LawyerListCard, Pagination, Reveal, RevealGroup, Skeleton } from '@repo/ui';
+import { Button, EmptyState, Input, LawyerGridCard, LawyerListCard, Pagination, Reveal, RevealGroup, Skeleton } from '@repo/ui';
 import type { LawyerPublicProfileResponse } from '@repo/shared';
-import { LayoutGrid, LayoutList, Search, X } from 'lucide-react';
+import { Heart, LayoutGrid, LayoutList, Search, X } from 'lucide-react';
 import { useState } from 'react';
 import { appUrls } from '../../lib/app-urls';
 
@@ -132,29 +132,24 @@ export function SavedLawyersPage() {
         )}
 
         {!isLoading && lawyers.length === 0 && (
-          <div className="rounded-xl border border-dashed border-gray-200 bg-white py-14 text-center">
-            {debouncedSearch ? (
-              <>
-                <p className="font-heading text-[15px] font-semibold text-navy mb-1">No results found</p>
-                <p className="font-sans text-sm text-gray-500 mb-5">
-                  No saved lawyers match &ldquo;{debouncedSearch}&rdquo;.
-                </p>
-                <Button variant="outline" size="sm" onClick={() => handleSearchChange('')}>
-                  Clear Search
-                </Button>
-              </>
-            ) : (
-              <>
-                <p className="font-heading text-[15px] font-semibold text-navy mb-1">No saved lawyers yet</p>
-                <p className="font-sans text-sm text-gray-500 mb-5">
-                  Browse lawyers and tap the heart icon to save them here.
-                </p>
-                <Button variant="gold" size="sm" onClick={() => { window.location.href = appUrls.search; }}>
-                  Find a Lawyer
-                </Button>
-              </>
-            )}
-          </div>
+          debouncedSearch ? (
+            <div className="rounded-xl border border-dashed border-gray-200 bg-white py-14 text-center">
+              <p className="font-heading text-[15px] font-semibold text-navy mb-1">No results found</p>
+              <p className="font-sans text-sm text-gray-500 mb-5">
+                No saved lawyers match &ldquo;{debouncedSearch}&rdquo;.
+              </p>
+              <Button variant="outline" size="sm" onClick={() => handleSearchChange('')}>
+                Clear Search
+              </Button>
+            </div>
+          ) : (
+            <EmptyState
+              icon={<Heart size={36} />}
+              title="No saved lawyers yet"
+              description="Browse lawyers and tap the heart icon to save them here for future consultations."
+              primaryAction={{ label: 'Browse Lawyers', onClick: () => { window.location.href = appUrls.search; } }}
+            />
+          )
         )}
 
         {!isLoading && lawyers.length > 0 && view === 'list' && (

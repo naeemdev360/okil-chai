@@ -1,6 +1,8 @@
-import { Reveal, RevealGroup } from '@repo/ui';
+import { PageLoader, Reveal, RevealGroup } from '@repo/ui';
+import { useIsNewClient } from '../../lib/use-is-new-client';
 import { DocumentsWidget } from './components/DocumentsWidget';
 import { MessagesWidget } from './components/MessagesWidget';
+import { NewUserHome } from './components/NewUserHome';
 import { NextConsultationCard } from './components/NextConsultationCard';
 import { PremiumUpsellCard } from './components/PremiumUpsellCard';
 import { RecentActivityFeed } from './components/RecentActivityFeed';
@@ -8,7 +10,7 @@ import { SavedLawyersWidget } from './components/SavedLawyersWidget';
 import { UpcomingAppointmentsList } from './components/UpcomingAppointmentsList';
 import { WelcomeBanner } from './components/WelcomeBanner';
 
-export function HomePage() {
+function ActiveUserDashboard() {
   return (
     <RevealGroup className="min-w-0">
       <Reveal><WelcomeBanner /></Reveal>
@@ -33,4 +35,13 @@ export function HomePage() {
       </Reveal>
     </RevealGroup>
   );
+}
+
+export function HomePage() {
+  const { isNewClient, isLoading } = useIsNewClient();
+
+  // Wait for stats before branching so returning users never flash the onboarding screen.
+  if (isLoading) return <PageLoader />;
+
+  return isNewClient ? <NewUserHome /> : <ActiveUserDashboard />;
 }

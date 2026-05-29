@@ -28,7 +28,7 @@ export function SavedLawyersWidget() {
             key={l.id}
             className={`flex items-center gap-2.5 px-5 py-3.5${i === 0 ? ' border-b border-gray-100' : ''}`}
           >
-            <Avatar initials={initials} size="md" />
+            <Avatar src={l.photoUrl} initials={initials} size="md" />
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-semibold text-navy font-sans">
                 {l.firstName} {l.lastName}

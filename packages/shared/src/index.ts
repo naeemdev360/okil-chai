@@ -2,7 +2,12 @@ export { MIN_APPOINTMENT_DURATION_MINUTES, MIN_APPOINTMENT_DURATION_MS } from '.
 export { SESSION_HINT_COOKIE } from './constants/auth.constants.js';
 export { LAWYER_ONBOARDING_TOTAL_STEPS } from './constants/lawyer.constants.js';
 export { AppointmentStatus } from './enums/appointment-status.enum.js';
+export { CaseAssignmentStatus } from './enums/case-assignment-status.enum.js';
 export { CaseCategory } from './enums/case-category.enum.js';
+export { CasesSortField } from './enums/cases-sort-field.enum.js';
+export { CaseHearingType } from './enums/case-hearing-type.enum.js';
+export { CaseStage } from './enums/case-stage.enum.js';
+export { CaseStatus } from './enums/case-status.enum.js';
 export { PaymentStatus } from './enums/payment-status.enum.js';
 export { NotificationType } from './enums/notification-type.enum.js';
 export { AuthProvider } from './enums/auth-provider.enum.js';

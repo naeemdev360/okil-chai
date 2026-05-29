@@ -17,6 +17,14 @@ const buttonVariants = cva(
           'border-2 border-navy text-navy bg-transparent hover:bg-navy hover:text-white rounded-md',
         ghost:
           'text-gray-600 bg-transparent hover:text-navy hover:bg-gray-50 rounded-md',
+        'icon-destructive':
+          'rounded-full bg-error-bg text-error hover:opacity-80',
+        'icon-warning':
+          'rounded-full bg-warning-bg text-warning hover:opacity-80',
+        'icon-success':
+          'rounded-full bg-success-bg text-success hover:opacity-80',
+        'icon-neutral':
+          'rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200',
         destructive:
           'bg-error text-white hover:opacity-90 rounded-md',
         link:

@@ -1,0 +1,7 @@
+export enum CaseAssignmentStatus {
+  UNASSIGNED = 'UNASSIGNED',
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  DECLINED = 'DECLINED',
+  RELEASED = 'RELEASED',
+}

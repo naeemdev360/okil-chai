@@ -1,6 +1,6 @@
 import { usePortalAuth } from '@repo/hooks';
 import type { DarkNavSection } from '@repo/ui';
-import { DarkSidebarNav, PortalTopbar } from '@repo/ui';
+import { ConfirmDialog, DarkSidebarNav, PortalTopbar } from '@repo/ui';
 import { useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { landingHome } from '../../lib/auth';
@@ -45,6 +45,8 @@ export function ClientPortalLayout() {
   };
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readCollapsed);
+  const [signOutOpen, setSignOutOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   const activeKey = location.pathname;
 
@@ -81,13 +83,29 @@ export function ClientPortalLayout() {
           onToggleCollapse={handleToggleCollapse}
           isMobileOpen={mobileNavOpen}
           onMobileClose={() => setMobileNavOpen(false)}
-          onLogout={async () => { await logout(); window.location.href = landingHome; }}
+          onLogout={() => setSignOutOpen(true)}
         />
 
         <main className="flex-1 min-w-0 overflow-y-auto px-7 py-6 pb-10">
           <Outlet />
         </main>
       </div>
+
+      <ConfirmDialog
+        open={signOutOpen}
+        onOpenChange={setSignOutOpen}
+        variant="warning"
+        title="Sign out?"
+        description="You'll be redirected to the Home page."
+        confirmLabel="Sign out"
+        cancelLabel="Stay"
+        isLoading={signingOut}
+        onConfirm={async () => {
+          setSigningOut(true);
+          await logout();
+          window.location.href = landingHome;
+        }}
+      />
     </div>
   );
 }

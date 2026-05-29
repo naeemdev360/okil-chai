@@ -2,27 +2,14 @@
 
 import { Check, Trash2, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { cn } from '@repo/ui';
-import { ACCEPTED_PHOTO_ATTR, usePhotoUpload } from '../hooks/usePhotoUpload';
+import { FileDropzone } from '@repo/ui';
+import { ACCEPTED_PHOTO_ATTR, MAX_PHOTO_BYTES, usePhotoUpload } from '../hooks/usePhotoUpload';
 import type { StepProps } from '../types';
 
 export function StepPhoto({ data, update, errors }: StepProps) {
   const t = useTranslations('onboarding.lawyer.fields');
 
-  const {
-    inputRef,
-    previewUrl,
-    isDragOver,
-    fileError,
-    openPicker,
-    removePhoto,
-    handleInputChange,
-    handleDrop,
-    handleDragOver,
-    handleDragEnter,
-    handleDragLeave,
-    handleZoneKeyDown,
-  } = usePhotoUpload({ update, t });
+  const { previewUrl, applyFile, removePhoto } = usePhotoUpload({ update });
 
   const initials =
     data.fullName
@@ -33,7 +20,6 @@ export function StepPhoto({ data, update, errors }: StepProps) {
       .toUpperCase() || '?';
 
   const bullets = t.raw('almostDoneBullets') as string[];
-  const errorMessage = fileError ?? errors?.['photo'];
 
   return (
     <div className="flex flex-col gap-6">
@@ -70,52 +56,29 @@ export function StepPhoto({ data, update, errors }: StepProps) {
             {t('photoBody')}
           </p>
 
-          <div
-            role="button"
-            tabIndex={0}
-            aria-label={data.photo ? t('changePhoto') : t('uploadPhoto')}
-            className={cn(
-              'border-2 border-dashed rounded-lg px-5 py-4 text-center cursor-pointer transition-all duration-150 outline-none',
-              'focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2',
-              isDragOver
-                ? 'border-gold bg-gold-pale'
-                : errorMessage
-                  ? 'border-error bg-red-50'
-                  : 'border-gray-200 bg-cream hover:border-gold hover:bg-gold-pale',
-            )}
-            onClick={openPicker}
-            onKeyDown={handleZoneKeyDown}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <Upload
-              className="size-5 text-gold mx-auto mb-1.5"
-              strokeWidth={1.6}
-              aria-hidden="true"
-            />
-            <p className="font-sans text-sm font-medium text-navy">
-              {data.photo ? t('changePhoto') : t('uploadPhoto')}
-            </p>
-            <p className="font-sans text-xs text-gray-400 mt-0.5">{t('photoSpec')}</p>
-          </div>
-
-          <input
-            ref={inputRef}
-            type="file"
+          <FileDropzone
+            theme="gold"
+            size="sm"
             accept={ACCEPTED_PHOTO_ATTR}
-            className="sr-only"
-            aria-hidden="true"
-            tabIndex={-1}
-            onChange={handleInputChange}
-          />
+            maxSizeBytes={MAX_PHOTO_BYTES}
+            hasError={!!errors?.['photo']}
+            onFilesAccepted={(files) => { if (files[0]) applyFile(files[0]); }}
+            label={data.photo ? t('changePhoto') : t('uploadPhoto')}
+          >
+            <div className="flex flex-col items-center text-center gap-1.5 pointer-events-none">
+              <Upload className="size-5 text-gold" strokeWidth={1.6} aria-hidden="true" />
+              <p className="font-sans text-sm font-medium text-navy">
+                {data.photo ? t('changePhoto') : t('uploadPhoto')}
+              </p>
+              <p className="font-sans text-xs text-gray-400">{t('photoSpec')}</p>
+            </div>
+          </FileDropzone>
         </div>
       </div>
 
-      {errorMessage && (
+      {errors?.['photo'] && (
         <p role="alert" className="font-sans text-xs text-error -mt-2">
-          {errorMessage}
+          {errors['photo']}
         </p>
       )}
 

@@ -4,6 +4,7 @@ import {
   Calendar,
   CreditCard,
   FileText,
+  Gavel,
   Heart,
   LayoutDashboard,
   MessageSquare,
@@ -18,6 +19,7 @@ export const CLIENT_PORTAL_NAV_SECTIONS: readonly DarkNavSection[] = [
     items: [
       { key: '/dashboard',     label: 'Dashboard',       icon: <LayoutDashboard size={16} strokeWidth={1.5} /> },
       { key: '/appointments',  label: 'My Appointments', icon: <Calendar size={16} strokeWidth={1.5} /> },
+      { key: '/cases',         label: 'My Cases',        icon: <Gavel size={16} strokeWidth={1.5} /> },
       { key: '/saved',         label: 'Saved Lawyers',   icon: <Heart size={16} strokeWidth={1.5} /> },
       { key: '/messages',      label: 'Messages',        icon: <MessageSquare size={16} strokeWidth={1.5} /> },
       { key: '/documents',     label: 'Documents',       icon: <FileText size={16} strokeWidth={1.5} /> },

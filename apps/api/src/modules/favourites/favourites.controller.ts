@@ -20,8 +20,8 @@ import type { FavouriteToggleResponse, PaginatedLawyersResponse } from '@repo/sh
 import { Role } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { RolesGuard } from '../../common/guards/roles.guard';
 import { SearchQueryDto } from '../../common/dto/search-query.dto';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import {
   FAVOURITES_SERVICE,
@@ -55,10 +55,11 @@ export class FavouritesController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
   @ApiResponse({ status: 200, description: 'Paginated saved lawyers' })
-  listFavourites(
+  async listFavourites(
     @CurrentUser() user: RequestUser,
     @Query() query: SearchQueryDto,
   ): Promise<PaginatedLawyersResponse> {
+    // await new Promise((resolve) => setTimeout(resolve, 10000));
     return this.favouritesService.listFavourites(user.userId, query);
   }
 

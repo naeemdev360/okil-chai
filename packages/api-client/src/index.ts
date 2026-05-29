@@ -4,12 +4,14 @@ import { hasSessionHint } from './core/session-hint';
 import { createAuthApi } from './modules/auth.api';
 import { createLawyersApi } from './modules/lawyers.api';
 import { createAppointmentsApi } from './modules/appointments.api';
+import { createCasesApi } from './modules/cases.api';
 import { createReviewsApi } from './modules/reviews.api';
 import { createAdminApi } from './modules/admin.api';
 import { createAiMatchApi } from './modules/ai-match.api';
 import { createFavouritesApi } from './modules/favourites.api';
 import { createMessagesApi } from './modules/messages.api';
 import { createDashboardApi } from './modules/dashboard.api';
+import { createUsersApi } from './modules/users.api';
 import type { ApiClientConfig, TokenStore } from './core/types';
 import type { UserProfile } from './types/auth.types';
 
@@ -28,12 +30,14 @@ export function createApiClient(config: ApiClientConfig) {
     auth,
     lawyers:      createLawyersApi(http),
     appointments: createAppointmentsApi(http),
+    cases:        createCasesApi(http),
     reviews:      createReviewsApi(http),
     admin:        createAdminApi(http),
     aiMatch:      createAiMatchApi(http),
     favourites:   createFavouritesApi(http),
     messages:     createMessagesApi(http),
     dashboard:    createDashboardApi(http),
+    users:        createUsersApi(http),
 
     setAccessToken: (token: string | null): void => tokens.set(token),
     getAccessToken: (): string | null => tokens.get(),
@@ -67,6 +71,7 @@ export * from './keys';
 export type * from './types/auth.types';
 export type * from './types/lawyers.types';
 export type * from './types/appointments.types';
+export type * from './types/cases.types';
 export type * from './types/reviews.types';
 export type * from './types/admin.types';
 export type * from './types/ai-match.types';

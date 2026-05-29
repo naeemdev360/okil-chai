@@ -1,12 +1,13 @@
-import { DarkSidebarNav, PortalTopbar } from '@repo/ui';
+import { usePortalAuth } from '@repo/hooks';
+import { ConfirmDialog, DarkSidebarNav, PortalTopbar } from '@repo/ui';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { landingHome } from '../../lib/auth';
 import {
   LAWYER_NAV_SECTIONS,
   LAWYER_PORTAL_LOGO
 } from './lawyer-portal.constants';
 
-const PORTAL_USER = { name: 'James Mercer', subtitle: 'Pro · Verified', initials: 'JM' } as const;
 const COLLAPSE_KEY = 'lawyer_sidebar_collapsed';
 
 function readCollapsed(): boolean {
@@ -17,8 +18,17 @@ function readCollapsed(): boolean {
 export function LawyerPortalLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout, user } = usePortalAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(readCollapsed);
+  const [signOutOpen, setSignOutOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  const portalUser = {
+    name: user ? `${user.firstName} ${user.lastName}` : '',
+    subtitle: 'Lawyer',
+    initials: user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : '',
+  };
 
   const activeKey = location.pathname.replace('/', '') || 'dashboard';
 
@@ -40,7 +50,7 @@ export function LawyerPortalLayout() {
       <PortalTopbar
         logo={LAWYER_PORTAL_LOGO}
         searchPlaceholder="Search clients, cases, documents…"
-        user={PORTAL_USER}
+        user={portalUser}
         onNotificationsClick={() => handleNav('notifications')}
         notificationDot
         onMenuClick={() => setMobileNavOpen(true)}
@@ -56,7 +66,7 @@ export function LawyerPortalLayout() {
           onToggleCollapse={handleToggleCollapse}
           isMobileOpen={mobileNavOpen}
           onMobileClose={() => setMobileNavOpen(false)}
-          onLogout={() => {}}
+          onLogout={() => setSignOutOpen(true)}
           // footer={sidebarCollapsed ? undefined : LAWYER_SIDEBAR_PRO_TIP}
         />
 
@@ -64,6 +74,22 @@ export function LawyerPortalLayout() {
           <Outlet />
         </main>
       </div>
+
+      <ConfirmDialog
+        open={signOutOpen}
+        onOpenChange={setSignOutOpen}
+        variant="warning"
+        title="Sign out?"
+        description="You'll be redirected to the Home page."
+        confirmLabel="Sign out"
+        cancelLabel="Stay"
+        isLoading={signingOut}
+        onConfirm={async () => {
+          setSigningOut(true);
+          await logout();
+          window.location.href = landingHome;
+        }}
+      />
     </div>
   );
 }

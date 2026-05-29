@@ -11,6 +11,26 @@ export { useClientAppointments } from './appointments/useClientAppointments';
 export { useCreateAppointment } from './appointments/useCreateAppointment';
 export { useCancelAppointment } from './appointments/useCancelAppointment';
 
+export { useCases } from './cases/useCases';
+export { useCase } from './cases/useCase';
+export { useCreateCase } from './cases/useCreateCase';
+export { useUpdateCase } from './cases/useUpdateCase';
+export {
+  useAssignLawyer,
+  useAcceptAssignment,
+  useDeclineAssignment,
+  useReleaseAssignment,
+  useTransitionStage,
+  useCloseCase,
+  useCreateHearing,
+  useUpdateHearing,
+  useDeleteHearing,
+  useUploadCaseDocument,
+  useDeleteCaseDocument,
+  useLinkAppointment,
+  useUnlinkAppointment,
+} from './cases/useCaseActions';
+
 export { useCreateReview } from './reviews/useCreateReview';
 export { useLawyerReviews } from './reviews/useLawyerReviews';
 
@@ -21,3 +41,4 @@ export { useToggleFavourite } from './favourites/useToggleFavourite';
 export { useIsFavourited } from './favourites/useIsFavourited';
 export { useConversations } from './messages/useConversations';
 export { useClientDashboard } from './dashboard/useClientDashboard';
+export { useLookupClient } from './users/useLookupClient';

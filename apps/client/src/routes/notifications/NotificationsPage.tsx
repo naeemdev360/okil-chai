@@ -1,14 +1,16 @@
 import type { NotificationItem, PrefSection, TabItem } from '@repo/ui';
-import { cn, NotificationPreferencesPanel, NotificationRow, Reveal, RevealGroup, TabBar } from '@repo/ui';
+import { cn, EmptyState, NotificationPreferencesPanel, NotificationRow, Reveal, RevealGroup, TabBar } from '@repo/ui';
 import { Bell, Check, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { appUrls } from '../../lib/app-urls';
 import {
   countByTab,
   filterNotifications,
   NOTIFICATIONS,
   type TabId,
 } from '../../lib/notifications';
+import { useIsNewClient } from '../../lib/use-is-new-client';
 
 const TABS: readonly TabItem[] = [
   { id: 'all',     label: 'All'      },
@@ -65,7 +67,7 @@ function renderLink(href: string, label: string) {
   );
 }
 
-function EmptyState({ tab }: { readonly tab: string }) {
+function CaughtUpState({ tab }: { readonly tab: string }) {
   return (
     <div className="px-6 py-16 text-center">
       <div className="w-14 h-14 rounded-full bg-gray-50 mx-auto mb-4 flex items-center justify-center">
@@ -80,6 +82,7 @@ function EmptyState({ tab }: { readonly tab: string }) {
 }
 
 export function NotificationsPage() {
+  const { isNewClient } = useIsNewClient();
   const [activeTab,  setActiveTab]  = useState<TabId>('all');
   const [readIds,    setReadIds]    = useState<ReadonlySet<string>>(new Set());
   const [showPrefs,  setShowPrefs]  = useState(false);
@@ -108,7 +111,9 @@ export function NotificationsPage() {
                 Notifications
               </h1>
               <p className="font-sans text-sm text-gray-600">
-                {counts.unread > 0 ? (
+                {isNewClient ? (
+                  'Stay in the loop on bookings, messages, and payments.'
+                ) : counts.unread > 0 ? (
                   <>
                     <strong className="text-navy">{counts.unread} unread</strong>
                     {' '}notification{counts.unread !== 1 ? 's' : ''}
@@ -119,7 +124,7 @@ export function NotificationsPage() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {counts.unread > 0 && (
+              {!isNewClient && counts.unread > 0 && (
                 <button
                   onClick={markAll}
                   className="inline-flex items-center gap-1.5 px-[14px] py-[9px] rounded-md border-[1.5px] border-gray-200 bg-white font-sans text-[13px] font-medium text-navy hover:bg-gray-50 transition-colors cursor-pointer"
@@ -161,27 +166,38 @@ export function NotificationsPage() {
           </Reveal>
         )}
 
-        <Reveal>
-          <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-            <TabBar
-              items={tabsWithCounts}
-              active={activeTab}
-              onChange={(id) => setActiveTab(id as TabId)}
-              variant="light"
-              className="border-b border-gray-100 px-2"
+        {isNewClient ? (
+          <Reveal>
+            <EmptyState
+              icon={<Bell size={36} />}
+              title="No notifications yet"
+              description="When you book consultations, message lawyers, or make payments, updates will show up here."
+              primaryAction={{ label: 'Find a Lawyer', onClick: () => { window.location.href = appUrls.search; } }}
             />
+          </Reveal>
+        ) : (
+          <Reveal>
+            <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+              <TabBar
+                items={tabsWithCounts}
+                active={activeTab}
+                onChange={(id) => setActiveTab(id as TabId)}
+                variant="light"
+                className="border-b border-gray-100 px-2"
+              />
 
-            {items.length === 0 ? (
-              <EmptyState tab={activeTab} />
-            ) : (
-              items.map((n) => (
-                <Reveal key={n.id}>
-                  <NotificationRow notification={n} renderLink={renderLink} />
-                </Reveal>
-              ))
-            )}
-          </div>
-        </Reveal>
+              {items.length === 0 ? (
+                <CaughtUpState tab={activeTab} />
+              ) : (
+                items.map((n) => (
+                  <Reveal key={n.id}>
+                    <NotificationRow notification={n} renderLink={renderLink} />
+                  </Reveal>
+                ))
+              )}
+            </div>
+          </Reveal>
+        )}
       </div>
     </RevealGroup>
   );

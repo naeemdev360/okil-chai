@@ -2,6 +2,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/auth/RequireAuth';
 import { ClientPortalLayout } from './components/layout/ClientPortalLayout';
 import { AppointmentsPage } from './routes/appointments/AppointmentsPage';
+import { CaseDetailPage } from './routes/cases/CaseDetailPage';
+import { CasesPage } from './routes/cases/CasesPage';
+import { CreateCasePage } from './routes/cases/CreateCasePage';
 import { DocumentsPage } from './routes/documents/DocumentsPage';
 import { HomePage } from './routes/home/HomePage';
 import { SavedLawyersPage } from './routes/lawyers/SavedLawyersPage';
@@ -24,6 +27,9 @@ export function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard"     element={<HomePage />} />
         <Route path="/appointments"  element={<AppointmentsPage />} />
+        <Route path="/cases"         element={<CasesPage />} />
+        <Route path="/cases/new"     element={<CreateCasePage />} />
+        <Route path="/cases/:id"     element={<CaseDetailPage />} />
         <Route path="/saved"         element={<SavedLawyersPage />} />
         <Route path="/messages"      element={<MessagesPage />} />
         <Route path="/documents"     element={<DocumentsPage />} />

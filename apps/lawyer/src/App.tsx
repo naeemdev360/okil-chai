@@ -4,6 +4,9 @@ import { LawyerPortalLayout } from './components/layout/LawyerPortalLayout';
 import { useMockData } from './lib/mock-data';
 import { DashboardPage }     from './routes/dashboard';
 import { BookingsPage }      from './routes/bookings';
+import { CaseDetailPage }    from './routes/cases/CaseDetailPage';
+import { CasesPage }         from './routes/cases/CasesPage';
+import { CreateCasePage }    from './routes/cases/CreateCasePage';
 import { ConsultPage }       from './routes/consult';
 import { AvailabilityPage }  from './routes/availability';
 import { MessagesPage }      from './routes/messages';
@@ -29,6 +32,9 @@ function PortalRoutes() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard"     element={<DashboardPage data={data} />} />
         <Route path="bookings"      element={<BookingsPage data={data} />} />
+        <Route path="cases"         element={<CasesPage />} />
+        <Route path="cases/new"     element={<CreateCasePage />} />
+        <Route path="cases/:id"     element={<CaseDetailPage />} />
         <Route path="availability"  element={<AvailabilityPage data={data} />} />
         <Route path="messages"      element={<MessagesPage data={data} />} />
         <Route path="notifications" element={<NotificationsPage />} />

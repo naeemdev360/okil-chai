@@ -3,6 +3,7 @@ const LOCALE = 'en';
 
 export const appUrls = {
   search: `${LANDING}/${LOCALE}/search`,
+  aiMatch: `${LANDING}/${LOCALE}/ai-match`,
   profile: (lawyerId: string) => `${LANDING}/${LOCALE}/lawyers/${lawyerId}`,
   book: (lawyerId: string) => `${LANDING}/${LOCALE}/book/${lawyerId}`,
 } as const;

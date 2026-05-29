@@ -1,5 +1,8 @@
-import { Badge, Button, Reveal, RevealGroup } from '@repo/ui';
+import { Badge, Button, EmptyState, Reveal, RevealGroup } from '@repo/ui';
+import { CreditCard } from 'lucide-react';
+import { appUrls } from '../../lib/app-urls';
 import { TRANSACTIONS } from '../../lib/mock-data';
+import { useIsNewClient } from '../../lib/use-is-new-client';
 
 const PAYMENT_STATS = [
   { label: 'Total Spent',  value: '$1,240', sub: '7 consultations'  },
@@ -13,12 +16,25 @@ const PAYMENT_METHODS = [
 ] as const;
 
 export function PaymentsPage() {
+  const { isNewClient } = useIsNewClient();
+
   return (
     <RevealGroup>
       <Reveal>
         <h1 className="font-heading text-[22px] font-semibold text-navy sm:text-[26px] mb-6">Payments & Invoices</h1>
       </Reveal>
 
+      {isNewClient ? (
+        <Reveal>
+          <EmptyState
+            icon={<CreditCard size={36} />}
+            title="No payments yet"
+            description="Your invoices and receipts will appear here after your first consultation. No charges until you book."
+            primaryAction={{ label: 'Find a Lawyer', onClick: () => { window.location.href = appUrls.search; } }}
+          />
+        </Reveal>
+      ) : (
+      <>
       <Reveal>
         <div className="grid grid-cols-1 gap-3.5 mb-7 sm:grid-cols-3">
           {PAYMENT_STATS.map((s) => (
@@ -93,6 +109,8 @@ export function PaymentsPage() {
           ))}
         </div>
       </Reveal>
+      </>
+      )}
     </RevealGroup>
   );
 }

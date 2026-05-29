@@ -1,8 +1,11 @@
-import { Button, Reveal, RevealGroup } from '@repo/ui';
+import { Button, EmptyState, Reveal, RevealGroup } from '@repo/ui';
 import { Download, FileText, Lock, Plus } from 'lucide-react';
 import { DOCUMENTS } from '../../lib/mock-data';
+import { useIsNewClient } from '../../lib/use-is-new-client';
 
 export function DocumentsPage() {
+  const { isNewClient } = useIsNewClient();
+
   return (
     <RevealGroup>
       <Reveal>
@@ -19,6 +22,16 @@ export function DocumentsPage() {
         </p>
       </Reveal>
 
+      {isNewClient ? (
+        <Reveal>
+          <EmptyState
+            icon={<FileText size={36} />}
+            title="Your secure document vault"
+            description="Upload contracts, IDs, and case files in one place — end-to-end encrypted, and shareable with any lawyer you book."
+            primaryAction={{ label: 'Upload Document', onClick: () => {} }}
+          />
+        </Reveal>
+      ) : (
       <Reveal>
         <div className="bg-white rounded-xl border border-gray-100 overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse">
@@ -65,6 +78,7 @@ export function DocumentsPage() {
           </table>
         </div>
       </Reveal>
+      )}
     </RevealGroup>
   );
 }

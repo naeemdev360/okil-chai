@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  EmptyState,
   Input,
   Reveal,
   RevealGroup,
@@ -8,11 +9,14 @@ import {
   SelectableStackedListItem,
   cn,
 } from '@repo/ui';
-import { ChevronLeft, Video } from 'lucide-react';
+import { ChevronLeft, MessageSquare, Video } from 'lucide-react';
 import { useState } from 'react';
+import { appUrls } from '../../lib/app-urls';
 import { CHAT_MESSAGES, CONVERSATIONS } from '../../lib/mock-data';
+import { useIsNewClient } from '../../lib/use-is-new-client';
 
 export function MessagesPage() {
+  const { isNewClient } = useIsNewClient();
   const [activeChatIdx, setActiveChatIdx] = useState(0);
   const [inputValue, setInputValue] = useState('');
   const [mobileShowThread, setMobileShowThread] = useState(false);
@@ -33,6 +37,16 @@ export function MessagesPage() {
         </h1>
       </Reveal>
 
+      {isNewClient ? (
+        <Reveal>
+          <EmptyState
+            icon={<MessageSquare size={36} />}
+            title="No conversations yet"
+            description="Once you book a consultation, you'll be able to message your lawyer directly to share context and ask quick questions."
+            primaryAction={{ label: 'Find a Lawyer', onClick: () => { window.location.href = appUrls.search; } }}
+          />
+        </Reveal>
+      ) : (
       <Reveal>
         <div
           className={cn(
@@ -140,6 +154,7 @@ export function MessagesPage() {
         </div>
       </div>
       </Reveal>
+      )}
     </RevealGroup>
   );
 }

@@ -50,6 +50,13 @@
       "when": 1779793037462,
       "tag": "0006_add-feeamount",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1779951718877,
+      "tag": "0007_modern_pestilence",
+      "breakpoints": true
     }
   ]
 }

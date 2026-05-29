@@ -1,13 +1,13 @@
 'use client';
 
 import { DocumentStatus, DocumentType } from '@repo/shared';
-import { ConfirmDialog, DocumentItem, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, cn, formatBytes } from '@repo/ui';
+import { ConfirmDialog, DocumentItem, FileDropzone, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, formatBytes } from '@repo/ui';
 import type { BadgeProps } from '@repo/ui';
-import { Check, FileText, Loader2, Upload, X } from 'lucide-react';
+import { Check, Loader2, FileText, Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { BAR_COUNCILS } from '../constants';
-import { ACCEPTED_ATTR, useDocumentUpload } from '../hooks/useDocumentUpload';
+import { ACCEPTED_ATTR, MAX_FILE_BYTES, useDocumentUpload } from '../hooks/useDocumentUpload';
 import type { StepProps } from '../types';
 import { Field } from '../ui';
 
@@ -33,20 +33,11 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
   const t = useTranslations('onboarding.lawyer.fields');
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
 
-  const {
-    inputRef,
-    isDragOver,
-    fileErrors,
-    handleInputChange,
-    handleDrop,
-    handleDragOver,
-    handleDragEnter,
-    handleDragLeave,
-    handleZoneKeyDown,
-    openFilePicker,
-    removeFile,
-    changeDocType,
-  } = useDocumentUpload({ documents: data.documents, documentTypes: data.documentTypes, update, t });
+  const { addFiles, removeFile, changeDocType } = useDocumentUpload({
+    documents: data.documents,
+    documentTypes: data.documentTypes,
+    update,
+  });
 
   function handleConfirmDelete() {
     if (!pendingDelete) return;
@@ -90,38 +81,21 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
       </Field>
 
       <Field label={t('uploadDocs')} hint={errors?.['documents'] ? undefined : t('uploadHint')} error={errors?.['documents']}>
-        <div
-          role="button"
-          tabIndex={0}
-          aria-label={t('uploadCta')}
-          className={cn(
-            'border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-150 outline-none',
-            'focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2',
-            isDragOver
-              ? 'border-gold bg-gold-pale'
-              : 'border-gray-200 bg-cream hover:border-gold hover:bg-gold-pale',
-          )}
-          onClick={openFilePicker}
-          onKeyDown={handleZoneKeyDown}
-          onDragOver={handleDragOver}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <Upload className="size-7 text-gold mx-auto mb-2.5" strokeWidth={1.6} aria-hidden="true" />
-          <p className="font-sans text-sm font-medium text-navy">{t('uploadCta')}</p>
-          <p className="font-sans text-xs text-gray-400 mt-1">{t('uploadSpec')}</p>
-        </div>
-        <input
-          ref={inputRef}
-          type="file"
+        <FileDropzone
+          theme="gold"
           multiple
           accept={ACCEPTED_ATTR}
-          className="sr-only"
-          aria-hidden="true"
-          tabIndex={-1}
-          onChange={handleInputChange}
-        />
+          maxSizeBytes={MAX_FILE_BYTES}
+          hasError={!!errors?.['documents']}
+          onFilesAccepted={addFiles}
+          label={t('uploadCta')}
+        >
+          <div className="flex flex-col items-center text-center gap-1.5 pointer-events-none">
+            <Upload className="size-7 text-gold" strokeWidth={1.6} aria-hidden="true" />
+            <p className="font-sans text-sm font-medium text-navy">{t('uploadCta')}</p>
+            <p className="font-sans text-xs text-gray-400">{t('uploadSpec')}</p>
+          </div>
+        </FileDropzone>
       </Field>
 
       {data.existingDocuments.length > 0 && (
@@ -191,14 +165,6 @@ export function StepCredentials({ data, update, errors, onDeleteExistingDoc, del
                 <X className="size-4" aria-hidden="true" />
               </button>
             </li>
-          ))}
-        </ul>
-      )}
-
-      {fileErrors.length > 0 && (
-        <ul className="flex flex-col gap-1" role="alert">
-          {fileErrors.map((err) => (
-            <li key={err} className="font-sans text-xs text-error">{err}</li>
           ))}
         </ul>
       )}

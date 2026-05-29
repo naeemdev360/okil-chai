@@ -1,5 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type { PaginatedLawyersResponse, UpdateUserProfileRequest, UserProfileResponse } from '@repo/shared';
+import type {
+  ClientLookupResponse,
+  PaginatedLawyersResponse,
+  UpdateUserProfileRequest,
+  UserProfileResponse,
+} from '@repo/shared';
 import type { PaginationQuery } from '@repo/shared';
 import { buildPagination, buildPaginationMeta } from '../../common/utils/pagination.util';
 import type { IUsersRepository, IUsersService } from './interfaces/users.interfaces';
@@ -22,6 +27,22 @@ export class UsersService implements IUsersService {
     if (!profile) throw new NotFoundException('User not found');
     await this.usersRepository.updateProfile(userId, data);
     return this.usersRepository.findProfileById(userId) as Promise<UserProfileResponse>;
+  }
+
+  async lookupClientByEmail(email: string): Promise<ClientLookupResponse> {
+    const client = await this.usersRepository.findClientByEmail(email);
+    if (!client) {
+      throw new NotFoundException('No client registered with that email');
+    }
+    return client;
+  }
+
+  async getClientById(userId: string): Promise<ClientLookupResponse> {
+    const client = await this.usersRepository.findClientById(userId);
+    if (!client) {
+      throw new NotFoundException('Client not found');
+    }
+    return client;
   }
 
   async addFavourite(userId: string, lawyerId: string): Promise<void> {

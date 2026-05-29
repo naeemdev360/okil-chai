@@ -58,7 +58,7 @@ export function UpcomingAppointmentsList() {
               i < appointments.length - 1 ? ' border-b border-gray-100' : ''
             }`}
           >
-            <Avatar initials={initials} size="lg" />
+            <Avatar src={a.lawyer.photoUrl} initials={initials} size="lg" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-navy font-sans">{lawyerName}</p>
               <p className="text-xs text-gray-600 font-sans">

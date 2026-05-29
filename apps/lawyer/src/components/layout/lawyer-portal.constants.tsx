@@ -5,6 +5,7 @@ import {
   DollarSign,
   Eye,
   Folder,
+  Gavel,
   Home,
   MessageSquare,
   Scale,
@@ -22,6 +23,7 @@ export const LAWYER_NAV_SECTIONS: readonly DarkNavSection[] = [
     items: [
       { key: 'dashboard',     label: 'Dashboard',     icon: <Home size={16} strokeWidth={1.5} /> },
       { key: 'bookings',      label: 'Bookings',      icon: <CalendarCheck size={16} strokeWidth={1.5} />, badge: 'NEW' },
+      { key: 'cases',         label: 'Cases',         icon: <Gavel size={16} strokeWidth={1.5} /> },
       { key: 'consult',       label: 'Consult room',  icon: <Video size={16} strokeWidth={1.5} />, live: true },
       { key: 'availability',  label: 'Availability',  icon: <Calendar size={16} strokeWidth={1.5} /> },
       { key: 'messages',      label: 'Messages',      icon: <MessageSquare size={16} strokeWidth={1.5} />, count: 7 },

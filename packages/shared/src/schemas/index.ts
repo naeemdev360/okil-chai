@@ -12,6 +12,7 @@ export type {
 } from './auth.schemas.js';
 
 export {
+  ClientLookupResponseSchema,
   UserProfileSchema,
   UserListItemSchema,
   UpdateUserProfileSchema,
@@ -19,6 +20,7 @@ export {
   DeactivateUserSchema,
 } from './user.schemas.js';
 export type {
+  ClientLookupResponse,
   UserProfileResponse,
   UserListItemResponse,
   UpdateUserProfileRequest,
@@ -96,6 +98,43 @@ export type {
   LawyerDashboardResponse,
   PendingPayoutItem,
 } from './payment.schemas.js';
+
+export {
+  CreateCaseRequestSchema,
+  UpdateCaseRequestSchema,
+  AssignLawyerRequestSchema,
+  ReleaseAssignmentRequestSchema,
+  StageTransitionRequestSchema,
+  CreateHearingRequestSchema,
+  UpdateHearingRequestSchema,
+  LinkAppointmentRequestSchema,
+  CaseStageEventResponseSchema,
+  CaseHearingResponseSchema,
+  CaseDocumentResponseSchema,
+  CaseLinkedAppointmentSchema,
+  CaseAssignmentHistoryItemSchema,
+  CaseSummarySchema,
+  CaseDetailSchema,
+  PaginatedCasesSchema,
+} from './case.schemas.js';
+export type {
+  CreateCaseRequest,
+  UpdateCaseRequest,
+  AssignLawyerRequest,
+  ReleaseAssignmentRequest,
+  StageTransitionRequest,
+  CreateHearingRequest,
+  UpdateHearingRequest,
+  LinkAppointmentRequest,
+  CaseStageEventResponse,
+  CaseHearingResponse,
+  CaseDocumentResponse,
+  CaseLinkedAppointment,
+  CaseAssignmentHistoryItem,
+  CaseSummary,
+  CaseDetail,
+  PaginatedCasesResponse,
+} from './case.schemas.js';
 
 export {
   UrgencySchema,

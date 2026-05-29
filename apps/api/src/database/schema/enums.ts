@@ -3,7 +3,11 @@ import {
   AppointmentStatus,
   AuthProvider,
   AuthTokenType,
+  CaseAssignmentStatus,
   CaseCategory,
+  CaseHearingType,
+  CaseStage,
+  CaseStatus,
   ConsultationType,
   DocumentStatus,
   DocumentType,
@@ -105,6 +109,44 @@ const notificationTypeValues = [
   NotificationType.LAWYER_APPROVED,
   NotificationType.LAWYER_REJECTED,
   NotificationType.PAYMENT_FAILED,
+  NotificationType.CASE_ASSIGNMENT_REQUESTED,
+  NotificationType.CASE_ASSIGNMENT_ACCEPTED,
+  NotificationType.CASE_ASSIGNMENT_DECLINED,
+  NotificationType.CASE_ASSIGNMENT_RELEASED,
+  NotificationType.CASE_STAGE_CHANGED,
+  NotificationType.CASE_HEARING_SCHEDULED,
+  NotificationType.CASE_HEARING_UPDATED,
+  NotificationType.CASE_DOCUMENT_UPLOADED,
+  NotificationType.CASE_CLOSED,
+] as const;
+const caseStageValues = [
+  CaseStage.INTAKE,
+  CaseStage.LAWYER_ASSIGNED,
+  CaseStage.DISCOVERY,
+  CaseStage.PRE_FILING,
+  CaseStage.FILED,
+  CaseStage.HEARING_SCHEDULED,
+  CaseStage.IN_TRIAL,
+  CaseStage.JUDGMENT,
+  CaseStage.APPEAL,
+  CaseStage.SETTLEMENT,
+  CaseStage.ON_HOLD,
+  CaseStage.CLOSED,
+] as const;
+const caseStatusValues = [CaseStatus.ACTIVE, CaseStatus.ON_HOLD, CaseStatus.CLOSED] as const;
+const caseAssignmentStatusValues = [
+  CaseAssignmentStatus.UNASSIGNED,
+  CaseAssignmentStatus.PENDING,
+  CaseAssignmentStatus.ACCEPTED,
+  CaseAssignmentStatus.DECLINED,
+  CaseAssignmentStatus.RELEASED,
+] as const;
+const caseHearingTypeValues = [
+  CaseHearingType.MENTION,
+  CaseHearingType.EVIDENCE,
+  CaseHearingType.JUDGMENT,
+  CaseHearingType.APPEAL,
+  CaseHearingType.OTHER,
 ] as const;
 
 export const userRoleEnum = pgEnum('user_role', userRoleValues);
@@ -120,3 +162,7 @@ export const subscriptionTierEnum = pgEnum('subscription_tier', subscriptionTier
 export const stripeAccountStatusEnum = pgEnum('stripe_account_status', stripeAccountStatusValues);
 export const paymentStatusEnum = pgEnum('payment_status', paymentStatusValues);
 export const notificationTypeEnum = pgEnum('notification_type', notificationTypeValues);
+export const caseStageEnum = pgEnum('case_stage', caseStageValues);
+export const caseStatusEnum = pgEnum('case_status', caseStatusValues);
+export const caseAssignmentStatusEnum = pgEnum('case_assignment_status', caseAssignmentStatusValues);
+export const caseHearingTypeEnum = pgEnum('case_hearing_type', caseHearingTypeValues);

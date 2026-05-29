@@ -1,14 +1,25 @@
 import { useCancelAppointment, useClientAppointments } from '@repo/hooks';
-import { Pagination } from '@repo/ui';
+import { EmptyState, Pagination } from '@repo/ui';
+import { CalendarDays } from 'lucide-react';
+import { appUrls } from '../../../lib/app-urls';
 import type { FilterKey } from '../AppointmentsPage';
 import { PAGE_SIZE } from '../utils/appointments.utils';
 import { AppointmentCard } from './AppointmentCard';
 import { AppointmentsListSkeleton } from './AppointmentsListSkeleton';
 
-const EMPTY_MESSAGES: Record<FilterKey, string> = {
-  upcoming: 'No upcoming appointments.',
-  past:     'No past appointments.',
-  all:      'No appointments yet.',
+const EMPTY_CONTENT: Record<FilterKey, { title: string; description: string }> = {
+  upcoming: {
+    title:       'No upcoming consultations',
+    description: "Book your first consultation with a verified lawyer. We'll match you with specialists in your area.",
+  },
+  past: {
+    title:       'No past consultations yet',
+    description: "Once you've had a consultation, it'll show up here so you can leave reviews or rebook.",
+  },
+  all: {
+    title:       'No appointments yet',
+    description: 'Find a verified lawyer and book your first consultation to get started.',
+  },
 };
 
 interface AppointmentsListProps {
@@ -42,7 +53,15 @@ export function AppointmentsList({ filter, page, onPageChange }: AppointmentsLis
   }
 
   if (appointments.length === 0) {
-    return <p className="text-sm text-gray-500 font-sans">{EMPTY_MESSAGES[filter]}</p>;
+    const { title, description } = EMPTY_CONTENT[filter];
+    return (
+      <EmptyState
+        icon={<CalendarDays size={36} />}
+        title={title}
+        description={description}
+        primaryAction={{ label: 'Find a Lawyer', onClick: () => { window.location.href = appUrls.search; } }}
+      />
+    );
   }
 
   return (

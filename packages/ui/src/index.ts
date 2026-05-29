@@ -52,6 +52,8 @@ export * from './icons';
 // Navigation
 export { TabBar } from './components/navigation/tab-bar';
 export type { TabItem } from './components/navigation/tab-bar';
+export { SegmentedControl } from './components/navigation/segmented-control';
+export type { SegmentItem } from './components/navigation/segmented-control';
 export { Pagination } from './components/navigation/pagination';
 export type { PaginationProps } from './components/navigation/pagination';
 
@@ -76,6 +78,9 @@ export { ToggleChip }     from './components/ui/toggle-chip';
 export { TogglePill, togglePillVariants } from './components/ui/toggle-pill';
 export type { TogglePillProps } from './components/ui/toggle-pill';
 export { PasswordInput }  from './components/ui/password-input';
+
+export { FileDropzone } from './components/ui/file-dropzone';
+export type { FileDropzoneProps, FileRejection, FileError } from './components/ui/file-dropzone';
 
 // Shared cross-framework components
 export { LanguageSwitcher } from './components/shared/language-switcher';
@@ -107,6 +112,12 @@ export { Badge, badgeVariants } from './components/ui/badge';
 export type { BadgeProps } from './components/ui/badge';
 
 export { Separator } from './components/ui/separator';
+
+export { SectionHeader } from './components/ui/section-header';
+export type { SectionHeaderProps } from './components/ui/section-header';
+
+export { EmptyState } from './components/ui/empty-state';
+export type { EmptyStateProps, EmptyStateAction } from './components/ui/empty-state';
 
 export { SurfaceCard, surfaceCardVariants } from './components/ui/surface-card';
 export type { SurfaceCardProps } from './components/ui/surface-card';
@@ -162,3 +173,14 @@ export {
 
 export { TimePicker } from './components/ui/time-picker';
 export type { TimePickerProps } from './components/ui/time-picker';
+
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverAnchor,
+} from './components/ui/popover';
+export { Calendar } from './components/ui/calendar';
+export type { CalendarProps } from './components/ui/calendar';
+export { DateRangePicker } from './components/ui/date-range-picker';
+export type { DateRange } from './components/ui/date-range-picker';

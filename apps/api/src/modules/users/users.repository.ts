@@ -1,6 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConsultationType, LAWYER_ONBOARDING_TOTAL_STEPS, Role } from '@repo/shared';
-import type { LawyerPublicProfileResponse, UpdateUserProfileRequest, UserProfileResponse } from '@repo/shared';
+import type {
+  ClientLookupResponse,
+  LawyerPublicProfileResponse,
+  UpdateUserProfileRequest,
+  UserProfileResponse,
+} from '@repo/shared';
 import type { PaginationQuery } from '@repo/shared';
 import { and, count, eq, inArray } from 'drizzle-orm';
 import { DATABASE_TOKEN, type DatabaseInstance } from '../../database/database.module';
@@ -8,6 +13,14 @@ import { lawyerFavourites, lawyerLanguages, lawyerProfiles, lawyerSpecialization
 import { BaseRepository } from '../../common/utils/base.repository';
 import { buildPagination } from '../../common/utils/pagination.util';
 import type { IUsersRepository } from './interfaces/users.interfaces';
+
+const CLIENT_LOOKUP_SELECT = {
+  id: users.id,
+  firstName: users.firstName,
+  lastName: users.lastName,
+  email: users.email,
+  avatarUrl: users.avatarUrl,
+};
 
 @Injectable()
 export class UsersRepository extends BaseRepository implements IUsersRepository {
@@ -52,6 +65,30 @@ export class UsersRepository extends BaseRepository implements IUsersRepository 
       onboardingComplete: lawyerRow !== undefined && lawyerRow.onboardingStep >= LAWYER_ONBOARDING_TOTAL_STEPS,
       onboardingStep: lawyerRow?.onboardingStep ?? null,
     };
+  }
+
+  async findClientByEmail(email: string): Promise<ClientLookupResponse | null> {
+    const normalized = email.trim().toLowerCase();
+
+    const [row] = await this.db
+      .select(CLIENT_LOOKUP_SELECT)
+      .from(users)
+      .innerJoin(userRoles, eq(userRoles.userId, users.id))
+      .where(and(eq(users.email, normalized), eq(userRoles.role, Role.CLIENT)))
+      .limit(1);
+
+    return row ?? null;
+  }
+
+  async findClientById(userId: string): Promise<ClientLookupResponse | null> {
+    const [row] = await this.db
+      .select(CLIENT_LOOKUP_SELECT)
+      .from(users)
+      .innerJoin(userRoles, eq(userRoles.userId, users.id))
+      .where(and(eq(users.id, userId), eq(userRoles.role, Role.CLIENT)))
+      .limit(1);
+
+    return row ?? null;
   }
 
   async updateProfile(userId: string, data: UpdateUserProfileRequest): Promise<void> {

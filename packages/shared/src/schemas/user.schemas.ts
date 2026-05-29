@@ -37,6 +37,15 @@ export const UserListItemSchema = BaseEntitySchema.extend({
   roles: z.array(z.nativeEnum(Role)),
 });
 
+/** Minimal client identity — used when a lawyer looks up a client by email to open a case for them. Returns only the fields needed to confirm "yes, this is the right person" without exposing PII. */
+export const ClientLookupResponseSchema = z.object({
+  id: z.string().uuid(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  avatarUrl: z.string().url().nullable(),
+});
+
 // ── Request schemas (what clients send) ───────────────────────────────────────
 
 /** PATCH /users/me — update own profile fields */
@@ -65,6 +74,7 @@ export const DeactivateUserSchema = z.object({
 
 export type UserProfileResponse = z.infer<typeof UserProfileSchema>;
 export type UserListItemResponse = z.infer<typeof UserListItemSchema>;
+export type ClientLookupResponse = z.infer<typeof ClientLookupResponseSchema>;
 export type UpdateUserProfileRequest = z.infer<typeof UpdateUserProfileSchema>;
 export type UpdateUserEmailRequest = z.infer<typeof UpdateUserEmailSchema>;
 export type DeactivateUserRequest = z.infer<typeof DeactivateUserSchema>;

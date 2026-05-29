@@ -24,6 +24,7 @@ import { StorageModule } from './modules/storage/storage.module';
 import { LawyersModule } from './modules/lawyers/lawyers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { AppointmentsModule } from './modules/appointments/appointments.module';
+import { CasesModule } from './modules/cases/cases.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
@@ -64,6 +65,7 @@ const envFilePath =
     LawyersModule,
     AdminModule,
     AppointmentsModule,
+    CasesModule,
     PaymentsModule,
     NotificationsModule,
     ReviewsModule,

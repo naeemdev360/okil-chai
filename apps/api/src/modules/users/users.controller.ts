@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -11,16 +12,21 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { PaginatedLawyersResponse, UserProfileResponse } from '@repo/shared';
+import type { ClientLookupResponse, PaginatedLawyersResponse, UserProfileResponse } from '@repo/shared';
+import { Role } from '@repo/shared';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 import type { RequestUser } from '../auth/interfaces/auth.interfaces';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
@@ -31,6 +37,23 @@ import { USERS_SERVICE, type IUsersService } from './interfaces/users.interfaces
 @Controller('users')
 export class UsersController {
   constructor(@Inject(USERS_SERVICE) private readonly usersService: IUsersService) {}
+
+  @Get('clients/lookup')
+  @UseGuards(RolesGuard)
+  @Roles(Role.LAWYER)
+  @ApiOperation({
+    summary: 'Resolve a client by email (lawyer-only) — used to open a case on behalf of an existing client',
+  })
+  @ApiQuery({ name: 'email', type: String })
+  @ApiResponse({ status: 200, description: 'Client found' })
+  @ApiResponse({ status: 400, description: 'Email missing or malformed' })
+  @ApiResponse({ status: 404, description: 'No client with that email' })
+  lookupClient(@Query('email') email?: string): Promise<ClientLookupResponse> {
+    if (!email || !email.includes('@')) {
+      throw new BadRequestException('Provide a valid email address');
+    }
+    return this.usersService.lookupClientByEmail(email);
+  }
 
   @Get('me')
   @ApiOperation({ summary: 'Return the full profile of the authenticated user' })

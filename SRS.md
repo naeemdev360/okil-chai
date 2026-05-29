@@ -174,7 +174,9 @@ support: Initial launch localized for **English**
 and **Bengali (bn-BD)**.
 
 **Phase 2** Video consultations, AI lawyer match, reviews &
-ratings, lawyer analytics dashboard
+ratings, lawyer analytics dashboard, Case
+Tracker (cases, stages, hearings, per-case
+documents — see § 3.4)
 
 **Phase 3** Document vault, e-signature, multi-language, mobile
 apps (React Native)
@@ -249,6 +251,12 @@ Favourites revisit without searching again
 Consultation Private notes visible only to **P2** UX
 Notes client, stored per appointment
 
+Case Tracker Track an ongoing legal case end-to-end: **P1** Cases
+stages with history, hearing dates,
+ETA, assigned lawyer, linked
+bookings, per-case documents.
+See § 3.4 for full spec.
+
 Document Vault Upload encrypted documents, share **P2** Legal Tools
 securely with booked lawyer
 
@@ -303,6 +311,12 @@ Plans (unlimited + priority listing +
 Video Room Integrated video consultation via **P1** Consultation
 embedded WebRTC or Daily.co
 
+Case Workspace Manage assigned cases: transition **P1** Cases
+stages, log stage notes, set
+hearing dates, update ETA, review
+client-uploaded documents.
+See § 3.4 for full spec.
+
 No-Show Flag no-show clients, auto-charge **P2** Trust
 Protection cancellation fee based on policy
 
@@ -348,6 +362,252 @@ Listings featured sections, ad slot
 
 Notification Send platform-wide emails/push to **P2** Comms
 Broadcast all users or segments
+
+---
+
+##
+
+##
+
+## 3.4 Case Tracker Module (Cross-Cutting)
+
+Cases are the long-running record of a client's legal matter. A booking
+is a single consultation; a case spans many bookings, documents,
+hearings and stage transitions over weeks or months. The Case Tracker
+unifies them in one workspace.
+
+### 3.4.1 Lifecycle Stages
+
+A case progresses through an ordered set of stages. Each transition is
+recorded with timestamp, actor, optional note, and optional document
+references. Stages may be revisited (e.g. re-opened for appeal).
+
+---
+
+**Stage** **Definition**
+
+INTAKE Case created. Client describes matter, uploads
+initial documents. No lawyer assigned yet, or
+lawyer pending acceptance.
+
+LAWYER_ASSIGNED A verified lawyer has accepted the case and is
+the responsible attorney of record.
+
+DISCOVERY Fact-gathering: evidence collection, witness
+interviews, document requests.
+
+PRE_FILING Drafting filings, demand letters, settlement
+offers prior to formal court action.
+
+FILED Case formally lodged with a court / tribunal.
+Court reference number captured.
+
+HEARING_SCHEDULED One or more hearings on the calendar. Each
+hearing has its own date, venue, type, outcome.
+
+IN_TRIAL Active trial / substantive hearings under way.
+
+JUDGMENT Court has issued a judgment / decision.
+
+APPEAL Judgment under appeal (optional branch).
+
+SETTLEMENT Resolved by negotiated settlement (terminal).
+
+CLOSED Matter concluded (judgment final, settled, or
+withdrawn). Read-only thereafter.
+
+ON_HOLD Temporarily paused (client unreachable, awaiting
+external action). Can return to prior stage.
+
+---
+
+### 3.4.2 Entities
+
+---
+
+**Entity** **Key Fields**
+
+**Case** id, clientId, assignedLawyerId (nullable),
+title, description, caseCategory (reuses
+existing enum), referenceNumber (court ref,
+nullable), currentStage, status
+(ACTIVE\|ON_HOLD\|CLOSED), estimatedCompletionAt
+(nullable), openedAt, closedAt, createdAt
+
+**CaseStageEvent** id, caseId, fromStage (nullable),
+toStage, actorUserId, note, occurredAt,
+createdAt — immutable audit log of every
+transition.
+
+**CaseHearing** id, caseId, scheduledAt, venue, hearingType
+(MENTION\|EVIDENCE\|JUDGMENT\|APPEAL\|OTHER),
+notes, outcome (nullable), createdAt
+
+**CaseDocument** id, caseId, uploaderUserId, name, s3Key,
+contentType, sizeBytes, uploadedAt — reuses
+existing storage module.
+
+**CaseAppointmentLink** caseId, appointmentId, linkedAt — many-to-many
+between cases and existing appointments so a
+booking can be associated with the case it
+discusses.
+
+**CaseLawyerAssignment** id, caseId, lawyerId, invitedByUserId,
+status (PENDING\|ACCEPTED\|DECLINED\|RELEASED),
+invitedAt, respondedAt, releasedAt, releaseReason
+— append-only history of every assignment over
+the lifetime of a case (see § 3.4.3 for the
+reassignment flow).
+
+---
+
+### 3.4.3 Authority & Permissions
+
+- **Create case**: client (self-service) or lawyer (on behalf of an
+  existing platform client — see § 3.4.8). A lawyer who opens a case
+  is automatically the assigned lawyer with status ACCEPTED; the
+  client is notified but does not need to confirm.
+- **Assign / accept lawyer**: lawyer must explicitly accept; once
+  accepted, only that lawyer can transition stages, set
+  `estimatedCompletionAt`, add/edit `CaseHearing` records, and update
+  `referenceNumber`.
+- **Reassignment / handoff**: cases are not locked to a single lawyer
+  for life. The client may invite a different lawyer at any time
+  (`POST /cases/:id/assign-lawyer`) — this creates a new PENDING
+  assignment and supersedes any existing PENDING; if an ACCEPTED
+  lawyer is currently active, that assignment moves to RELEASED with
+  `releaseReason: 'reassigned_by_client'` once the new lawyer accepts.
+  The current lawyer may voluntarily release the case (`POST
+  /cases/:id/release-assignment`), clearing `assignedLawyerId` until a
+  new lawyer accepts. All transitions append to `CaseLawyerAssignment`
+  so the full handoff history is auditable.
+- **Upload documents**: both client and assigned lawyer.
+- **Link bookings**: either party may link any appointment where they
+  are a participant.
+- **View**: client always sees their own cases; assigned lawyer sees
+  cases they own; admins see all (for dispute resolution).
+- **Close case**: assigned lawyer. Client may request closure (creates
+  a request notification to the lawyer).
+
+### 3.4.4 Notifications
+
+Hooks into the existing notifications module. Channels: in-app + email
+(push later). Triggered by:
+
+- Hearing scheduled or rescheduled → both parties.
+- Hearing reminder T-24h and T-1h → both parties.
+- Stage transition → the non-acting party.
+- Document uploaded → the non-uploading party.
+- `estimatedCompletionAt` reached without closure → both parties.
+- Case assigned / accepted / declined / released → the other party.
+
+### 3.4.5 API Endpoints (v1)
+
+All under `/api/v1`. Auth: JWT required; authorization enforced by
+participant membership.
+
+---
+
+**Endpoint** **Description**
+
+**POST /cases** Create a case (client or lawyer).
+
+**GET /cases** List cases for the authenticated user
+(filters: status, stage, category).
+
+**GET /cases/:id** Full case detail incl. stages, hearings,
+documents, linked appointments.
+
+**PATCH /cases/:id** Update editable metadata (title,
+description, referenceNumber, ETA).
+
+**POST /cases/:id/assign-lawyer** Client invites a lawyer. Idempotent: may be
+called repeatedly to swap lawyers or replace
+a pending invite (see § 3.4.3).
+
+**POST /cases/:id/accept-assignment** Lawyer accepts pending assignment.
+
+**POST /cases/:id/decline-assignment** Lawyer declines pending assignment.
+
+**POST /cases/:id/release-assignment** Current lawyer voluntarily withdraws from the
+case, clearing `assignedLawyerId`.
+
+**GET /cases/:id/assignment-history** Ordered list of every `CaseLawyerAssignment`
+row for this case (audit trail).
+
+**POST /cases/:id/stage-transitions** Lawyer moves the case to a new stage with
+optional note. Appends to stage history.
+
+**GET /cases/:id/stage-history** Ordered list of stage events.
+
+**POST /cases/:id/hearings** Create a hearing (lawyer only).
+
+**PATCH /cases/:id/hearings/:hearingId** Edit / record outcome (lawyer only).
+
+**DELETE /cases/:id/hearings/:hearingId** Cancel a hearing (lawyer only).
+
+**POST /cases/:id/documents** Upload a document (presigned-URL flow,
+client or lawyer).
+
+**GET /cases/:id/documents** List documents.
+
+**DELETE /cases/:id/documents/:docId** Remove a document (uploader only).
+
+**POST /cases/:id/appointments** Link an existing appointment to the case.
+
+**DELETE /cases/:id/appointments/:apptId** Unlink an appointment.
+
+**POST /cases/:id/close** Close the case (lawyer only).
+
+---
+
+### 3.4.6 UX Surfaces
+
+- **Client portal**: `/cases` list, `/cases/:id` detail with a vertical
+  stage timeline, hearings calendar strip, document list, linked
+  bookings, and inline notifications. Case can be created from a
+  completed booking ("Open a case from this consultation").
+- **Lawyer portal**: `/cases` inbox (pending assignments, active,
+  closed). Detail view adds stage-transition action, hearing
+  create/edit, ETA editor, and outcome capture.
+- **Admin portal**: read-only case viewer accessible from the dispute
+  resolution flow.
+
+### 3.4.7 Lawyer-Initiated Case Creation
+
+A lawyer may open a case on behalf of an existing client they have
+already engaged with off-platform (e.g. after a phone call):
+
+1. The lawyer enters the client's registered email address.
+2. The API resolves the email to a user with the CLIENT role via
+   `GET /users/clients/lookup?email=…` (lawyer-only endpoint). If no
+   such user exists, the lawyer must ask the client to register first.
+3. On submission, `POST /cases` is called with `clientUserId` set;
+   the case is created with the lawyer as the `assignedLawyer` and
+   `assignmentStatus = ACCEPTED`, jumping straight from INTAKE to
+   LAWYER_ASSIGNED. An accepted `CaseLawyerAssignment` row is
+   recorded with `invitedByUserId = the lawyer`.
+4. The client receives a `CASE_ASSIGNMENT_ACCEPTED` notification
+   ("Your lawyer X opened a case for you") and the case appears in
+   their portal immediately. No further confirmation is required;
+   the client retains the right to request closure or invite a
+   different lawyer.
+
+This flow exists for legal-practice realism — many clients first reach
+out by phone and the lawyer drives intake — and avoids the unnecessary
+self-invite-then-accept round-trip.
+
+### 3.4.8 Acceptance Criteria (excerpt)
+
+- A client can open a case, attach documents, and invite a lawyer
+  without ever booking an appointment.
+- Stage transitions are immutable: editing or deleting a past
+  `CaseStageEvent` is impossible via the API.
+- Hearings created within 24h fire a single reminder at T-1h only (not
+  T-24h) to avoid spamming.
+- Closing a case freezes all writes except admin-initiated re-opening.
+- A case with no `assignedLawyerId` cannot be transitioned past
+  `LAWYER_ASSIGNED`.
 
 ---
 
@@ -624,6 +884,25 @@ createdAt, isRead
 
 **Document** id, ownerId, lawyerId, name, s3Key, encryptionKey,
 sharedAt
+
+**Case** id, clientId, assignedLawyerId, title, description,
+caseCategory, referenceNumber, currentStage, status,
+estimatedCompletionAt, openedAt, closedAt
+
+**CaseStageEvent** id, caseId, fromStage, toStage, actorUserId,
+note, occurredAt
+
+**CaseHearing** id, caseId, scheduledAt, venue, hearingType,
+notes, outcome
+
+**CaseDocument** id, caseId, uploaderUserId, name, s3Key,
+contentType, sizeBytes, uploadedAt
+
+**CaseAppointmentLink** caseId, appointmentId, linkedAt
+
+**CaseLawyerAssignment** id, caseId, lawyerId, invitedByUserId,
+status (PENDING\|ACCEPTED\|DECLINED\|RELEASED),
+invitedAt, respondedAt, releasedAt, releaseReason
 
 ---
 
